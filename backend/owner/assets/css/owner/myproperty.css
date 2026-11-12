@@ -1,0 +1,225 @@
+.my-properties-page {
+    min-height: 100vh;
+    background: #f3f6fb;
+    color: #172943;
+}
+
+.my-properties-page .page-nav {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e1e8f1;
+}
+
+.my-properties-page .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #172943;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.my-properties-page .brand-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 11px;
+    color: #fff;
+    background: #315d9a;
+}
+
+.my-properties-page .page-heading h1 {
+    color: #172943;
+    letter-spacing: -0.04em;
+}
+
+.my-properties-page .eyebrow {
+    color: #4775af;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.my-properties-page .add-property-button {
+    border-color: #315d9a;
+    background: #315d9a;
+}
+
+.my-properties-page .add-property-button:hover {
+    border-color: #274f88;
+    background: #274f88;
+}
+
+.my-properties-page .preview-notice {
+    border-color: #d9e5f4;
+    color: #536780;
+    background: #edf4fc;
+}
+
+.my-properties-page .summary-card {
+    display: flex;
+    min-height: 100px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 20px;
+    border: 1px solid #e5eaf1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(23, 41, 67, 0.04);
+}
+
+.my-properties-page .summary-label {
+    color: #75839a;
+    font-size: 0.9rem;
+}
+
+.my-properties-page .summary-card strong {
+    color: #172943;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.my-properties-page .property-card {
+    overflow: hidden;
+    border: 1px solid #e5eaf1;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(23, 41, 67, 0.05);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.my-properties-page .property-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(23, 41, 67, 0.1);
+}
+
+.my-properties-page .property-art {
+    position: relative;
+    display: flex;
+    min-height: 190px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: #cbd9e6;
+    background-position: center;
+    background-size: cover;
+}
+
+.my-properties-page .art-lakeview {
+    background-image: linear-gradient(140deg, rgba(28, 62, 92, 0.12), rgba(17, 38, 63, 0.48)), linear-gradient(35deg, #9bb9c8 0%, #d7e3e7 48%, #7997a5 49%, #426277 100%);
+}
+
+.my-properties-page .art-palm {
+    background-image: linear-gradient(140deg, rgba(28, 62, 92, 0.08), rgba(17, 38, 63, 0.4)), linear-gradient(145deg, #d6cdb3 0%, #f0e9d8 42%, #8f9b83 43%, #647969 100%);
+}
+
+.my-properties-page .art-cedar {
+    background-image: linear-gradient(140deg, rgba(28, 62, 92, 0.1), rgba(17, 38, 63, 0.4)), linear-gradient(35deg, #d3c3a9 0%, #f1e7d3 45%, #93a6a4 46%, #5b7c7d 100%);
+}
+
+.my-properties-page .property-type,
+.my-properties-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px 11px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #30425d;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.my-properties-page .status-available {
+    color: #276749;
+    background: #e8f6ee;
+}
+
+.my-properties-page .status-rented {
+    color: #5b4b8a;
+    background: #f0ecfa;
+}
+
+.my-properties-page .property-card .card-title {
+    color: #1c2a40;
+    font-weight: 700;
+}
+
+.my-properties-page .property-address {
+    color: #77859a;
+}
+
+.my-properties-page .property-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    color: #66758b;
+    font-size: 0.85rem;
+}
+
+.my-properties-page .property-specs strong {
+    color: #30425d;
+}
+
+.my-properties-page .property-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    border-top: 1px solid #edf0f5;
+}
+
+.my-properties-page .property-price span {
+    color: #77859a;
+    font-size: 0.85rem;
+}
+
+.my-properties-page .property-price strong {
+    color: #315d9a;
+    font-size: 1.05rem;
+}
+
+.my-properties-page .page-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid #e1e8f1;
+    color: #788397;
+    font-size: 0.85rem;
+}
+
+.my-properties-page .page-footer a {
+    color: #315d9a;
+    text-decoration: none;
+}
+
+.my-properties-page .page-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    .my-properties-page .page-nav {
+        margin-bottom: 2rem !important;
+    }
+
+    .my-properties-page .brand-mark {
+        font-size: 1rem;
+    }
+
+    .my-properties-page .page-nav .btn {
+        padding-inline: 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .my-properties-page .property-art {
+        min-height: 170px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .my-properties-page .property-card {
+        transition: none;
+    }
+}

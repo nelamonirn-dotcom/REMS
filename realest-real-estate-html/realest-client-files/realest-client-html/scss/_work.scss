@@ -1,0 +1,113 @@
+/***
+
+====================================================================
+    Work Section
+====================================================================
+
+***/
+
+.working-section {
+  position: relative;
+  padding: 120px 0 90px;
+  background-color: var(--theme-color-light-gray);
+  @include media-breakpoint-down(lg){
+    padding: 80px 0 50px;
+  }
+  .shape-1 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    opacity: 0.5;
+    @include media-breakpoint-down(lg){
+      display: none;
+    }
+  }
+  .sec-title {
+    margin-bottom: 60px;
+    @include media-breakpoint-down(lg){
+      margin-bottom: 35px;
+    }
+    .title {
+      max-width: 540px;
+      margin: 0 auto;
+    }
+  }
+}
+
+.working-block {
+  position: relative;
+  margin-bottom: 30px;
+  .inner-block {
+    border: 1px solid rgba(0, 23, 45, 0.1490196078);
+    background-color: var(--theme-color-white);
+    position: relative;
+    padding: 60px 35px 40px;
+    text-align: center;
+    margin-top: 20px;
+    z-index: 1;
+    @include transition(all 300ms ease);
+    &:hover {
+      border: 1px solid var(--theme-color2);
+      &:before {
+        opacity: 1;
+        visibility: visible;
+        height: 100%;
+      }
+      .step-box {
+        .count {
+          background-color: var(--theme-color1);
+          color: var(--theme-color1-text-color);
+        }
+      }
+    }
+    &:before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      content: "";
+      background: rgba(0, 23, 45, 0.06);
+      opacity: 0;
+      visibility: hidden;
+      height: 0;
+      transition: all 0.2s ease-in-out;
+      z-index: -1;
+    }
+    .step-box {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      .count {
+        @include transition(all 300ms ease);
+        padding: 5px 20px;
+        background-color: var(--theme-color2);
+        border-radius: 40px;
+        text-align: center;
+        color: var(--theme-color2-text-color);
+      }
+      i {
+        color: var(--theme-color2);
+      }
+    }
+    .image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin: 0 auto;
+      img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+    .title {
+      margin: 30px 0 15px;
+    }
+  }
+}

@@ -1,0 +1,56 @@
+/*** 
+
+====================================================================
+Section Title
+====================================================================
+
+***/
+
+.sec-title {
+  position: relative;
+  &.light {
+    .sub-title {
+      color: rgba(var(--theme-color-white-rgb), .698);
+      &:before {
+        background-image: url(../images/icons/sub-title2.png);
+      }
+    }
+    .title {
+      color: var(--theme-color-white);
+    }
+  }
+  .sub-title {
+    position: relative;
+    display: inline-block;
+    font-size: var(--sec-title-subtitle-font-size);
+    font-weight: var(--sec-title-subtitle-font-weight);
+    font-family: var(--sec-title-subtitle-font-family);
+    letter-spacing: 1.4px;
+    line-height: var(--sec-title-subtitle-line-height);
+    padding-left: 19px;
+    text-transform: uppercase;
+    color: var(--sec-title-subtitle-color);
+    margin-bottom: 10px;
+    &:before {
+      position: absolute;
+      content: "";
+      background-color: transparent;
+      background-image: url(../images/icons/sub-title1.png);
+      width: 14px;
+      height: 14px;
+      top: calc(50% - 7px);
+      left: 0;
+    }
+  }
+  .title {
+    font-size: var(--sec-title-font-size);
+    font-weight: var(--sec-title-font-weight);
+    font-family: var(--sec-title-font-family);
+    color: var(--theme-color-dark);
+    line-height: var(--sec-title-title-line-height);
+    margin: 0 0 10px;
+    @include media-breakpoint-down(md){
+      font-size: 40px;
+    }
+  }
+}

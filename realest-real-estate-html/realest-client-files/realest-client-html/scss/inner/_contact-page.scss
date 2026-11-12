@@ -1,0 +1,86 @@
+/***
+
+====================================================================
+        Contact
+====================================================================
+
+***/
+.contact-details__info {
+  position: relative;
+  display: block;
+  margin-top: 41px;
+  li {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 30px;
+    @media (max-width: 375.98px){
+      flex-wrap: wrap;
+      flex-direction: column;
+      text-align: center;
+    }
+    .icon {
+      height: 80px;
+      width: 80px;
+      background-color: var(--theme-color1);
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      @include transition(all 500ms ease);
+      flex-shrink: 0;
+      span {
+        color: var(--theme-color1-text-color);
+        font-size: 25px;
+        @include transition(all 500ms ease);
+      }
+    }
+    &:hover {
+      .icon {
+        background-color: var(--theme-color2);
+        color: var(--theme-color2-text-color);
+        span {
+          color: var(--text-color-bg-theme-color2);
+        }
+      }
+      .text {
+        a {
+          color: var(--notech-base);
+          span {
+            color: var(--notech-gray);
+          }
+        }
+      }
+    }
+    .text {
+      p {
+        font-size: 14px;
+        line-height: 24px;
+      }
+      a {
+        font-size: 18px;
+        color: var(--notech-black);
+        @include transition(all 500ms ease);
+      }
+      span {
+        font-size: 20px;
+        color: var(--notech-black);
+      }
+    }
+  }
+  li+li {
+    margin-top: 19px;
+  }
+}
+.map{
+  height: 550px;
+}

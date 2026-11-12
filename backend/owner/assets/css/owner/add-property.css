@@ -1,0 +1,40 @@
+.add-property-page {
+    min-height: 100vh;
+    background: #f3f6fb;
+    color: #1f2937;
+}
+
+.add-property-page .property-card {
+    max-width: 900px;
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 12px 36px rgba(31, 41, 55, 0.08);
+}
+
+.add-property-page .property-card-header {
+    border-bottom: 1px solid #e8edf5;
+    background: #fff;
+    border-radius: 18px 18px 0 0;
+}
+
+.add-property-page .form-label {
+    font-weight: 600;
+    color: #344054;
+}
+
+.add-property-page .form-control,
+.add-property-page .form-select {
+    min-height: 46px;
+    border-color: #d7deea;
+    border-radius: 9px;
+}
+
+.add-property-page textarea.form-control {
+    min-height: 120px;
+}
+
+.add-property-page .form-control:focus,
+.add-property-page .form-select:focus {
+    border-color: #6b8afd;
+    box-shadow: 0 0 0 0.2rem rgba(79, 104, 237, 0.14);
+}

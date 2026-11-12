@@ -1,0 +1,271 @@
+/*** 
+
+====================================================================
+   Award Section
+====================================================================
+
+***/
+.award-section {
+  background-color: var(--theme-color-light-gray);
+}
+.award-block-one {
+  @include transition(all 300ms ease);
+  .inner-box {
+    display: flex;
+    @include transition(all 300ms ease);
+    @include media-breakpoint-down(sm){
+      flex-direction: column;
+    }
+    .content-box {
+      align-items: center;
+      border-top: 1px solid #1D213214;
+      display: grid;
+      grid-template-columns: auto auto auto;
+      gap: 60px;
+      justify-content: space-between;
+      padding: 40px 60px;
+      position: relative;
+      width: 100%;
+      @include transition(all 300ms ease);
+      @include media-breakpoint-down(lg){
+        gap: 40px;
+        padding: 40px 30px 34px;
+      }
+      @include media-breakpoint-down(md){
+        display: block;
+        gap: 20px;
+        text-align: center;
+      }
+      @include media-breakpoint-down(sm){
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+      }
+      .title-box{
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 60px;
+        @include media-breakpoint-down(md){
+          align-items: center;
+          flex-direction: column;
+          gap: 15px;
+          margin-bottom: 10px;
+        }
+        .year{
+          color: #1B1F12;
+          font-size: 20px;
+          font-weight: 600;
+          line-height: 26px;
+          text-align: center;
+        }
+        .title {
+          color: #1B1F12;
+          font-size: 30px;
+          line-height: 39px;
+          margin-bottom: 0;
+        }
+      }
+      .category {
+        position: relative;
+      }
+      .icon {
+        color: var(--theme-color2);
+        font-size: 20px;
+        transform: rotate(-45deg);
+        @include transition(all 300ms ease);
+      }
+    }
+    &:hover {
+      background-color: var(--theme-color1);
+      cursor: pointer;
+      .icon{
+        transform: rotate(0deg);
+      }
+    }
+  }
+  &:last-child{
+    .inner-box{
+      .content-box{
+        border-bottom: 1px solid #1D213214;
+      }
+    }
+  }
+}
+
+/*** 
+
+====================================================================
+   award-section-one
+====================================================================
+
+***/
+
+.award-section-one {
+  position: relative;
+  padding: 0 15px;
+  .outer-box{
+    position: relative;
+    max-width: 1840px;
+    padding: 190px 0 120px;
+    border-radius: 30px;
+    background-color: var(--theme-color-light-gray);
+    overflow: hidden;
+    margin: -70px auto 0;
+    z-index: 0;
+    @include media-breakpoint-down(lg){
+      padding: 150px 0 80px;
+    }
+    .shape-1 {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      opacity: 0.59;
+      @include media-breakpoint-down(xxl){
+        display: none;
+      }
+    }
+    .sec-title-box{
+      display: flex;
+      justify-content: space-between;
+      gap: 60px;
+      margin-bottom: 60px;
+      @include media-breakpoint-down(lg){
+        margin-bottom: 35px;
+      }
+      @media (max-width: 1024px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+      }
+      .sec-title {
+        max-width: 475px;
+        @media (max-width: 1024px) {
+          max-width: 100%;
+          text-align: center;
+        }
+        .title {
+          margin-bottom: 0;
+        }
+      }
+      .text {
+        max-width: 607px;
+        @media (max-width: 1024px) {
+          max-width: 100%;
+          text-align: center;
+        }
+      }
+    }
+    .image-column {
+      position: relative;
+      @include media-breakpoint-down(lg){
+        display: none;
+      }
+      .image {
+        position: relative;
+        margin-left: -94px;
+        padding-right: 76px;
+        @media (max-width: 1366px) {
+          margin-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
+    .content-column {
+      .inner-column {
+        position: relative;
+        padding-left: 24px;
+        @media (max-width: 1366px) {
+          padding-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.award-block {
+  position: relative;
+  .inner-block {
+    position: relative;
+    z-index: 1;
+    padding: 40px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    @include transition(all 300ms ease);
+    margin-bottom: 20px;
+    @include media-breakpoint-down(md){
+      padding: 20px;
+    }
+    &:hover {
+      background: var(--theme-color1);
+      padding-left: 40px;
+      padding-right: 40px;
+      @include media-breakpoint-down(lg){
+        padding-left: 30px;
+        padding-right: 10px;
+      }
+      @include media-breakpoint-down(sm){
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .left-side {
+        gap: 30px;
+        @include media-breakpoint-down(sm){
+          gap: 15px;
+        }
+      }
+    }
+    .left-side {
+      display: flex;
+      align-items: center;
+      gap: 70px;
+      @include transition(all 300ms ease);
+      @include media-breakpoint-down(md){
+        gap: 30px;
+      }
+      @include media-breakpoint-down(sm){
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      .count {
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 45.6px;
+        color: var(--theme-color2);
+      }
+      .title {
+        margin-bottom: 0;
+      }
+    }
+    .right-side {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 110px;
+      @include media-breakpoint-down(lg){
+        gap:80px;
+      }
+      @include media-breakpoint-down(md){
+        gap:30px;
+        justify-content: start;
+      }
+      @include media-breakpoint-down(sm){
+        flex-direction: column;
+        gap: 15px;
+        justify-content: center;
+      }
+      .text {
+        font-size: 18px;
+      }
+      .link-btn {
+        color: var(--theme-color1-text-color);
+        font-size: 36px;
+        i {
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}

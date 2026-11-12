@@ -1,0 +1,264 @@
+/***
+
+====================================================================
+    Team Section
+====================================================================
+
+***/
+
+.team-section {
+  position: relative;
+  padding: 120px 0px 90px;
+  @include media-breakpoint-down(lg){
+    padding: 80px 0 50px;
+  }
+  .sec-title-box {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+    @include media-breakpoint-down(md){
+      flex-direction: column;
+      align-items: start;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    .sec-title {
+      .title {
+        margin-bottom: 0;
+      }
+    }
+    .arrow-box {
+      position: relative;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      .team-h1-slider-prev, 
+      .team-h1-slider-next {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        line-height: 52px;
+        text-align: center;
+        box-shadow: 0 1px 72px 0 rgba(0, 0, 0, 0.14);
+        border: 1px solid rgba(var(--theme-color-black-rgb), .16);
+        background-color: var(--theme-color-white);
+        color: var(--theme-color1-text-color);
+        @include transition(all 300ms ease);
+        &:hover {
+          background-color: var(--theme-color1);
+        }
+      }
+    }
+  }
+  .team-h1-slider {
+    overflow: hidden;
+    max-width: 1700px;
+    padding: 0 15px;
+    margin: 0 -50px 0 auto;
+    @media (max-width: 1024px) {
+      margin: 0 auto;
+    }
+  }
+  .shape-1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    @include media-breakpoint-down(xl){
+      display: none;
+    }
+  }
+}
+
+.team-section-three {
+  position: relative;
+  padding: 120px 0px 90px;
+  @include media-breakpoint-down(lg){
+    padding: 80px 0 50px;
+  }
+  .sec-title-box {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+    @include media-breakpoint-down(md){
+      flex-direction: column;
+      align-items: start;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    .sec-title {
+      .title {
+        margin-bottom: 0;
+      }
+    }
+    .arrow-box {
+      position: relative;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      .team-h1-slider-prev, 
+      .team-h1-slider-next {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        line-height: 52px;
+        text-align: center;
+        box-shadow: 0 1px 72px 0 rgba(0, 0, 0, 0.14);
+        border: 1px solid rgba(var(--theme-color-black-rgb), .16);
+        background-color: var(--theme-color-white);
+        color: var(--theme-color1-text-color);
+        @include transition(all 300ms ease);
+        &:hover {
+          background-color: var(--theme-color1);
+        }
+      }
+    }
+  }
+  .team-h3-slider {
+    overflow: hidden;
+    max-width: 1700px;
+    padding: 0 15px;
+    margin: 0 -65px 0 auto;
+    @media (max-width: 1024px) {
+      margin: 0 auto;
+    }
+  }
+  .shape-1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    @include media-breakpoint-down(xl){
+      display: none;
+    }
+  }
+}
+
+/***
+
+====================================================================
+    team-section-two
+====================================================================
+
+***/
+
+.team-section-two {
+  position: relative;
+  padding: 120px 0px 90px;
+  @include media-breakpoint-down(lg){
+    padding: 80px 0 50px;
+  }
+  .sec-title-box {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 50px;
+    @include media-breakpoint-down(md){
+      flex-direction: column;
+      align-items: start;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    .sec-title {
+      .title {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.team-block{
+  .inner-block{
+    position: relative;
+    margin-bottom: 30px;
+    &:hover {
+      .images-box {
+        .shape {
+          path {
+            fill: var(--theme-color1);
+          }
+        }
+        .social-link {
+          opacity: 1;
+          transform: translateY(-30px);
+        }
+      }
+    }
+    .images-box{
+      position: relative;
+      background-color: var(--theme-color2);
+      border-radius: 20px;
+      display: block;
+      margin-bottom: 0;
+      padding-top: 48px;
+      overflow: hidden;
+      @include transition(all 300ms ease);
+      margin-bottom: 17px;
+      @include media-breakpoint-down(md){
+        text-align: center;
+      }
+      .shape {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        z-index: 0;
+        height: 543px;
+        width: 304px;
+        transform: translateX(-50%);
+        path {
+          fill: rgba(102, 102, 102, 0.2705882353);
+          @include transition(all 300ms ease);
+        }
+      }
+      .image {
+        position: relative;
+        z-index: 1;
+      }
+      .social-link {
+        position: absolute;
+        @include transition(all 300ms ease);
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        text-align: center;
+        transform: translateY(0);
+        opacity: 0;
+        z-index: 2;
+        width: 100%;
+        li {
+          a {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: var(--theme-color-white);
+            font-size: 16px;
+            color: var(--theme-color1-text-color);
+            &:hover {
+              background-color: var(--theme-color1);
+            }
+          }
+        }
+      }
+    }
+    .author-info{
+      .inner-box {
+        position: relative;
+        text-align: center;
+        .name {
+          margin-bottom: 2px;
+        }
+      }
+    }
+  }
+}
