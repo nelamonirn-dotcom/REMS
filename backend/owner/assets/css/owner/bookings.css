@@ -1,0 +1,254 @@
+.owner-bookings-page {
+    min-height: 100vh;
+    background: #f3f6fb;
+    color: #172943;
+}
+
+.owner-bookings-page .page-nav {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e1e8f1;
+}
+
+.owner-bookings-page .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #172943;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.owner-bookings-page .brand-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 11px;
+    color: #fff;
+    background: #315d9a;
+}
+
+.owner-bookings-page .eyebrow {
+    color: #4775af;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.owner-bookings-page h1 {
+    color: #172943;
+    letter-spacing: -0.04em;
+}
+
+.owner-bookings-page .btn-outline-primary {
+    border-color: #b8c8dd;
+    color: #315d9a;
+}
+
+.owner-bookings-page .btn-outline-primary:hover {
+    border-color: #315d9a;
+    color: #fff;
+    background: #315d9a;
+}
+
+.owner-bookings-page .preview-notice {
+    border-color: #d9e5f4;
+    color: #536780;
+    background: #edf4fc;
+}
+
+.owner-bookings-page .summary-card {
+    display: flex;
+    min-height: 108px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 20px;
+    border: 1px solid #e5eaf1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(23, 41, 67, 0.04);
+}
+
+.owner-bookings-page .summary-label {
+    color: #75839a;
+    font-size: 0.9rem;
+}
+
+.owner-bookings-page .summary-card strong {
+    color: #172943;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.owner-bookings-page .summary-card .status-text-pending {
+    color: #a76b13;
+}
+
+.owner-bookings-page .summary-card .status-text-approved {
+    color: #258052;
+}
+
+.owner-bookings-page .booking-panel {
+    overflow: hidden;
+    border: 1px solid #e5eaf1;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 5px 18px rgba(23, 41, 67, 0.05);
+}
+
+.owner-bookings-page .booking-panel-heading {
+    padding: 22px 24px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.owner-bookings-page .booking-panel-heading h2 {
+    color: #1c2a40;
+    font-weight: 700;
+}
+
+.owner-bookings-page .booking-panel-heading p,
+.owner-bookings-page .request-count {
+    color: #77859a;
+    font-size: 0.9rem;
+}
+
+.owner-bookings-page .request-count {
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #f1f4f8;
+}
+
+.owner-bookings-page .table {
+    min-width: 760px;
+    color: #52627a;
+}
+
+.owner-bookings-page .table thead th {
+    padding: 14px 20px;
+    border-bottom-color: #e8edf3;
+    color: #77859a;
+    background: #f9fafc;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.owner-bookings-page .table tbody td {
+    padding: 17px 20px;
+    border-bottom-color: #edf0f5;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.owner-bookings-page .table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.owner-bookings-page .customer-avatar {
+    display: inline-grid;
+    width: 38px;
+    height: 38px;
+    margin-right: 10px;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+.owner-bookings-page .avatar-blue {
+    color: #416ca3;
+    background: #e8f0fb;
+}
+
+.owner-bookings-page .avatar-green {
+    color: #3b8067;
+    background: #e8f4ee;
+}
+
+.owner-bookings-page .avatar-purple {
+    color: #7562a1;
+    background: #f0ecf8;
+}
+
+.owner-bookings-page .avatar-amber {
+    color: #9a6b22;
+    background: #fff3df;
+}
+
+.owner-bookings-page .customer-info {
+    display: inline-grid;
+    gap: 4px;
+    vertical-align: middle;
+}
+
+.owner-bookings-page .customer-info strong,
+.owner-bookings-page .table tbody td > strong {
+    color: #26364d;
+    font-weight: 600;
+}
+
+.owner-bookings-page .customer-info small,
+.owner-bookings-page .table tbody td > small {
+    display: block;
+    color: #8995a8;
+    font-size: 0.78rem;
+}
+
+.owner-bookings-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.owner-bookings-page .status-pending {
+    color: #93600c;
+    background: #fff3da;
+}
+
+.owner-bookings-page .status-approved {
+    color: #276749;
+    background: #e8f6ee;
+}
+
+.owner-bookings-page .page-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid #e1e8f1;
+    color: #788397;
+    font-size: 0.85rem;
+}
+
+.owner-bookings-page .page-footer a {
+    color: #315d9a;
+    text-decoration: none;
+}
+
+.owner-bookings-page .page-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    .owner-bookings-page .page-nav {
+        margin-bottom: 2rem !important;
+    }
+
+    .owner-bookings-page .brand-mark {
+        font-size: 1rem;
+    }
+
+    .owner-bookings-page .page-nav .btn {
+        padding-inline: 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .owner-bookings-page .booking-panel-heading {
+        padding: 18px;
+    }
+}

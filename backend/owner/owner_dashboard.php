@@ -112,37 +112,6 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
             <tr><td><strong>Rent · November</strong><small>Maliha Chowdhury</small></td><td>Cedar Court, Unit 3C</td><td>Nov 03</td><td>৳ 98,000</td><td><span class="owner-status status-rented">Received</span></td></tr>
           </tbody></table></div></article>
         </section>
-
-        <section class="owner-module-section" id="expenses" aria-labelledby="expenses-title">
-          <div class="owner-section-heading"><div><h2 id="expenses-title">Expenses</h2><p>Property-related costs recorded for your portfolio.</p></div><strong class="owner-expense-total">This month <span>৳ 18,500</span></strong></div>
-          <article class="owner-panel owner-table-panel"><div class="owner-table-scroll"><table class="owner-data-table"><thead><tr><th>Expense</th><th>Property</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>
-            <tr><td><strong>Plumbing repair</strong><small>Kitchen maintenance</small></td><td>Cedar Court, Unit 3C</td><td>Nov 09</td><td>৳ 7,500</td><td><span class="owner-status status-rented">Paid</span></td></tr>
-            <tr><td><strong>Building service charge</strong><small>Monthly common-area fee</small></td><td>Lakeview Heights</td><td>Nov 05</td><td>৳ 11,000</td><td><span class="owner-status status-rented">Paid</span></td></tr>
-          </tbody></table></div></article>
-        </section>
-
-        <section class="owner-module-section" id="maintenance" aria-labelledby="maintenance-title">
-          <div class="owner-section-heading"><div><h2 id="maintenance-title">Maintenance</h2><p>Submit and track maintenance requests.</p></div></div>
-          <div class="owner-maintenance-grid">
-            <form class="owner-panel owner-form-grid owner-maintenance-form" id="maintenance-form">
-              <label class="owner-form-field owner-form-wide">Property<select name="property" required><option value="">Choose a property</option><option>Lakeview Heights</option><option>Palm Grove Residence</option><option>Cedar Court, Unit 3C</option></select></label>
-              <label class="owner-form-field owner-form-wide">What needs attention?<textarea name="details" rows="3" placeholder="Describe the issue" required></textarea></label>
-              <div class="owner-form-actions owner-form-wide"><button class="btn owner-primary-button" type="submit"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> Submit request</button><span class="owner-form-feedback" id="maintenance-feedback" role="status" aria-live="polite" hidden></span></div>
-            </form>
-            <article class="owner-panel owner-maintenance-list"><h3>Recent requests</h3><div class="owner-maintenance-item"><span class="maintenance-icon"><i class="fa-solid fa-faucet-drip" aria-hidden="true"></i></span><div><strong>Kitchen plumbing</strong><small>Cedar Court · Submitted Nov 09</small></div><span class="owner-status status-review">In progress</span></div><div class="owner-maintenance-item"><span class="maintenance-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></span><div><strong>Hallway lighting</strong><small>Lakeview Heights · Submitted Nov 07</small></div><span class="owner-status status-pending">Requested</span></div></article>
-          </div>
-        </section>
-
-        <section class="owner-module-section" id="property-images" aria-labelledby="property-images-title">
-          <div class="owner-section-heading"><div><h2 id="property-images-title">Property Images</h2><p>Choose and preview photos for a property listing.</p></div></div>
-          <form class="owner-panel owner-image-upload" id="property-images-form">
-            <label class="owner-form-field">Property<select name="property" required><option>Lakeview Heights</option><option>Palm Grove Residence</option><option>Cedar Court, Unit 3C</option></select></label>
-            <label class="owner-image-picker" for="property-image-files"><i class="fa-regular fa-images" aria-hidden="true"></i><strong>Select property images</strong><small>JPG, PNG or WebP · preview only</small><input id="property-image-files" name="images[]" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
-            <div class="owner-image-previews" id="owner-image-previews" aria-live="polite"></div>
-            <div class="owner-form-actions"><button class="btn owner-primary-button" type="submit"><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i> Upload images</button><span class="owner-form-feedback" id="images-feedback" role="status" aria-live="polite" hidden></span></div>
-          </form>
-        </section>
-
         <section class="owner-module-section" id="notifications" aria-labelledby="notifications-title">
           <div class="owner-section-heading"><div><h2 id="notifications-title">Notifications</h2><p>Booking and payment updates for your properties.</p></div></div>
           <article class="owner-panel owner-notification-list">

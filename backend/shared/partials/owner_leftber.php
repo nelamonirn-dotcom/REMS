@@ -27,21 +27,19 @@ $ownerInitial = strtoupper(substr($ownerName, 0, 1));
     <a class="owner-nav-link" href="property_crud/myproperty.php" title="My Properties"><i class="fa-solid fa-building" aria-hidden="true"></i><span>My Properties</span><span class="owner-nav-count">12</span></a>
     <a class="owner-nav-link" href="property_crud/Addproperty.php" title="Add Property"><i class="fa-solid fa-list-check" aria-hidden="true"></i><span>Add Property</span></a>
     <a class="owner-nav-link" href="property_crud/property_stutas.php" title="Property Status"><i class="fa-solid fa-signal" aria-hidden="true"></i><span>Property Status</span></a>
-    <a class="owner-nav-link" href="#bookings" title="Bookings"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i><span>Bookings</span><span class="owner-nav-count owner-count-warm">4</span></a>
+    <a class="owner-nav-link" href="property_crud/bookings.php" title="Bookings"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i><span>Bookings</span><span class="owner-nav-count owner-count-warm">4</span></a>
     <a class="owner-nav-link" href="#payments" title="Payments"><i class="fa-solid fa-wallet" aria-hidden="true"></i><span>Payments</span></a>
-    <a class="owner-nav-link" href="#expenses" title="Expenses"><i class="fa-solid fa-receipt" aria-hidden="true"></i><span>Expenses</span></a>
-    <a class="owner-nav-link" href="#maintenance" title="Maintenance"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i><span>Maintenance</span><span class="owner-nav-count owner-count-warm">2</span></a>
-    <a class="owner-nav-link" href="#property-images" title="Property Images"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Property Images</span></a>
-    <a class="owner-nav-link" href="#notifications" title="Notifications"><i class="fa-regular fa-bell" aria-hidden="true"></i><span>Notifications</span><span class="owner-nav-count owner-count-warm">3</span></a>
+    <a class="owner-nav-link" href="property_crud/property_Images.php" title="Property Images"><i class="fa-regular fa-images" aria-hidden="true"></i><span>Property Images</span></a>
+    <a class="owner-nav-link" href="property_crud/notifications.php" title="Notifications"><i class="fa-regular fa-bell" aria-hidden="true"></i><span>Notifications</span><span class="owner-nav-count owner-count-warm">3</span></a>
     <h2 class="owner-nav-label owner-nav-label-spaced">Account</h2>
-    <a class="owner-nav-link" href="#profile" title="Profile"><i class="fa-regular fa-user" aria-hidden="true"></i><span>Profile</span></a>
+    <a class="owner-nav-link" href="property_crud/profile.php" title="Profile"><i class="fa-regular fa-user" aria-hidden="true"></i><span>Profile</span></a>
   </nav>
 
   <div class="owner-sidebar-bottom">
     <div class="owner-help-card">
       <span class="owner-help-icon"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span>
       <span class="owner-help-copy"><strong>Need a hand?</strong><small>Contact the property team</small></span>
-      <a href="mailto:hello@estateflow.example" aria-label="Email the property team"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+      <a href="property_crud/Need_ahand.php" aria-label="Open help and support"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
     </div>
     <div class="owner-account">
       <span class="owner-avatar"><?= htmlspecialchars($ownerInitial, ENT_QUOTES, 'UTF-8') ?></span>

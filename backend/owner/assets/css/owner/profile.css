@@ -1,0 +1,459 @@
+.owner-profile-page {
+    min-height: 100vh;
+    background: #f3f6fb;
+    color: #172943;
+}
+
+.owner-profile-page .page-nav {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e1e8f1;
+}
+
+.owner-profile-page .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #172943;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.owner-profile-page .brand-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 11px;
+    color: #fff;
+    background: #315d9a;
+}
+
+.owner-profile-page .eyebrow {
+    color: #4775af;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.owner-profile-page .profile-secure-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border: 1px solid #dce8f4;
+    border-radius: 999px;
+    color: #42668f;
+    background: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.owner-profile-page .profile-secure-label span {
+    color: #328064;
+}
+
+.owner-profile-page h1,
+.owner-profile-page .profile-heading h2 {
+    color: #172943;
+    letter-spacing: -0.04em;
+}
+
+.owner-profile-page .preview-notice {
+    border-color: #d9e5f4;
+    color: #536780;
+    background: #edf4fc;
+}
+
+.owner-profile-page .profile-card,
+.owner-profile-page .detail-card {
+    overflow: hidden;
+    border: 1px solid #e5eaf1;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 5px 18px rgba(23, 41, 67, 0.05);
+}
+
+.owner-profile-page .profile-cover {
+    height: 132px;
+    background: linear-gradient(115deg, #172d50, #315d9a 62%, #70a5bb);
+}
+
+.owner-profile-page .profile-identity {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 0 26px 24px;
+}
+
+.owner-profile-page .profile-avatar {
+    display: grid;
+    width: 86px;
+    height: 86px;
+    flex: 0 0 86px;
+    margin-top: -34px;
+    place-items: center;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    color: #315d9a;
+    background: #eaf1fa;
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.owner-profile-page .profile-heading {
+    min-width: 0;
+    padding-top: 15px;
+}
+
+.owner-profile-page .profile-heading h2 {
+    font-weight: 700;
+}
+
+.owner-profile-page .profile-heading p {
+    color: #77859a;
+}
+
+.owner-profile-page .account-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: #276749;
+    background: #e8f6ee;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.owner-profile-page .account-badge span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #3a9870;
+}
+
+.owner-profile-page .account-badge.status-inactive {
+    color: #a33838;
+    background: #fcecec;
+}
+
+.owner-profile-page .account-badge.status-inactive span {
+    background: #c94b4b;
+}
+
+.owner-profile-page .member-since {
+    margin-left: auto;
+    color: #8794a7;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.owner-profile-page .detail-card {
+    padding: 24px;
+}
+
+.owner-profile-page .profile-form-card {
+    padding: 26px;
+}
+
+.owner-profile-page .form-label {
+    color: #34445c;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.owner-profile-page .form-control {
+    min-height: 44px;
+    border-color: #d7deea;
+    color: #26364d;
+}
+
+.owner-profile-page .form-control:focus {
+    border-color: #7d9bc4;
+    box-shadow: 0 0 0 0.2rem rgba(49, 93, 154, 0.12);
+}
+
+.owner-profile-page .form-note {
+    color: #77859a;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.owner-profile-page .form-text {
+    color: #8995a8;
+    font-size: 0.8rem;
+}
+
+.owner-profile-page .form-actions .btn-primary {
+    min-height: 44px;
+}
+
+.owner-profile-page .form-actions .btn-light {
+    min-height: 44px;
+    border: 1px solid #e1e7ef;
+    color: #52627a;
+    background: #fff;
+}
+
+.owner-profile-page .form-actions .btn-light:hover {
+    background: #f4f6f9;
+}
+
+.owner-profile-page .section-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.owner-profile-page .section-heading h2 {
+    color: #1c2a40;
+    font-weight: 700;
+}
+
+.owner-profile-page .section-heading p {
+    font-size: 0.9rem;
+}
+
+.owner-profile-page .section-icon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    place-items: center;
+    border-radius: 11px;
+    color: #416ca3;
+    background: #e8f0fb;
+    font-size: 1.3rem;
+}
+
+.owner-profile-page .portfolio-icon {
+    color: #328064;
+    background: #e8f6f0;
+}
+
+.owner-profile-page .profile-details {
+    display: grid;
+    gap: 0;
+}
+
+.owner-profile-page .detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.owner-profile-page .detail-row:last-child {
+    border-bottom: 0;
+}
+
+.owner-profile-page .detail-row dt {
+    color: #77859a;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.owner-profile-page .detail-row dd {
+    margin: 0;
+    color: #26364d;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: right;
+}
+
+.owner-profile-page .account-info-list {
+    display: grid;
+}
+
+.owner-profile-page .account-info-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.owner-profile-page .account-info-row:last-child {
+    border-bottom: 0;
+}
+
+.owner-profile-page .account-info-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    place-items: center;
+    border-radius: 10px;
+    color: #416ca3;
+    background: #e8f0fb;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.owner-profile-page .account-info-row > div {
+    display: grid;
+    gap: 3px;
+}
+
+.owner-profile-page .account-info-row small {
+    color: #77859a;
+    font-size: 0.8rem;
+}
+
+.owner-profile-page .account-info-row strong {
+    color: #26364d;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.owner-profile-page .account-info-row .account-status-text {
+    color: #328064;
+}
+
+.owner-profile-page .account-info-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid #d9e5f4;
+    border-radius: 10px;
+    color: #536780;
+    background: #edf4fc;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.owner-profile-page .portfolio-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.owner-profile-page .portfolio-stat:last-of-type {
+    border-bottom: 0;
+}
+
+.owner-profile-page .portfolio-stat > span:last-child {
+    display: grid;
+    gap: 3px;
+}
+
+.owner-profile-page .portfolio-stat strong {
+    color: #26364d;
+    font-size: 1.05rem;
+}
+
+.owner-profile-page .portfolio-stat small {
+    color: #77859a;
+    font-size: 0.85rem;
+}
+
+.owner-profile-page .stat-icon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    place-items: center;
+    border-radius: 11px;
+    font-weight: 700;
+}
+
+.owner-profile-page .stat-blue {
+    color: #416ca3;
+    background: #e8f0fb;
+}
+
+.owner-profile-page .stat-green {
+    color: #328064;
+    background: #e8f6f0;
+}
+
+.owner-profile-page .stat-purple {
+    color: #7562a1;
+    background: #f0ecf8;
+}
+
+.owner-profile-page .btn-outline-primary {
+    border-color: #b8c8dd;
+    color: #315d9a;
+}
+
+.owner-profile-page .btn-outline-primary:hover {
+    border-color: #315d9a;
+    color: #fff;
+    background: #315d9a;
+}
+
+.owner-profile-page .btn-primary {
+    border-color: #315d9a;
+    background: #315d9a;
+}
+
+.owner-profile-page .btn-primary:hover {
+    border-color: #274f88;
+    background: #274f88;
+}
+
+.owner-profile-page .page-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid #e1e8f1;
+    color: #788397;
+    font-size: 0.85rem;
+}
+
+.owner-profile-page .page-footer a {
+    color: #315d9a;
+    text-decoration: none;
+}
+
+.owner-profile-page .page-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    .owner-profile-page .page-nav {
+        margin-bottom: 2rem !important;
+    }
+
+    .owner-profile-page .brand-mark {
+        font-size: 1rem;
+    }
+
+    .owner-profile-page .page-nav .btn {
+        padding-inline: 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .owner-profile-page .profile-identity {
+        flex-wrap: wrap;
+        gap: 10px 14px;
+        padding-inline: 18px;
+    }
+
+    .owner-profile-page .profile-avatar {
+        width: 72px;
+        height: 72px;
+        flex-basis: 72px;
+    }
+
+    .owner-profile-page .profile-heading h2 {
+        font-size: 1.25rem;
+    }
+
+    .owner-profile-page .member-since {
+        width: 100%;
+        margin: 0;
+    }
+
+    .owner-profile-page .detail-card {
+        padding: 19px;
+    }
+}

@@ -1,0 +1,226 @@
+.property-images-page {
+    min-height: 100vh;
+    background: #f3f6fb;
+    color: #172943;
+}
+
+.property-images-page .page-nav {
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e1e8f1;
+}
+
+.property-images-page .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #172943;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.property-images-page .brand-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 11px;
+    color: #fff;
+    background: #315d9a;
+}
+
+.property-images-page .eyebrow {
+    color: #4775af;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.property-images-page h1 {
+    color: #172943;
+    letter-spacing: -0.04em;
+}
+
+.property-images-page .btn-outline-primary {
+    border-color: #b8c8dd;
+    color: #315d9a;
+}
+
+.property-images-page .btn-outline-primary:hover {
+    border-color: #315d9a;
+    color: #fff;
+    background: #315d9a;
+}
+
+.property-images-page .btn-primary {
+    border-color: #315d9a;
+    background: #315d9a;
+}
+
+.property-images-page .btn-primary:hover {
+    border-color: #274f88;
+    background: #274f88;
+}
+
+.property-images-page .preview-notice {
+    border-color: #d9e5f4;
+    color: #536780;
+    background: #edf4fc;
+}
+
+.property-images-page .upload-panel {
+    padding: 24px;
+    border: 1px solid #e5eaf1;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 5px 18px rgba(23, 41, 67, 0.05);
+}
+
+.property-images-page .form-select {
+    min-height: 44px;
+    border-color: #d7deea;
+}
+
+.property-images-page .form-select:focus,
+.property-images-page .form-control:focus {
+    border-color: #7d9bc4;
+    box-shadow: 0 0 0 0.2rem rgba(49, 93, 154, 0.12);
+}
+
+.property-images-page .upload-dropzone {
+    display: flex;
+    min-height: 130px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 16px;
+    border: 1px dashed #aebfd5;
+    border-radius: 12px;
+    background: #f9fbfe;
+}
+
+.property-images-page .upload-icon {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 10px;
+    color: #315d9a;
+    background: #eaf1fa;
+    font-size: 1.3rem;
+}
+
+.property-images-page .upload-dropzone input {
+    max-width: 100%;
+    border: 0;
+    background: transparent;
+    font-size: 0.85rem;
+}
+
+.property-images-page .photo-count {
+    padding: 6px 11px;
+    border-radius: 20px;
+    color: #52627a;
+    background: #e9eef5;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.property-images-page .gallery-filter select {
+    min-width: 180px;
+}
+
+.property-images-page .empty-gallery {
+    padding: 32px 20px;
+    border: 1px dashed #c5d0df;
+    border-radius: 14px;
+    color: #75839a;
+    background: #fff;
+    text-align: center;
+}
+
+.property-images-page .photo-card {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    border: 1px solid #e5eaf1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 5px 16px rgba(23, 41, 67, 0.05);
+}
+
+.property-images-page .photo-card img {
+    display: block;
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background: #dce5ef;
+}
+
+.property-images-page .photo-card figcaption {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 11px 13px;
+    color: #34445c;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.property-images-page .cover-badge {
+    padding: 4px 7px;
+    border-radius: 20px;
+    color: #276749;
+    background: #e8f6ee;
+    font-size: 0.7rem;
+    white-space: nowrap;
+}
+
+.property-images-page .page-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid #e1e8f1;
+    color: #788397;
+    font-size: 0.85rem;
+}
+
+.property-images-page .page-footer a {
+    color: #315d9a;
+    text-decoration: none;
+}
+
+.property-images-page .page-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    .property-images-page .page-nav {
+        margin-bottom: 2rem !important;
+    }
+
+    .property-images-page .brand-mark {
+        font-size: 1rem;
+    }
+
+    .property-images-page .page-nav .btn {
+        padding-inline: 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .property-images-page .upload-panel {
+        padding: 18px;
+    }
+
+    .property-images-page .gallery-filter {
+        width: 100%;
+    }
+
+    .property-images-page .gallery-filter select {
+        min-width: 0;
+        flex: 1;
+    }
+}
