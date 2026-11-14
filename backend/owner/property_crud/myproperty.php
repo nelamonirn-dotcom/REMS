@@ -37,6 +37,8 @@ $arts = ['art-lakeview', 'art-palm', 'art-cedar'];
     <link rel="stylesheet" href="../assets/css/owner/myproperty.css">
 </head>
 <body class="my-properties-page">
+   <?php include "/../backend/shared/partials/owner_leftbar.php"; ?>
+    <?php include "./shared/partials/owner_leftber.php;" ?>
     <main class="container py-4 py-lg-5">
         <nav class="page-nav d-flex align-items-center justify-content-between mb-5" aria-label="Page navigation">
             <a class="brand-mark text-decoration-none" href="../owner_dashboard.php">
