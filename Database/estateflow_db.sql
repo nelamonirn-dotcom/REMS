@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 10, 2026 at 04:09 AM
+-- Generation Time: Nov 15, 2026 at 06:50 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.33
 
@@ -83,6 +83,15 @@ CREATE TABLE `bookings` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`booking_id`, `property_id`, `customer_id`, `booking_date`, `status`, `created_at`) VALUES
+(2, 3, 2, '2026-11-25 14:41:00', 'cancelled', '2026-11-14 14:41:40'),
+(3, 1, 2, '2026-11-25 14:42:00', 'approved', '2026-11-14 14:42:39'),
+(4, 3, 2, '2026-11-27 00:06:00', 'approved', '2026-11-15 10:02:21');
+
 -- --------------------------------------------------------
 
 --
@@ -114,6 +123,13 @@ CREATE TABLE `customers` (
   `address` text COLLATE utf8mb4_unicode_ci,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`customer_id`, `user_id`, `customer_type`, `preferred_location`, `budget`, `address`, `created_at`) VALUES
+(2, 9, 'buyer', NULL, NULL, NULL, '2026-11-14 14:41:40');
 
 -- --------------------------------------------------------
 
@@ -212,12 +228,23 @@ CREATE TABLE `properties` (
   `area_sqft` decimal(10,2) DEFAULT NULL,
   `price` decimal(12,2) DEFAULT NULL,
   `monthly_rent` decimal(12,2) DEFAULT NULL,
-  `bedrooms` int DEFAULT NULL,
-  `bathrooms` int DEFAULT NULL,
+  `flat_details` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` enum('available','sold','rented') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'available',
   `description` text COLLATE utf8mb4_unicode_ci,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `imagas` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `properties`
+--
+
+INSERT INTO `properties` (`property_id`, `owner_id`, `title`, `property_type`, `address`, `area_sqft`, `price`, `monthly_rent`, `flat_details`, `status`, `description`, `created_at`, `imagas`) VALUES
+(1, 11, 'Tuhin', 'flat', 'Dhaka', 1500.00, 15000.00, 5000.00, '3', 'available', 'hiu', '2026-11-12 15:04:29', ''),
+(2, 11, 'Tuhin Vila', 'commercial', 'CTG', 2000.00, 45000.00, 20000.00, '5', 'available', 'Best', '2026-11-12 15:08:06', ''),
+(3, 11, 'Tuhin Vila', 'commercial', 'CTG', 2000.00, 45000.00, 20000.00, '5', 'available', 'Best', '2026-11-12 15:08:36', ''),
+(4, 11, 'nela-land', 'land', 'afthabnogor', 4567.00, 10000000.00, 100000.00, '3', 'available', 'good land', '2026-11-15 10:07:04', ''),
+(5, 11, 'ghhj', 'land', 'Dhaka', 46557.00, 456578.00, 877798.00, '7nm,,jkjkkk', 'sold', 'jjkhgjgh', '2026-11-15 12:49:04', '');
 
 -- --------------------------------------------------------
 
@@ -232,6 +259,14 @@ CREATE TABLE `property_images` (
   `is_primary` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `property_images`
+--
+
+INSERT INTO `property_images` (`image_id`, `property_id`, `image_path`, `is_primary`, `created_at`) VALUES
+(1, 1, '../uploads/property-images/1/b31e27b90c3a2048f72a78495bf74091.jpg', 1, '2026-11-14 11:40:19'),
+(2, 1, '../uploads/property-images/1/9af9a7cd6e63aa7f34d2d1103979144d.png', 0, '2026-11-14 13:08:34');
 
 -- --------------------------------------------------------
 
@@ -423,7 +458,7 @@ ALTER TABLE `agreements`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `booking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `commissions`
@@ -435,7 +470,7 @@ ALTER TABLE `commissions`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `customer_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -471,13 +506,13 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `property_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `property_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `image_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `image_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
