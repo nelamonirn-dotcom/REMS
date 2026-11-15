@@ -26,14 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $address = $_POST['address'];
   $price = $_POST['price'];
   $monthly_rent = $_POST['monthly_rent'];
-  $bedrooms = $_POST['bedrooms'];
-  $bathrooms = $_POST['bathrooms'];
+  $flatdetails = $_POST['flat_details'];
   $status = $_POST['status'];
+  $imagas = $_POST['imagas'];
   $description = $_POST['description'];
 
   
 
-  $result = $conn->query("INSERT INTO properties (owner_id,title,property_type,area_sqft,address,price,monthly_rent,bedrooms,bathrooms,status,description) VALUES ('$owner_id','$title','$property_type','$area_sqft','$address','$price','$monthly_rent','$bedrooms','$bathrooms','$status','$description')");
+  $result = $conn->query("INSERT INTO properties (owner_id,title,property_type,area_sqft,address,price,monthly_rent,flat_details,status,imagas,description) VALUES ('$owner_id','$title','$property_type','$area_sqft','$address','$price','$monthly_rent','$flatdetails','$status', '$imagas','$description')");
 
   if ($conn->affected_rows) {
     header('Location: ../owner_dashboard.php');
@@ -106,15 +106,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
 
                         <div class="col-md-6">
-                            <label for="bedrooms" class="form-label">Bedrooms</label>
-                            <input type="number" class="form-control" id="bedrooms" name="bedrooms" min="0" step="1" placeholder="Number of bedrooms">
+                            <label for="flat_details" class="form-label">flat_details</label>
+                            <input type="text" class="form-control" id="flat_details" name="flat_details" min="0" step="1" placeholder="Number of bedrooms">
                         </div>
-
-                        <div class="col-md-6">
-                            <label for="bathrooms" class="form-label">Bathrooms</label>
-                            <input type="number" class="form-control" id="bathrooms" name="bathrooms" min="0" step="1" placeholder="Number of bathrooms">
-                        </div>
-
+                        
                         <div class="col-12">
                             <label for="status" class="form-label">Status</label>
                             <select class="form-select" id="status" name="status">
@@ -123,7 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <option value="rented">Rented</option>
                             </select>
                         </div>
-
+                        <div class="col-12">
+                            <label for="description" class="form-label">imagas</label>
+                            <input type="file" class="form-control" id="imagas" name="imagas" rows="4" >
+                        </div>
                         <div class="col-12">
                             <label for="description" class="form-label">Description</label>
                             <textarea class="form-control" id="description" name="description" rows="4" placeholder="Add more details about the property"></textarea>
