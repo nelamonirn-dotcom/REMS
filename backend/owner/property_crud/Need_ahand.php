@@ -108,10 +108,6 @@
                 <h3>Where can I see booking requests?</h3>
                 <p>Open the Bookings page to review the current booking request list.</p>
             </div>
-            <div class="faq-item">
-                <h3>How do I add photos to a listing?</h3>
-                <p>Use the Property Images page to choose a property and select its photos.</p>
-            </div>
         </section>
 
         <footer class="page-footer mt-5 pt-3">
