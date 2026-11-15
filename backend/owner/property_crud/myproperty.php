@@ -3,29 +3,33 @@ session_start();
 include_once 'dbconfig.php';
 
 if (!isset($_SESSION['email'])) {
-  header('Location: ../admin/index.php');
-  exit;
+    header('Location: ../admin/index.php');
+    exit;
 }
 
 if (($_SESSION['role'] ?? '') !== 'owner') {
-  header('Location: ../admin/unauthorize.php');
-  exit;
+    header('Location: ../admin/unauthorize.php');
+    exit;
 }
 
 $owner_id = $_SESSION['user_id'];
 
-$stmt = $conn->prepare("SELECT * FROM properties WHERE owner_id = ?");
+$stmt = $conn->prepare("SELECT * FROM properties WHERE owner_id = ? ORDER BY created_at DESC");
 $stmt->bind_param("s", $owner_id);
 $stmt->execute();
 $properties = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
 $total = count($properties);
-$available = count(array_filter($properties, fn($p) => $p['status'] === 'available'));
+$available = count(array_filter($properties, fn($p) => ($p['status'] ?? '') === 'available'));
 $arts = ['art-lakeview', 'art-palm', 'art-cedar'];
 
+$imageUrl = static function (?string $path): string {
+    if (empty($path)) {
+        return '';
+    }
+    return implode('/', array_map('rawurlencode', explode('/', $path)));
+};
 ?>
-
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -37,8 +41,6 @@ $arts = ['art-lakeview', 'art-palm', 'art-cedar'];
     <link rel="stylesheet" href="../assets/css/owner/myproperty.css">
 </head>
 <body class="my-properties-page">
-   <?php //include "/../backend/shared/partials/owner_leftbar.php"; ?>
-    <?php //include "./shared/partials/owner_leftber.php;" ?>
     <main class="container py-4 py-lg-5">
         <nav class="page-nav d-flex align-items-center justify-content-between mb-5" aria-label="Page navigation">
             <a class="brand-mark text-decoration-none" href="../owner_dashboard.php">
@@ -89,23 +91,30 @@ $arts = ['art-lakeview', 'art-palm', 'art-cedar'];
             <?php else: ?>
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 <?php foreach ($properties as $i => $p): ?>
+                    <?php
+                    $img = $imageUrl($p['imagas'] ?? '');
+                    $isRent = !empty($p['monthly_rent']) && $p['monthly_rent'] > 0;
+                    $status = $p['status'] ?? '';
+                    $details = trim((string)($p['flat_details'] ?? ''));
+                    ?>
                 <div class="col">
                     <article class="card property-card h-100">
-                        <div class="property-art <?= $arts[$i % 3] ?>" role="img" aria-label="Property illustration">
-                            <span class="property-type"><?= htmlspecialchars($p['property_type']) ?></span>
-                            <span class="status-badge <?= $p['status'] === 'available' ? 'status-available' : 'status-rented' ?>"><?= htmlspecialchars(ucfirst($p['status'])) ?></span>
+                        <div class="property-art <?= $arts[$i % 3] ?>"
+                             <?php if ($img): ?>style="background-image:url('<?= htmlspecialchars($img, ENT_QUOTES) ?>'); background-size:cover; background-position:center;"<?php endif; ?>
+                             aria-label="Property illustration">
+                            <span class="property-type"><?= htmlspecialchars($p['property_type'] ?? '') ?></span>
+                            <span class="status-badge <?= $status === 'available' ? 'status-available' : 'status-rented' ?>"><?= htmlspecialchars(ucfirst($status)) ?></span>
                         </div>
                         <div class="card-body d-flex flex-column p-4">
-                            <h3 class="h5 card-title mb-1"><?= htmlspecialchars($p['title']) ?></h3>
-                            <p class="property-address mb-3"><?= htmlspecialchars($p['address']) ?></p>
+                            <h3 class="h5 card-title mb-1"><?= htmlspecialchars($p['title'] ?? '') ?></h3>
+                            <p class="property-address mb-3"><?= htmlspecialchars($p['address'] ?? '') ?></p>
                             <div class="property-specs">
-                                <span><strong><?= (int)$p['bedrooms'] ?></strong> bedrooms</span>
-                                <span><strong><?= (int)$p['bathrooms'] ?></strong> bathrooms</span>
-                                <span><strong><?= number_format($p['area_sqft']) ?></strong> sq. ft.</span>
+                                <span><strong><?= $details !== '' ? htmlspecialchars($details) : '—' ?></strong> bedrooms</span>
+                                <span><strong><?= number_format((float)($p['area_sqft'] ?? 0)) ?></strong> sq. ft.</span>
                             </div>
                             <div class="property-price mt-auto pt-3">
-                                <span><?= $p['property_type'] === 'rent' ? 'Monthly rent' : 'Price' ?></span>
-                                <strong>৳ <?= number_format($p['price']) ?></strong>
+                                <span><?= $isRent ? 'Monthly rent' : 'Price' ?></span>
+                                <strong>৳ <?= number_format((float)($isRent ? $p['monthly_rent'] : ($p['price'] ?? 0))) ?></strong>
                             </div>
                         </div>
                     </article>

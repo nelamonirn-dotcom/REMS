@@ -1,5 +1,6 @@
 <?php
 session_start();
+include_once __DIR__ . '/property_crud/dbconfig.php'; // dbconfig.php যেখানে আছে সেই পথ দাও
 
 if (!isset($_SESSION['email'])) {
   header('Location: ../admin/index.php');
@@ -15,8 +16,91 @@ $ownerName = $_SESSION['name'] ?? 'Property Owner';
 $ownerEmail = $_SESSION['email'] ?? '';
 $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 
+// ডাটাবেস থেকে এই owner-এর প্রপার্টি
+$owner_id = $_SESSION['user_id'];
+// owner_id যদি INT হয়, তাহলে "s" এর জায়গায় "i" দাও
+$stmt = $conn->prepare("SELECT * FROM properties WHERE owner_id = ? ORDER BY created_at DESC");
+$stmt->bind_param("s", $owner_id);
+$stmt->execute();
+$properties = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-?>
+$totalProps = count($properties);
+$availableProps = count(array_filter($properties, fn($p) => ($p['status'] ?? '') === 'available'));
+$imgClasses = ['property-image-one', 'property-image-two', 'property-image-three'];
+
+// Booking approve / cancel (শুধু নিজের প্রপার্টির booking বদলানো যাবে)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['booking_id'], $_POST['new_status'])) {
+  if (in_array($_POST['new_status'], ['approved', 'cancelled'], true)) {
+    $bid = (int)$_POST['booking_id'];
+    $newStatus = $_POST['new_status'];
+    $upd = $conn->prepare("UPDATE bookings b JOIN properties p ON p.property_id = b.property_id SET b.status = ? WHERE b.booking_id = ? AND p.owner_id = ?");
+    $upd->bind_param("sis", $newStatus, $bid, $owner_id);
+    $upd->execute();
+  }
+  header('Location: owner_dashboard.php#bookings');
+  exit;
+}
+
+// এই owner-এর প্রপার্টির সব booking
+$bstmt = $conn->prepare("SELECT b.booking_id, b.customer_id, b.booking_date, b.status, b.created_at, p.title
+                         FROM bookings b
+                         JOIN properties p ON p.property_id = b.property_id
+                         WHERE p.owner_id = ?
+                         ORDER BY b.created_at DESC");
+$bstmt->bind_param("s", $owner_id);
+$bstmt->execute();
+$bookings = $bstmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$totalBookings = count($bookings);
+$pendingBookings = count(array_filter($bookings, fn($b) => ($b['status'] ?? '') === 'pending'));
+$approvedBookings = count(array_filter($bookings, fn($b) => ($b['status'] ?? '') === 'approved'));
+$bookingStatusClass = ['pending' => 'status-pending', 'approved' => 'status-rented', 'cancelled' => 'status-review'];
+
+// Payments (payments টেবিল না থাকলে পেজ ভাঙবে না, খালি দেখাবে)
+$payments = [];
+$paymentsReady = true;
+try {
+  $pstmt = $conn->prepare("SELECT pay.payment_id, pay.amount, pay.due_date, pay.paid_date, pay.status, b.customer_id, p.title
+                           FROM payments pay
+                           JOIN bookings b ON b.booking_id = pay.booking_id
+                           JOIN properties p ON p.property_id = b.property_id
+                           WHERE p.owner_id = ?
+                           ORDER BY pay.due_date DESC");
+  $pstmt->bind_param("s", $owner_id);
+  $pstmt->execute();
+  $payments = $pstmt->get_result()->fetch_all(MYSQLI_ASSOC);
+} catch (mysqli_sql_exception $e) {
+  $paymentsReady = false;
+}
+
+$receivedThisMonth = 0.0;
+$pendingTotal = 0.0;
+$pendingCount = 0;
+foreach ($payments as $pay) {
+  if (($pay['status'] ?? '') === 'received') {
+    $when = $pay['paid_date'] ?: $pay['due_date'];
+    if ($when && date('Y-m', strtotime($when)) === date('Y-m')) {
+      $receivedThisMonth += (float)$pay['amount'];
+    }
+  } else {
+    $pendingTotal += (float)$pay['amount'];
+    $pendingCount++;
+  }
+}
+
+// Notifications: সর্বশেষ ৫টা booking-এর অবস্থা থেকে তৈরি
+$notifications = [];
+foreach (array_slice($bookings, 0, 5) as $b) {
+  $st = $b['status'] ?? 'pending';
+  $who = 'Customer #' . (int)$b['customer_id'];
+  if ($st === 'approved') {
+    $notifications[] = ['icon' => 'fa-solid fa-circle-check', 'cls' => 'activity-green', 'title' => 'Booking approved', 'text' => "You approved $who for " . $b['title'] . '.', 'time' => $b['created_at']];
+  } elseif ($st === 'cancelled') {
+    $notifications[] = ['icon' => 'fa-solid fa-ban', 'cls' => 'activity-amber', 'title' => 'Booking cancelled', 'text' => "Booking by $who for " . $b['title'] . ' was cancelled.', 'time' => $b['created_at']];
+  } else {
+    $notifications[] = ['icon' => 'fa-regular fa-calendar-check', 'cls' => 'activity-blue', 'title' => 'New booking request', 'text' => "$who requested " . $b['title'] . '.', 'time' => $b['created_at']];
+  }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -50,7 +134,7 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
         </div>
         <div class="owner-topbar-actions">
           <span class="owner-today"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span id="owner-date"></span></span>
-          <a class="owner-icon-button owner-notifications" href="#notifications" aria-label="View notifications, 3 unread">
+          <a class="owner-icon-button owner-notifications" href="#notifications" aria-label="View notifications, <?= $pendingBookings ?> pending">
             <i class="fa-regular fa-bell" aria-hidden="true"></i><span></span>
           </a>
           <span class="owner-topbar-divider"></span>
@@ -66,18 +150,15 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
             <p class="owner-subtitle">A clear view of your properties, payments, and what needs attention.</p>
           </div>
           <div class="owner-heading-actions">
-            <span class="owner-preview-label"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Sample data preview</span>
             <a href="./property_crud/Addproperty.php" class="btn owner-primary-button"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add property</a>
           </div>
         </section>
 
-        <div class="owner-preview-notice" role="note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>This dashboard uses sample records. Forms and uploads are previews and do not save to the database.</span></div>
-
-        <section class="row g-3 owner-stat-grid" aria-label="Property portfolio summary">
-          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Owned properties</span><span class="owner-stat-icon icon-blue"><i class="fa-solid fa-building" aria-hidden="true"></i></span></div><strong class="owner-stat-value">12</strong><div class="owner-stat-foot"><span class="stat-positive">8 available</span><span>in your portfolio</span></div></article></div>
-          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Payments received</span><span class="owner-stat-icon icon-green"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span></div><strong class="owner-stat-value">৳ 3.42L</strong><div class="owner-stat-foot"><span class="stat-positive">This month</span><span>৳ 42,000 pending</span></div></article></div>
-          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Active bookings</span><span class="owner-stat-icon icon-purple"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i></span></div><strong class="owner-stat-value">09</strong><div class="owner-stat-foot"><span class="stat-neutral">3 need review</span><span>assigned properties</span></div></article></div>
-          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Open maintenance</span><span class="owner-stat-icon icon-amber"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i></span></div><strong class="owner-stat-value">02</strong><div class="owner-stat-foot"><span class="stat-attention">1 needs attention</span><span>open requests</span></div></article></div>
+                <section class="row g-3 owner-stat-grid" aria-label="Property portfolio summary">
+          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Owned properties</span><span class="owner-stat-icon icon-blue"><i class="fa-solid fa-building" aria-hidden="true"></i></span></div><strong class="owner-stat-value"><?= str_pad((string)$totalProps, 2, '0', STR_PAD_LEFT) ?></strong><div class="owner-stat-foot"><span class="stat-positive"><?= $availableProps ?> available</span><span>in your portfolio</span></div></article></div>
+          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Payments received</span><span class="owner-stat-icon icon-green"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span></div><strong class="owner-stat-value">৳ <?= number_format($receivedThisMonth) ?></strong><div class="owner-stat-foot"><span class="stat-positive">This month</span><span>৳ <?= number_format($pendingTotal) ?> pending</span></div></article></div>
+          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Active bookings</span><span class="owner-stat-icon icon-purple"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i></span></div><strong class="owner-stat-value"><?= str_pad((string)$approvedBookings, 2, '0', STR_PAD_LEFT) ?></strong><div class="owner-stat-foot"><span class="stat-neutral"><?= $pendingBookings ?> need review</span><span>approved bookings</span></div></article></div>
+          <div class="col-12 col-sm-6 col-xl-3"><article class="owner-stat-card"><div class="owner-stat-head"><span>Open maintenance</span><span class="owner-stat-icon icon-amber"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i></span></div><strong class="owner-stat-value">00</strong><div class="owner-stat-foot"><span class="stat-neutral">No open requests</span><span>maintenance</span></div></article></div>
         </section>
 
         <section class="owner-section-heading" id="properties">
@@ -86,38 +167,109 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
         </section>
 
         <section class="row g-3 owner-property-grid" aria-label="Owned properties">
-          <div class="col-12 col-md-6 col-xl-4"><article class="owner-property-card"><div class="property-image property-image-one" role="img" aria-label="Modern apartment exterior"><span class="property-type-pill">Apartment</span><span class="property-listing-status"><span></span> Rented</span></div><div class="property-card-body"><div class="property-card-heading"><div><h3>Lakeview Heights</h3><p><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Gulshan 2, Dhaka</p></div></div><div class="property-specs"><span><i class="fa-solid fa-bed" aria-hidden="true"></i> 3 beds</span><span><i class="fa-solid fa-bath" aria-hidden="true"></i> 2 baths</span><span><i class="fa-solid fa-vector-square" aria-hidden="true"></i> 1,450 sqft</span></div><div class="property-card-footer"><strong>৳ 85,000 <small>/ month</small></strong><a href="#property-images">Manage images</a></div></div></article></div>
-          <div class="col-12 col-md-6 col-xl-4"><article class="owner-property-card"><div class="property-image property-image-two" role="img" aria-label="Contemporary residential apartment building"><span class="property-type-pill">Apartment</span><span class="property-listing-status status-available"><span></span> Available</span></div><div class="property-card-body"><div class="property-card-heading"><div><h3>Palm Grove Residence</h3><p><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Dhanmondi, Dhaka</p></div></div><div class="property-specs"><span><i class="fa-solid fa-bed" aria-hidden="true"></i> 2 beds</span><span><i class="fa-solid fa-bath" aria-hidden="true"></i> 2 baths</span><span><i class="fa-solid fa-vector-square" aria-hidden="true"></i> 1,180 sqft</span></div><div class="property-card-footer"><strong>৳ 62,000 <small>/ month</small></strong><a href="#property-images">Manage images</a></div></div></article></div>
-          <div class="col-12 col-md-6 col-xl-4"><article class="owner-property-card"><div class="property-image property-image-three" role="img" aria-label="Bright modern apartment interior"><span class="property-type-pill">Condominium</span><span class="property-listing-status"><span></span> Rented</span></div><div class="property-card-body"><div class="property-card-heading"><div><h3>Cedar Court, Unit 3C</h3><p><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Banani, Dhaka</p></div></div><div class="property-specs"><span><i class="fa-solid fa-bed" aria-hidden="true"></i> 3 beds</span><span><i class="fa-solid fa-bath" aria-hidden="true"></i> 3 baths</span><span><i class="fa-solid fa-vector-square" aria-hidden="true"></i> 1,700 sqft</span></div><div class="property-card-footer"><strong>৳ 98,000 <small>/ month</small></strong><a href="#property-images">Manage images</a></div></div></article></div>
+          <?php if ($totalProps === 0): ?>
+            <div class="col-12"><p class="text-secondary">You haven't added any properties yet.</p></div>
+          <?php endif; ?>
+
+          <?php foreach (array_slice($properties, 0, 3) as $i => $p):
+            $isRent = !empty($p['monthly_rent']) && $p['monthly_rent'] > 0;
+            $status = $p['status'] ?? '';
+            $img = !empty($p['imagas'])
+              ? 'property_crud/' . implode('/', array_map('rawurlencode', explode('/', $p['imagas'])))
+              : '';
+          ?>
+          <div class="col-12 col-md-6 col-xl-4">
+            <article class="owner-property-card">
+              <div class="property-image <?= $imgClasses[$i % 3] ?>" role="img" aria-label="<?= $escape((string)($p['title'] ?? '')) ?>"
+                   <?php if ($img): ?>style="background-image:url('<?= $escape($img) ?>'); background-size:cover; background-position:center;"<?php endif; ?>>
+                <span class="property-type-pill"><?= $escape(ucfirst((string)($p['property_type'] ?? ''))) ?></span>
+                <span class="property-listing-status <?= $status === 'available' ? 'status-available' : '' ?>"><span></span> <?= $escape(ucfirst($status)) ?></span>
+              </div>
+              <div class="property-card-body">
+                <div class="property-card-heading">
+                  <div>
+                    <h3><?= $escape((string)($p['title'] ?? '')) ?></h3>
+                    <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <?= $escape((string)($p['address'] ?? '')) ?></p>
+                  </div>
+                </div>
+                <div class="property-specs">
+                  <span><i class="fa-solid fa-bed" aria-hidden="true"></i> <?= $escape((string)($p['flat_details'] ?? '—')) ?> beds</span>
+                  <span><i class="fa-solid fa-vector-square" aria-hidden="true"></i> <?= number_format((float)($p['area_sqft'] ?? 0)) ?> sqft</span>
+                </div>
+                <div class="property-card-footer">
+                  <strong>৳ <?= number_format((float)($isRent ? $p['monthly_rent'] : ($p['price'] ?? 0))) ?><?php if ($isRent): ?> <small>/ month</small><?php endif; ?></strong>
+                  <a href="property_crud/myproperty.php">Details</a>
+                </div>
+              </div>
+            </article>
+          </div>
+          <?php endforeach; ?>
         </section>
 
-       
-
-        
         <section class="owner-module-section" id="bookings" aria-labelledby="bookings-title">
-          <div class="owner-section-heading"><div><h2 id="bookings-title">Bookings</h2><p>Review booking requests for your properties.</p></div><span class="owner-section-count">4 requests</span></div>
-          <article class="owner-panel owner-table-panel"><div class="owner-table-scroll"><table class="owner-data-table"><thead><tr><th>Customer</th><th>Property</th><th>Requested</th><th>Status</th><th>Action</th></tr></thead><tbody>
-            <tr><td><strong>Nadia Karim</strong><small>nadia@example.com</small></td><td>Lakeview Heights</td><td>Nov 11</td><td><span class="owner-status status-pending">Pending</span></td><td><button class="owner-inline-action" type="button" data-preview-message="Booking decisions are a preview and are not saved. Connect booking actions to your backend.">Review</button></td></tr>
-            <tr><td><strong>Imran Hossain</strong><small>imran@example.com</small></td><td>Palm Grove Residence</td><td>Nov 10</td><td><span class="owner-status status-review">In review</span></td><td><button class="owner-inline-action" type="button" data-preview-message="Booking details shown here are sample data.">View</button></td></tr>
-            <tr><td><strong>Maliha Chowdhury</strong><small>maliha@example.com</small></td><td>Cedar Court, Unit 3C</td><td>Nov 08</td><td><span class="owner-status status-rented">Confirmed</span></td><td><button class="owner-inline-action" type="button" data-preview-message="Booking details shown here are sample data.">View</button></td></tr>
-          </tbody></table></div></article>
+          <div class="owner-section-heading"><div><h2 id="bookings-title">Bookings</h2><p>Review booking requests for your properties.</p></div><span class="owner-section-count"><?= $totalBookings ?> requests</span></div>
+          <article class="owner-panel owner-table-panel"><div class="owner-table-scroll">
+            <?php if ($totalBookings === 0): ?>
+              <p class="text-secondary p-3 mb-0">No booking requests yet.</p>
+            <?php else: ?>
+            <table class="owner-data-table"><thead><tr><th>Customer</th><th>Property</th><th>Requested</th><th>Status</th><th>Action</th></tr></thead><tbody>
+              <?php foreach ($bookings as $b):
+                $bStatus = $b['status'] ?? 'pending';
+              ?>
+              <tr>
+                <td><strong>Customer #<?= (int)$b['customer_id'] ?></strong></td>
+                <td><?= $escape((string)$b['title']) ?></td>
+                <td><?= $escape(date('M d, Y', strtotime((string)$b['booking_date']))) ?></td>
+                <td><span class="owner-status <?= $bookingStatusClass[$bStatus] ?? '' ?>"><?= $escape(ucfirst($bStatus)) ?></span></td>
+                <td>
+                  <?php if ($bStatus === 'pending'): ?>
+                  <form method="post" class="d-inline-flex gap-1">
+                    <input type="hidden" name="booking_id" value="<?= (int)$b['booking_id'] ?>">
+                    <button class="owner-inline-action" type="submit" name="new_status" value="approved">Approve</button>
+                    <button class="owner-inline-action" type="submit" name="new_status" value="cancelled">Cancel</button>
+                  </form>
+                  <?php else: ?>
+                    <span class="text-secondary">—</span>
+                  <?php endif; ?>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody></table>
+            <?php endif; ?>
+          </div></article>
         </section>
 
         <section class="owner-module-section" id="payments" aria-labelledby="payments-title">
           <div class="owner-section-heading"><div><h2 id="payments-title">Payments</h2><p>See received payments and pending balances.</p></div></div>
-          <div class="owner-finance-summary"><article class="owner-panel"><small>Received this month</small><strong>৳ 3,42,000</strong><span>Across 8 properties</span></article><article class="owner-panel"><small>Pending payments</small><strong>৳ 42,000</strong><span>2 payments due</span></article></div>
-          <article class="owner-panel owner-table-panel"><div class="owner-table-scroll"><table class="owner-data-table"><thead><tr><th>Payment</th><th>Property</th><th>Date due</th><th>Amount</th><th>Status</th></tr></thead><tbody>
-            <tr><td><strong>Rent · November</strong><small>Nadia Karim</small></td><td>Lakeview Heights</td><td>Nov 05</td><td>৳ 85,000</td><td><span class="owner-status status-rented">Received</span></td></tr>
-            <tr><td><strong>Rent · November</strong><small>Imran Hossain</small></td><td>Palm Grove Residence</td><td>Nov 15</td><td>৳ 62,000</td><td><span class="owner-status status-pending">Pending</span></td></tr>
-            <tr><td><strong>Rent · November</strong><small>Maliha Chowdhury</small></td><td>Cedar Court, Unit 3C</td><td>Nov 03</td><td>৳ 98,000</td><td><span class="owner-status status-rented">Received</span></td></tr>
-          </tbody></table></div></article>
+          <div class="owner-finance-summary"><article class="owner-panel"><small>Received this month</small><strong>৳ <?= number_format($receivedThisMonth) ?></strong><span><?= count($payments) - $pendingCount ?> payments received</span></article><article class="owner-panel"><small>Pending payments</small><strong>৳ <?= number_format($pendingTotal) ?></strong><span><?= $pendingCount ?> payments due</span></article></div>
+          <article class="owner-panel owner-table-panel"><div class="owner-table-scroll">
+            <?php if (!$paymentsReady || count($payments) === 0): ?>
+              <p class="text-secondary p-3 mb-0">No payments recorded yet.</p>
+            <?php else: ?>
+            <table class="owner-data-table"><thead><tr><th>Payment</th><th>Property</th><th>Date due</th><th>Amount</th><th>Status</th></tr></thead><tbody>
+              <?php foreach ($payments as $pay): $received = ($pay['status'] ?? '') === 'received'; ?>
+              <tr>
+                <td><strong>Rent</strong><small>Customer #<?= (int)$pay['customer_id'] ?></small></td>
+                <td><?= $escape((string)$pay['title']) ?></td>
+                <td><?= $escape(date('M d', strtotime((string)$pay['due_date']))) ?></td>
+                <td>৳ <?= number_format((float)$pay['amount']) ?></td>
+                <td><span class="owner-status <?= $received ? 'status-rented' : 'status-pending' ?>"><?= $received ? 'Received' : 'Pending' ?></span></td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody></table>
+            <?php endif; ?>
+          </div></article>
         </section>
+
         <section class="owner-module-section" id="notifications" aria-labelledby="notifications-title">
           <div class="owner-section-heading"><div><h2 id="notifications-title">Notifications</h2><p>Booking and payment updates for your properties.</p></div></div>
           <article class="owner-panel owner-notification-list">
-            <div class="owner-notification-item"><span class="activity-icon activity-blue"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i></span><div><strong>New booking request</strong><p>Nadia Karim submitted a request for Lakeview Heights.</p></div><small>Today · 9:15 AM</small></div>
-            <div class="owner-notification-item"><span class="activity-icon activity-green"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><div><strong>Payment received</strong><p>November rent payment received for Cedar Court.</p></div><small>Yesterday · 4:40 PM</small></div>
-            <div class="owner-notification-item"><span class="activity-icon activity-amber"><i class="fa-solid fa-clock" aria-hidden="true"></i></span><div><strong>Payment due soon</strong><p>Palm Grove Residence rent is due on November 15.</p></div><small>Yesterday · 10:20 AM</small></div>
+            <?php if (count($notifications) === 0): ?>
+              <p class="text-secondary p-3 mb-0">No notifications yet.</p>
+            <?php endif; ?>
+            <?php foreach ($notifications as $n): ?>
+            <div class="owner-notification-item"><span class="activity-icon <?= $n['cls'] ?>"><i class="<?= $n['icon'] ?>" aria-hidden="true"></i></span><div><strong><?= $escape($n['title']) ?></strong><p><?= $escape($n['text']) ?></p></div><small><?= $escape(date('M d · g:i A', strtotime((string)$n['time']))) ?></small></div>
+            <?php endforeach; ?>
           </article>
         </section>
 
@@ -132,13 +284,21 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
         </section>
 
         <p class="owner-action-feedback" id="owner-action-feedback" role="status" aria-live="polite" hidden></p>
-        <footer class="owner-footer"><span>EstateFlow <span aria-hidden="true">·</span> Owner workspace</span><span>Dashboard content is sample preview data.</span></footer>
+        <footer class="owner-footer"><span>EstateFlow <span aria-hidden="true">·</span> Owner workspace</span><span>Owner dashboard</span></footer>
       </main>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
+  <script>
+    (function () {
+      var d = document.getElementById('owner-date');
+      if (d) d.textContent = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      var g = document.getElementById('owner-greeting');
+      if (g) { var h = new Date().getHours(); g.textContent = h < 12 ? 'Good morning' : (h < 18 ? 'Good afternoon' : 'Good evening'); }
+    })();
+  </script>
+
 </body>
 
 </html>

@@ -1,7 +1,11 @@
 .add-property-page {
     min-height: 100vh;
-    background: #f3f6fb;
+    background: #fff;
     color: #1f2937;
+}
+
+body.add-property-page.owner-dashboard {
+    background: #fff;
 }
 
 .add-property-page .property-card {

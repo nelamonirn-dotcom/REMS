@@ -3,13 +3,13 @@ session_start();
 include_once 'dbconfig.php';
 
 if (!isset($_SESSION['email'])) {
-  header('Location: ../admin/index.php');
-  exit;
+    header('Location: ../admin/index.php');
+    exit;
 }
 
 if (($_SESSION['role'] ?? '') !== 'owner') {
-  header('Location: ../admin/unauthorize.php');
-  exit;
+    header('Location: ../admin/unauthorize.php');
+    exit;
 }
 
 $ownerName = $_SESSION['name'] ?? 'Property Owner';
@@ -18,39 +18,59 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-  // data received from entry form
-  $owner_id = $_SESSION['user_id'];
-  $title = $_POST['title'];
-  $property_type = $_POST['property_type'];
-  $area_sqft = $_POST['area_sqft'];
-  $address = $_POST['address'];
-  $price = $_POST['price'];
-  $monthly_rent = $_POST['monthly_rent'];
-  $flatdetails = $_POST['flat_details'];
-  $status = $_POST['status'];
-  $imagas = $_POST['imagas'];
-  $description = $_POST['description'];
+    // data received from entry form
+    $owner_id = $_SESSION['user_id'];
+    $title = $_POST['title'];
+    $property_type = $_POST['property_type'];
+    $area_sqft = $_POST['area_sqft'];
+    $address = $_POST['address'];
+    $price = $_POST['price'];
+    $monthly_rent = $_POST['monthly_rent'];
+    $flatdetails = $_POST['flat_details'];
+    $status = $_POST['status'];
+    //$imagas = $_POST['photo'];
 
-  
+    $description = $_POST['description'];
 
-  $result = $conn->query("INSERT INTO properties (owner_id,title,property_type,area_sqft,address,price,monthly_rent,flat_details,status,imagas,description) VALUES ('$owner_id','$title','$property_type','$area_sqft','$address','$price','$monthly_rent','$flatdetails','$status', '$imagas','$description')");
+    // echo "<pre>";
+    // print_r($_FILES);
+    // echo "<hr>";
+    // print_r($_POST);
 
-  if ($conn->affected_rows) {
-    header('Location: ../owner_dashboard.php');
-  }
+    $photo = $_FILES['photo']['name'];
+    $path = "uploads/";
+    $filepath = $path . $photo;
+
+    $tmp = $_FILES['photo']['tmp_name'];
+
+    if (move_uploaded_file($tmp, $filepath)) {
+
+        $result = $conn->query("INSERT INTO properties (owner_id,title,property_type,area_sqft,address,price,monthly_rent,flat_details,status,imagas,description) VALUES ('$owner_id','$title','$property_type','$area_sqft','$address','$price','$monthly_rent','$flatdetails','$status', '$filepath','$description')");
+    }
+
+
+
+    if ($conn->affected_rows) {
+        //echo "Success";
+        header('Location: ../owner_dashboard.php');
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Property</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/owner/add-property.css">
+    
 </head>
+
 <body class="add-property-page">
+
     <main class="container py-5">
         <div class="card property-card mx-auto">
             <div class="property-card-header card-body p-4 p-md-5 pb-4">
@@ -60,9 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="card-body p-4 p-md-5 pt-4">
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     <div class="row g-4">
-                        
+
 
                         <div class="col-12">
                             <label for="title" class="form-label">Property title <span class="text-danger">*</span></label>
@@ -109,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <label for="flat_details" class="form-label">flat_details</label>
                             <input type="text" class="form-control" id="flat_details" name="flat_details" min="0" step="1" placeholder="Number of bedrooms">
                         </div>
-                        
+
                         <div class="col-12">
                             <label for="status" class="form-label">Status</label>
                             <select class="form-select" id="status" name="status">
@@ -120,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="col-12">
                             <label for="description" class="form-label">imagas</label>
-                            <input type="file" class="form-control" id="imagas" name="imagas" rows="4" >
+                            <input type="file" class="form-control" id="photo" name="photo" rows="4">
                         </div>
                         <div class="col-12">
                             <label for="description" class="form-label">Description</label>
@@ -137,4 +157,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 </body>
+
 </html>
