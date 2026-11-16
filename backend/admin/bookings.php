@@ -12,28 +12,83 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
 }
 
 $adminPageTitle = 'Bookings';
-?>
-<?php
-if($_SERVER['REQUEST_METHOD']=='POST'){
-    // data received from entry from
-    $date = $_POST ['date'];
-    $status = $_POST ['status'];
-   
-    include_once("dbconfig.php"); // database Connection
 
-$result = $conn->query("INSERT INTO allstudents (booking_id, property_id, customer_id, date,status,phone) VALUES (NULL,NULL, NULL,'$date','$status')");
+include_once __DIR__ . '/dbconfig.php'; // database connection ($conn)
 
+// ---------- Filters (GET) ----------
+$statusFilter = $_GET['status'] ?? '';
+$search       = trim($_GET['q'] ?? '');
+$page         = max(1, (int)($_GET['page'] ?? 1));
+$perPage      = 10;
 
-if ($conn->affected_rows){
-
-echo "success";
+// ---------- Summary cards ----------
+$stats = ['total' => 0, 'pending' => 0, 'approved' => 0, 'cancelled' => 0];
+$r = $conn->query("SELECT status, COUNT(*) AS c FROM bookings GROUP BY status");
+while ($row = $r->fetch_assoc()) {
+  $stats[$row['status']] = (int)$row['c'];
+  $stats['total']       += (int)$row['c'];
 }
+$approvedPct = $stats['total'] > 0 ? round($stats['approved'] / $stats['total'] * 100) : 0;
 
+// ---------- Where conditions ----------
+$where  = [];
+$params = [];
+$types  = '';
+
+if (in_array($statusFilter, ['pending', 'approved', 'cancelled'], true)) {
+  $where[]  = "b.status = ?";
+  $params[] = $statusFilter;
+  $types   .= 's';
 }
+if ($search !== '') {
+  $where[]  = "(b.booking_id LIKE ? OR b.customer_id LIKE ? OR p.title LIKE ? OR p.address LIKE ?)";
+  $like     = "%$search%";
+  array_push($params, $like, $like, $like, $like);
+  $types   .= 'ssss';
+}
+$whereSql = $where ? ' WHERE ' . implode(' AND ', $where) : '';
 
+// ---------- Count (for pagination) ----------
+$countSql = "SELECT COUNT(*) FROM bookings b
+             LEFT JOIN properties p ON p.property_id = b.property_id" . $whereSql;
+$stmt = $conn->prepare($countSql);
+if ($params) { $stmt->bind_param($types, ...$params); }
+$stmt->execute();
+$filtered   = (int)$stmt->get_result()->fetch_row()[0];
+$totalPages = max(1, (int)ceil($filtered / $perPage));
+$page       = min($page, $totalPages);
+$offset     = ($page - 1) * $perPage;
+
+// ---------- Bookings list ----------
+$sql = "SELECT b.booking_id, b.customer_id, b.booking_date, b.status,
+               p.title, p.address, p.price, p.monthly_rent
+        FROM bookings b
+        LEFT JOIN properties p ON p.property_id = b.property_id"
+     . $whereSql . "
+        ORDER BY b.booking_date DESC
+        LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($sql);
+$params2 = array_merge($params, [$perPage, $offset]);
+$stmt->bind_param($types . 'ii', ...$params2);
+$stmt->execute();
+$bookings = $stmt->get_result();
+
+$from = $filtered > 0 ? $offset + 1 : 0;
+$to   = min($offset + $perPage, $filtered);
+
+// ---------- Helpers ----------
+function pageUrl($p) {
+  $q = $_GET;
+  $q['page'] = $p;
+  return '?' . http_build_query($q);
+}
+function statusClass($s) {
+  return $s === 'approved' ? 'status-confirmed' : ($s === 'cancelled' ? 'status-cancelled' : 'status-pending');
+}
+function statusLabel($s) {
+  return $s === 'approved' ? 'Confirmed' : ucfirst($s);
+}
 ?>
-
-
 <!doctype html>
 <html lang="en">
 
@@ -69,7 +124,6 @@ echo "success";
             <h1 id="bookings-title">Bookings</h1>
             <p class="page-subtitle">Track reservations and review incoming booking requests.</p>
           </div>
-          <span class="sample-label"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Sample data preview</span>
         </section>
 
         <section class="row g-3 booking-stats" aria-label="Booking summary">
@@ -77,15 +131,15 @@ echo "success";
             <article class="booking-stat-card">
               <span class="booking-stat-icon booking-stat-icon-blue"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></span>
               <p>Total bookings</p>
-              <strong>128</strong>
-              <small><span class="booking-trend"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> 12.5%</span> vs. last month</small>
+              <strong><?= $stats['total'] ?></strong>
+              <small>All time</small>
             </article>
           </div>
           <div class="col-12 col-sm-6 col-xl-3">
             <article class="booking-stat-card">
               <span class="booking-stat-icon booking-stat-icon-amber"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
               <p>Pending review</p>
-              <strong>08</strong>
+              <strong><?= $stats['pending'] ?></strong>
               <small>Needs your attention</small>
             </article>
           </div>
@@ -93,16 +147,16 @@ echo "success";
             <article class="booking-stat-card">
               <span class="booking-stat-icon booking-stat-icon-green"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
               <p>Confirmed</p>
-              <strong>96</strong>
-              <small>75% of all bookings</small>
+              <strong><?= $stats['approved'] ?></strong>
+              <small><?= $approvedPct ?>% of all bookings</small>
             </article>
           </div>
           <div class="col-12 col-sm-6 col-xl-3">
             <article class="booking-stat-card">
               <span class="booking-stat-icon booking-stat-icon-red"><i class="fa-solid fa-ban" aria-hidden="true"></i></span>
               <p>Cancelled</p>
-              <strong>24</strong>
-              <small>This month</small>
+              <strong><?= $stats['cancelled'] ?></strong>
+              <small>All time</small>
             </article>
           </div>
         </section>
@@ -113,118 +167,97 @@ echo "success";
               <h2 id="booking-list-title">All bookings</h2>
               <p>Review booking details and current status.</p>
             </div>
-            <button class="btn btn-outline-secondary booking-export" type="button">
-              <i class="fa-solid fa-arrow-down-to-line me-2" aria-hidden="true"></i>Export
-            </button>
           </div>
 
-          <div class="booking-toolbar">
+          <form class="booking-toolbar" method="get" action="">
             <label class="booking-search" for="booking-search">
               <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
               <span class="visually-hidden">Search bookings</span>
-              <input id="booking-search" class="form-control" type="search" placeholder="Search by guest, property or ID">
+              <input id="booking-search" name="q" class="form-control" type="search" placeholder="Search by ID, customer or property" value="<?= htmlspecialchars($search) ?>">
             </label>
             <label class="visually-hidden" for="booking-status">Filter by status</label>
-            <select class="form-select booking-filter" id="booking-status">
-              <option selected>All statuses</option>
-              <option>Confirmed</option>
-              <option>Pending</option>
-              <option>Cancelled</option>
+            <select class="form-select booking-filter" id="booking-status" name="status" onchange="this.form.submit()">
+              <option value="">All statuses</option>
+              <option value="approved"  <?= $statusFilter === 'approved'  ? 'selected' : '' ?>>Confirmed</option>
+              <option value="pending"   <?= $statusFilter === 'pending'   ? 'selected' : '' ?>>Pending</option>
+              <option value="cancelled" <?= $statusFilter === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
             </select>
-            <label class="visually-hidden" for="booking-date">Filter by date</label>
-            <select class="form-select booking-filter" id="booking-date">
-              <option selected>All dates</option>
-              <option>This month</option>
-              <option>Last month</option>
-            </select>
-          </div>
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+          </form>
 
           <div class="table-responsive">
             <table class="table booking-table align-middle mb-0">
               <thead>
                 <tr>
                   <th scope="col">Booking ID</th>
-                  <th scope="col">Guest</th>
+                  <th scope="col">Customer</th>
                   <th scope="col">Property</th>
                   <th scope="col">Booking date</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Status</th>
-                  <th scope="col"><span class="visually-hidden">Actions</span></th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><span class="booking-id">#BK-2048</span></td>
-                  <td><div class="guest-cell"><span class="guest-avatar guest-avatar-blue">AR</span><span><strong>Arif Rahman</strong><small>arif.rahman@email.com</small></span></div></td>
-                  <td><strong class="property-name">Lakeview Heights, Apt 5B</strong><small class="property-location">Gulshan, Dhaka</small></td>
-                  <td>Nov 08, 2026</td>
-                  <td class="booking-amount">৳ 85,000</td>
-                  <td><span class="booking-status status-confirmed"><span></span>Confirmed</span></td>
-                  <td><button class="booking-more" type="button" aria-label="More actions for booking BK-2048"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></td>
-                </tr>
-                <tr>
-                  <td><span class="booking-id">#BK-2047</span></td>
-                  <td><div class="guest-cell"><span class="guest-avatar guest-avatar-purple">SN</span><span><strong>Sadia Noor</strong><small>sadia.noor@email.com</small></span></div></td>
-                  <td><strong class="property-name">The Grand Residence</strong><small class="property-location">Banani, Dhaka</small></td>
-                  <td>Nov 07, 2026</td>
-                  <td class="booking-amount">৳ 120,000</td>
-                  <td><span class="booking-status status-pending"><span></span>Pending</span></td>
-                  <td><button class="booking-more" type="button" aria-label="More actions for booking BK-2047"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></td>
-                </tr>
-                <tr>
-                  <td><span class="booking-id">#BK-2046</span></td>
-                  <td><div class="guest-cell"><span class="guest-avatar guest-avatar-green">TH</span><span><strong>Tariq Hasan</strong><small>tariq.hasan@email.com</small></span></div></td>
-                  <td><strong class="property-name">Palm Grove Apartment</strong><small class="property-location">Dhanmondi, Dhaka</small></td>
-                  <td>Nov 06, 2026</td>
-                  <td class="booking-amount">৳ 65,000</td>
-                  <td><span class="booking-status status-confirmed"><span></span>Confirmed</span></td>
-                  <td><button class="booking-more" type="button" aria-label="More actions for booking BK-2046"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></td>
-                </tr>
-                <tr>
-                  <td><span class="booking-id">#BK-2045</span></td>
-                  <td><div class="guest-cell"><span class="guest-avatar guest-avatar-orange">FM</span><span><strong>Farhana Mahmud</strong><small>farhana.mahmud@email.com</small></span></div></td>
-                  <td><strong class="property-name">Riverside Tower, Unit 8A</strong><small class="property-location">Uttara, Dhaka</small></td>
-                  <td>Nov 05, 2026</td>
-                  <td class="booking-amount">৳ 92,000</td>
-                  <td><span class="booking-status status-cancelled"><span></span>Cancelled</span></td>
-                  <td><button class="booking-more" type="button" aria-label="More actions for booking BK-2045"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></td>
-                </tr>
-                <tr>
-                  <td><span class="booking-id">#BK-2044</span></td>
-                  <td><div class="guest-cell"><span class="guest-avatar guest-avatar-teal">MI</span><span><strong>Mahin Islam</strong><small>mahin.islam@email.com</small></span></div></td>
-                  <td><strong class="property-name">Cedar Court, Apartment 3C</strong><small class="property-location">Bashundhara, Dhaka</small></td>
-                  <td>Nov 04, 2026</td>
-                  <td class="booking-amount">৳ 78,000</td>
-                  <td><span class="booking-status status-confirmed"><span></span>Confirmed</span></td>
-                  <td><button class="booking-more" type="button" aria-label="More actions for booking BK-2044"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></td>
-                </tr>
+                <?php if ($bookings->num_rows > 0): ?>
+                  <?php while ($b = $bookings->fetch_assoc()): ?>
+                    <tr>
+                      <td><span class="booking-id">#BK-<?= (int)$b['booking_id'] ?></span></td>
+                      <td>
+                        <div class="guest-cell">
+                          <span class="guest-avatar guest-avatar-blue">C<?= (int)$b['customer_id'] ?></span>
+                          <span><strong>Customer #<?= (int)$b['customer_id'] ?></strong></span>
+                        </div>
+                      </td>
+                      <td>
+                        <strong class="property-name"><?= htmlspecialchars($b['title'] ?? 'Property removed') ?></strong>
+                        <small class="property-location"><?= htmlspecialchars($b['address'] ?? '') ?></small>
+                      </td>
+                      <td><?= htmlspecialchars(date('M d, Y', strtotime($b['booking_date']))) ?></td>
+                      <td class="booking-amount">
+                        <?php if ($b['monthly_rent'] !== null): ?>
+                          ৳ <?= number_format($b['monthly_rent']) ?>/month
+                        <?php elseif ($b['price'] !== null): ?>
+                          ৳ <?= number_format($b['price']) ?>
+                        <?php else: ?>
+                          —
+                        <?php endif; ?>
+                      </td>
+                      <td>
+                        <span class="booking-status <?= statusClass($b['status']) ?>"><span></span><?= statusLabel($b['status']) ?></span>
+                      </td>
+                    </tr>
+                  <?php endwhile; ?>
+                <?php else: ?>
+                  <tr><td colspan="6" class="text-center py-4">Kono booking pawa jayni.</td></tr>
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
 
           <div class="booking-table-footer">
-            <span>Showing <strong>1–5</strong> of <strong>128</strong> bookings</span>
-            <nav aria-label="Bookings pages">
-              <ul class="pagination pagination-sm mb-0">
-                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous page"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></a></li>
-                <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><span class="page-link page-ellipsis">...</span></li>
-                <li class="page-item"><a class="page-link" href="#">26</a></li>
-                <li class="page-item"><a class="page-link" href="#" aria-label="Next page"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></li>
-              </ul>
-            </nav>
+            <span>Showing <strong><?= $from ?>–<?= $to ?></strong> of <strong><?= $filtered ?></strong> bookings</span>
+            <?php if ($totalPages > 1): ?>
+              <nav aria-label="Bookings pages">
+                <ul class="pagination pagination-sm mb-0">
+                  <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
+                    <a class="page-link" href="<?= pageUrl($page - 1) ?>" aria-label="Previous page"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></a>
+                  </li>
+                  <?php for ($i = max(1, $page - 2); $i <= min($totalPages, $page + 2); $i++): ?>
+                    <li class="page-item <?= $i === $page ? 'active' : '' ?>" <?= $i === $page ? 'aria-current="page"' : '' ?>>
+                      <a class="page-link" href="<?= pageUrl($i) ?>"><?= $i ?></a>
+                    </li>
+                  <?php endfor; ?>
+                  <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
+                    <a class="page-link" href="<?= pageUrl($page + 1) ?>" aria-label="Next page"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                  </li>
+                </ul>
+              </nav>
+            <?php endif; ?>
           </div>
         </section>
 
-      <form action="" method="post">
-
-
-
         <footer class="bookings-footer">
           <span>EstateFlow Admin <span aria-hidden="true">·</span> Administrator workspace</span>
-          <span>Booking information shown is sample preview content.</span>
         </footer>
       </main>
     </div>

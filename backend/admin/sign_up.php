@@ -1,3 +1,50 @@
+<?php
+session_start();
+include_once __DIR__ . '/dbconfig.php'; // database connection ($conn)
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $name     = trim($_POST['name'] ?? '');
+  $email    = strtolower(trim($_POST['email'] ?? ''));
+  $phone    = trim($_POST['phone'] ?? '');
+  $password = $_POST['password'] ?? '';
+  $confirm  = $_POST['confirm_password'] ?? '';
+
+  if ($name === '' || $email === '' || $password === '') {
+    $error = 'Name, email ar password dite hobe.';
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $error = 'Email thik nai.';
+  } elseif (strlen($password) < 8) {
+    $error = 'Password komporkhome 8 ta character hote hobe.';
+  } elseif ($password !== $confirm) {
+    $error = 'Password duto mile ni.';
+  } else {
+    try {
+      // email ager theke ache kina check
+      $check = $conn->prepare("SELECT user_id FROM users WHERE email = ?");
+      $check->bind_param('s', $email);
+      $check->execute();
+      if ($check->get_result()->num_rows > 0) {
+        $error = 'Ei email diye ager theke account ache. Sign in koro.';
+      } else {
+        $hash      = password_hash($password, PASSWORD_DEFAULT);
+        $phoneVal  = $phone !== '' ? $phone : null;
+        $role      = 'customer';
+
+        $stmt = $conn->prepare("INSERT INTO users (name, email, password_hash, phone, role) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param('sssss', $name, $email, $hash, $phoneVal, $role);
+        $stmt->execute();
+
+        header("Location: index.php?registered=1");
+        exit;
+      }
+    } catch (Throwable $e) {
+      $error = 'Account toiri hoy ni: ' . $e->getMessage();
+    }
+  }
+}
+?>
 <!doctype html>
 <html lang="en">
 
@@ -43,16 +90,16 @@
       <h2 id="signup-heading">Create your account</h2>
       <p class="auth-intro">Join EstateFlow to explore homes and keep your search moving.</p>
 
-      <form class="auth-form signup-form" id="signup-form">
+      <form class="auth-form signup-form" id="signup-form" method="post" action="">
         <fieldset class="signup-intent">
           <legend>I’m looking to</legend>
           <div class="signup-intent-options">
             <label class="signup-intent-option">
-              <input type="radio" name="customer_type" value="buyer" checked>
+              <input type="radio" name="customer_type" value="buyer" <?= ($_POST['customer_type'] ?? 'buyer') === 'buyer' ? 'checked' : '' ?>>
               <span><strong>Buy a home</strong><small>Find a place to call yours</small></span>
             </label>
             <label class="signup-intent-option">
-              <input type="radio" name="customer_type" value="tenant">
+              <input type="radio" name="customer_type" value="tenant" <?= ($_POST['customer_type'] ?? '') === 'tenant' ? 'checked' : '' ?>>
               <span><strong>Rent a home</strong><small>Find your next place</small></span>
             </label>
           </div>
@@ -61,15 +108,15 @@
         <div class="signup-field-grid">
           <div class="signup-field signup-field-wide">
             <label for="name">Full name</label>
-            <input id="name" name="name" type="text" autocomplete="name" placeholder="e.g. Samira Rahman" maxlength="100" required>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="e.g. Samira Rahman" maxlength="100" required value="<?= htmlspecialchars($_POST['name'] ?? '') ?>">
           </div>
           <div class="signup-field">
             <label for="email">Email address</label>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="100" required>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="100" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
           </div>
           <div class="signup-field">
             <label for="phone">Phone number <span class="signup-optional">Optional</span></label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+880 1XXX-XXXXXX" maxlength="20">
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+880 1XXX-XXXXXX" maxlength="20" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
           </div>
           <div class="signup-field">
             <label for="password">Password</label>
@@ -81,19 +128,16 @@
           </div>
         </div>
 
-        <p class="signup-notice" id="signup-notice" role="status" hidden></p>
+        <p class="signup-notice" id="signup-notice" role="status" <?= $error === '' ? 'hidden' : '' ?>><?= htmlspecialchars($error) ?></p>
         <button type="submit">Create my account <span aria-hidden="true">→</span></button>
       </form>
 
-      <p class="auth-footnote signup-preview-note">This sign-up preview does not save account details yet.</p>
       <p class="signup-login-prompt">Already have an account? <a href="index.php">Sign in</a></p>
     </section>
   </main>
   <script>
-    const signupForm = document.getElementById('signup-form');
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirm-password');
-    const signupNotice = document.getElementById('signup-notice');
 
     function validatePasswordMatch() {
       confirmPasswordInput.setCustomValidity(
@@ -105,11 +149,6 @@
 
     passwordInput.addEventListener('input', validatePasswordMatch);
     confirmPasswordInput.addEventListener('input', validatePasswordMatch);
-    signupForm.addEventListener('submit', function (event) {
-      event.preventDefault();
-      signupNotice.textContent = 'This preview is not connected to account creation. Your details have not been saved.';
-      signupNotice.hidden = false;
-    });
   </script>
 </body>
 

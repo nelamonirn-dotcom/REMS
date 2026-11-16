@@ -14,6 +14,9 @@ if (($_SESSION['role'] ?? '') !== 'owner') {
 
 $ownerName = $_SESSION['name'] ?? 'Property Owner';
 $ownerEmail = $_SESSION['email'] ?? '';
+$ownerPageBase = '';
+$ownerPageTitle = 'Overview';
+$ownerActivePage = 'dashboard';
 $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 
 // ডাটাবেস থেকে এই owner-এর প্রপার্টি
@@ -122,25 +125,9 @@ foreach (array_slice($bookings, 0, 5) as $b) {
 <body class="owner-dashboard">
   <a class="owner-skip-link" href="#owner-main">Skip to dashboard</a>
   <div class="owner-layout">
-    <?php include __DIR__ . '/../shared/partials/owner_leftber.php'; ?>
-
+      <?php include __DIR__ . '/include/owner_leftber.php'; ?>
     <div class="owner-main-shell">
-      <header class="owner-topbar">
-        <div class="d-flex align-items-center gap-3">
-          <button class="owner-menu-toggle d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#ownerSidebar" aria-controls="ownerSidebar" aria-label="Open navigation">
-            <i class="fa-solid fa-bars" aria-hidden="true"></i>
-          </button>
-          <nav class="owner-breadcrumb" aria-label="Breadcrumb"><span>Owner workspace</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><strong>Overview</strong></nav>
-        </div>
-        <div class="owner-topbar-actions">
-          <span class="owner-today"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span id="owner-date"></span></span>
-          <a class="owner-icon-button owner-notifications" href="#notifications" aria-label="View notifications, <?= $pendingBookings ?> pending">
-            <i class="fa-regular fa-bell" aria-hidden="true"></i><span></span>
-          </a>
-          <span class="owner-topbar-divider"></span>
-          <a class="owner-topbar-profile" href="#profile"><span class="owner-avatar"><?= $escape(strtoupper(substr($ownerName, 0, 1))) ?></span><strong><?= $escape($ownerName) ?></strong><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
-        </div>
-      </header>
+      <?php include __DIR__ . '/../shared/partials/header.php'; ?>
 
       <main class="owner-content" id="owner-main">
         <section class="owner-welcome" id="overview">

@@ -1,4 +1,5 @@
 <?php
+session_start();
 ?>
 <?php include_once __DIR__ . "/dbconfig.php"; ?>
 <?php
@@ -42,6 +43,8 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
 
     <style>
         table {
@@ -108,6 +111,16 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
 </head>
 
 <body>
+    <div class="owner-layout">
+        <?php
+        $ownerPageBase = '../';
+        $ownerPageTitle = 'Property List';
+        $ownerActivePage = '';
+        include __DIR__ . '/../include/owner_leftber.php';
+        ?>
+        <div class="owner-main-shell">
+            <?php include __DIR__ . '/../../shared/partials/header.php'; ?>
+            <main class="container py-4">
     <h1>Student list</h1>
     <a class="new-entry" href="Addproperty.php">
     <i class="fa-solid fa-plus"></i> New Entry
@@ -156,5 +169,9 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
             <a href="?page=<?php echo $page + 1; ?>" aria-label="Next page">Next</a>
         <?php } ?>
     </nav>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -4,10 +4,6 @@
     color: #1f2937;
 }
 
-body.add-property-page.owner-dashboard {
-    background: #fff;
-}
-
 .add-property-page .property-card {
     max-width: 900px;
     border: 0;

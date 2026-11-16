@@ -35,8 +35,9 @@
             <div class="input-wrap">
               <select id="property-type" name="type">
                 <option value="">All property types</option>
-                <option value="apartment">Apartment</option>
-                <option value="house">House</option>
+                <option value="flat">Flat</option>
+                <option value="land">Land</option>
+                <option value="commercial">Commercial</option>
               </select>
             </div>
           </div>

@@ -32,7 +32,7 @@ $p  = null;
 
 if ($id > 0) {
   $stmt = $conn->prepare("SELECT property_id, title, property_type, address, area_sqft,
-                                 price, monthly_rent, bedrooms, bathrooms, status, description
+                                 price, monthly_rent, flat_details, status,imagas, description
                           FROM properties WHERE property_id = ? LIMIT 1");
   $stmt->bind_param('i', $id);
   $stmt->execute();
@@ -132,12 +132,10 @@ if ($p) {
           <?php if ($p['area_sqft'] !== null): ?>
             <div><span class="highlight-icon" aria-hidden="true">▱</span><strong><?= number_format($p['area_sqft']) ?> sqft</strong><small>Total area</small></div>
           <?php endif; ?>
-          <?php if ($p['bedrooms'] !== null): ?>
-            <div><span class="highlight-icon" aria-hidden="true">▤</span><strong><?= (int)$p['bedrooms'] ?> bedroom<?= (int)$p['bedrooms'] === 1 ? '' : 's' ?></strong><small>Comfortable rooms</small></div>
+          <?php if ($p['flat_details'] !== null): ?>
+            <div><span class="highlight-icon" aria-hidden="true">▤</span><strong><?= (int)$p['flat_details'] ?> bedroom<?= (int)$p['flat_details'] === 1 ? '' : 's' ?></strong><small>Comfortable rooms</small></div>
           <?php endif; ?>
-          <?php if ($p['bathrooms'] !== null): ?>
-            <div><span class="highlight-icon" aria-hidden="true">♨</span><strong><?= (int)$p['bathrooms'] ?> bathroom<?= (int)$p['bathrooms'] === 1 ? '' : 's' ?></strong><small>Full bathrooms</small></div>
-          <?php endif; ?>
+          
         </div>
 
         <section class="detail-section" aria-labelledby="overview-title">

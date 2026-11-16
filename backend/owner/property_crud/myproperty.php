@@ -38,9 +38,21 @@ $imageUrl = static function (?string $path): string {
     <meta name="description" content="View and manage your property listings.">
     <title>My Properties | EstateFlow</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
     <link rel="stylesheet" href="../assets/css/owner/myproperty.css">
 </head>
 <body class="my-properties-page">
+    <div class="owner-layout">
+        <?php
+        $ownerPageBase = '../';
+        $ownerPageTitle = 'My Properties';
+        $ownerActivePage = 'properties';
+        include __DIR__ . '/../include/owner_leftber.php';
+        ?>
+        <div class="owner-main-shell">
+            <?php include __DIR__ . '/../../shared/partials/header.php'; ?>
+    
     <main class="container py-4 py-lg-5">
         <nav class="page-nav d-flex align-items-center justify-content-between mb-5" aria-label="Page navigation">
             <a class="brand-mark text-decoration-none" href="../owner_dashboard.php">
@@ -50,14 +62,7 @@ $imageUrl = static function (?string $path): string {
             <a class="btn btn-outline-secondary" href="../owner_dashboard.php">Back to dashboard</a>
         </nav>
 
-        <header class="page-heading d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
-            <div>
-                <p class="eyebrow mb-2">OWNER WORKSPACE</p>
-                <h1 class="display-6 fw-bold mb-2">My Properties</h1>
-                <p class="text-secondary mb-0">Review your listings, availability, and property details.</p>
-            </div>
-            <a class="btn btn-primary btn-lg add-property-button" href="Addproperty.php">＋ Add property</a>
-        </header>
+        
 
         <section class="row g-3 mb-4" aria-label="Property totals">
             <div class="col-12 col-sm-4">
@@ -129,5 +134,8 @@ $imageUrl = static function (?string $path): string {
             <a href="../owner_dashboard.php">Return to dashboard</a>
         </footer>
     </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

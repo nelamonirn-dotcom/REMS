@@ -27,7 +27,8 @@ $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
         <li><a href="contact.php" <?= $currentPage === 'contact.php' ? 'aria-current="page"' : '' ?>>Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <a class="sign-in" href="../../backend/admin/index.php">Sign in</a>
+        <a class="sign-in" href="../../backend/admin/index.php">Sign in</a> |
+        <a class="sign-in" href="../../backend/admin/sign_up.php">Sign Up</a>
         <a class="button" href="properties.php">Explore homes <span aria-hidden="true">↗</span></a>
         <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>

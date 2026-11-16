@@ -2388,9 +2388,17 @@ body.owner-dashboard {
 }
 
 .owner-main-shell {
+  min-width: 0;
   margin-left: 260px;
-  background: var(--owner-canvas);
   transition: margin-left 220ms ease;
+}
+
+.owner-main-shell > main > .page-nav {
+  display: none !important;
+}
+
+.owner-dashboard .owner-main-shell {
+  background: var(--owner-canvas);
 }
 
 .owner-layout.is-collapsed .owner-main-shell {

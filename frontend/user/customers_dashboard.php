@@ -51,8 +51,9 @@ if ($budget > 0) {
   $types   .= 'ii';
 }
 
+// NOTE: bedrooms column nai, tai flat_details use kora hoyeche
 $sql = "SELECT property_id, title, property_type, address, area_sqft,
-               price, monthly_rent, bedrooms, bathrooms, status
+               price, monthly_rent, flat_details, status, imagas
         FROM properties"
      . ($where ? " WHERE " . implode(' AND ', $where) : "") . "
         ORDER BY created_at DESC";
@@ -78,6 +79,7 @@ $total  = $result->num_rows;
     .properties-section .section-head { margin-bottom: 20px; }
     .property-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px; margin-bottom:60px; }
     .property-card { border:1px solid #e3e3e3; border-radius:14px; padding:20px; background:#fff; }
+    .property-card img { width:100%; height:180px; object-fit:cover; border-radius:10px; margin-bottom:10px; }
     .property-card h3 { margin:10px 0 4px; }
     .badge { display:inline-block; font-size:12px; padding:3px 10px; border-radius:20px; background:#e8f1f1; margin-right:6px; }
     .price { font-size:20px; font-weight:700; margin:10px 0; }
@@ -160,6 +162,9 @@ $total  = $result->num_rows;
           <?php if ($total > 0): ?>
             <?php while ($p = $result->fetch_assoc()): ?>
               <article class="property-card">
+                <?php if (!empty($p['imagas'])): ?>
+                  <img src="../../backend/owner/property_crud/<?= htmlspecialchars($p['imagas']) ?>" alt="<?= htmlspecialchars($p['title']) ?>">
+                <?php endif; ?>
                 <span class="badge"><?= htmlspecialchars(ucfirst($p['property_type'])) ?></span>
                 <span class="badge"><?= htmlspecialchars(ucfirst($p['status'])) ?></span>
                 <h3><?= htmlspecialchars($p['title']) ?></h3>
@@ -176,8 +181,7 @@ $total  = $result->num_rows;
                   <?php endif; ?>
                 </p>
                 <ul class="meta">
-                  <?php if ($p['bedrooms']  !== null): ?><li><?= (int)$p['bedrooms'] ?> Beds</li><?php endif; ?>
-                  <?php if ($p['bathrooms'] !== null): ?><li><?= (int)$p['bathrooms'] ?> Baths</li><?php endif; ?>
+                  <?php if (!empty($p['flat_details'])): ?><li><?= htmlspecialchars($p['flat_details']) ?> Beds</li><?php endif; ?>
                   <?php if ($p['area_sqft'] !== null): ?><li><?= number_format($p['area_sqft']) ?> sqft</li><?php endif; ?>
                 </ul>
                 <a class="button" href="property-details.php?id=<?= (int)$p['property_id'] ?>">View details</a>

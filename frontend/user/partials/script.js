@@ -56,8 +56,8 @@
 
       emptyState.style.display = visibleCount > 0 ? "none" : "block";
       resultCount.textContent = visibleCount === 1
-        ? "Showing 1 handpicked home"
-        : `Showing ${visibleCount} handpicked homes`;
+        ? "Showing 1 available property"
+        : `Showing ${visibleCount} available properties`;
     };
 
     searchForm.addEventListener("submit", (event) => {

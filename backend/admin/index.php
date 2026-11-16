@@ -1,38 +1,59 @@
 <?php
+session_start();
+include_once __DIR__ . '/dbconfig.php'; // database connection ($conn)
+
+$error = '';
+
 if (isset($_POST['login'])) {
-  extract($_POST);
-  $password = sha1($password);
+  $email    = strtolower(trim($_POST['email'] ?? ''));
+  $password = $_POST['password'] ?? '';
 
-  include_once('dbconfig.php');
-  //echo "SELECT * FROM users WHERE email = '$email' AND password_hash = '$password'";
-  $result = $conn->query("SELECT * FROM users WHERE email = '$email' AND password_hash = '$password'");
+  // prepared statement: SQL injection theke safe
+  $stmt = $conn->prepare("SELECT user_id, name, email, password_hash, role, status FROM users WHERE email = ?");
+  $stmt->bind_param('s', $email);
+  $stmt->execute();
+  $row = $stmt->get_result()->fetch_assoc();
 
-  $row = $result->fetch_assoc();
+  $valid = false;
+  if ($row) {
+    if (password_verify($password, $row['password_hash'])) {
+      // notun account (signup page theke) - password_hash()
+      $valid = true;
+    } elseif (hash_equals($row['password_hash'], sha1($password))) {
+      // purono account - sha1. Login hole auto notun hash e upgrade hobe
+      $valid = true;
+      $newHash = password_hash($password, PASSWORD_DEFAULT);
+      $up = $conn->prepare("UPDATE users SET password_hash = ? WHERE user_id = ?");
+      $up->bind_param('si', $newHash, $row['user_id']);
+      $up->execute();
+    }
+  }
 
-
-  if ($result->num_rows > 0) {
-    session_start();
-    $_SESSION['email'] = $email;
-    $_SESSION['name'] = $row['name'];
-    $_SESSION['role'] = $row['role'];
+  if (!$valid) {
+    $error = 'Email ba password thik nai.';
+  } elseif ($row['status'] !== 'active') {
+    $error = 'Ei account ta inactive. Admin er shathe jogajog koro.';
+  } else {
+    session_regenerate_id(true);
+    $_SESSION['email']   = $row['email'];
+    $_SESSION['name']    = $row['name'];
+    $_SESSION['role']    = $row['role'];
     $_SESSION['user_id'] = $row['user_id'];
-
 
     if ($row['role'] == "admin") {
       $_SESSION['url'] = 'users_dashboard.php';
       header("Location: users_dashboard.php");
-    } else if ($row['role'] == "customer") {
+    } elseif ($row['role'] == "customer") {
       $_SESSION['url'] = '../../frontend/user/customers_dashboard.php';
       header("Location: ../../frontend/user/customers_dashboard.php");
-    } else if ($row['role'] == "agent" ) {
+    } elseif ($row['role'] == "agent") {
       $_SESSION['url'] = '../agent/agents_dashboard.php';
       header("Location: ../agent/agents_dashboard.php");
-    } else if ($row['role'] == "owner" ) {
+    } elseif ($row['role'] == "owner") {
       $_SESSION['url'] = '../owner/owner_dashboard.php';
       header("Location: ../owner/owner_dashboard.php");
     }
-  } else {
-    echo 'Problem Login';
+    exit;
   }
 }
 ?>
@@ -62,9 +83,16 @@ if (isset($_POST['login'])) {
     <h1 id="login-heading">Welcome back</h1>
     <p class="auth-intro">Sign in with your administrator account to continue.</p>
 
+    <?php if (isset($_GET['registered'])): ?>
+      <p class="signup-notice" role="status">Account toiri hoyeche. Ekhon sign in koro.</p>
+    <?php endif; ?>
+    <?php if ($error !== ''): ?>
+      <p class="signup-notice" role="alert"><?= htmlspecialchars($error) ?></p>
+    <?php endif; ?>
+
     <form class="auth-form" method="post" action="">
       <label for="email">Email address</label>
-      <input id="email" name="email" type="email" autocomplete="username" maxlength="100" value="@gmail.com" required autofocus>
+      <input id="email" name="email" type="email" autocomplete="username" maxlength="100" value="<?= htmlspecialchars($_POST['email'] ?? '@gmail.com') ?>" required autofocus>
       <label for="password">Password</label>
       <input id="password" name="password" type="password" autocomplete="current-password" required>
       <button type="submit" name="login">Sign in <span aria-hidden="true">→</span></button>
