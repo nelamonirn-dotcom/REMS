@@ -25,11 +25,11 @@
     place-items: center;
     border-radius: 11px;
     color: #fff;
-    background: #315d9a;
+    background: #2d336b;
 }
 
 .property-images-page .eyebrow {
-    color: #4775af;
+    color: #2d336b;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -42,23 +42,23 @@
 
 .property-images-page .btn-outline-primary {
     border-color: #b8c8dd;
-    color: #315d9a;
+    color: #2d336b;
 }
 
 .property-images-page .btn-outline-primary:hover {
-    border-color: #315d9a;
+    border-color: #2d336b;
     color: #fff;
-    background: #315d9a;
+    background: #2d336b;
 }
 
 .property-images-page .btn-primary {
-    border-color: #315d9a;
-    background: #315d9a;
+    border-color: #2d336b;
+    background: #2d336b;
 }
 
 .property-images-page .btn-primary:hover {
-    border-color: #274f88;
-    background: #274f88;
+    border-color: #2d336b;
+    background: #2d336b;
 }
 
 .property-images-page .preview-notice {
@@ -105,7 +105,7 @@
     height: 34px;
     place-items: center;
     border-radius: 10px;
-    color: #315d9a;
+    color: #2d336b;
     background: #eaf1fa;
     font-size: 1.3rem;
 }
@@ -189,7 +189,7 @@
 }
 
 .property-images-page .page-footer a {
-    color: #315d9a;
+    color: #2d336b;
     text-decoration: none;
 }
 

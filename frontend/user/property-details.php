@@ -46,7 +46,51 @@ if (!$p) {
 // Helpers
 function money($n) { return '৳' . number_format((float)$n); }
 
+$imageUrl = static function (?string $path): ?string {
+  $path = trim(str_replace('\\', '/', (string)$path));
+  if ($path === '') {
+    return null;
+  }
+  if (!str_starts_with($path, 'uploads/') && !str_starts_with($path, '../uploads/')) {
+    return null;
+  }
+
+  $ownerDirectory = realpath(__DIR__ . '/../../backend/owner');
+  $filePath = realpath(__DIR__ . '/../../backend/owner/property_crud/' . $path);
+  if (
+    $ownerDirectory === false
+    || $filePath === false
+    || !is_file($filePath)
+    || !str_starts_with(strtolower($filePath), strtolower($ownerDirectory . DIRECTORY_SEPARATOR))
+  ) {
+    return null;
+  }
+
+  return '../../backend/owner/property_crud/' . implode('/', array_map('rawurlencode', explode('/', $path)));
+};
+
+$galleryImages = [];
 if ($p) {
+  $imageStmt = $conn->prepare(
+    'SELECT image_path FROM property_images
+     WHERE property_id = ?
+     ORDER BY is_primary DESC, created_at ASC, image_id ASC'
+  );
+  $imageStmt->bind_param('i', $p['property_id']);
+  $imageStmt->execute();
+  foreach ($imageStmt->get_result()->fetch_all(MYSQLI_ASSOC) as $image) {
+    $src = $imageUrl($image['image_path'] ?? null);
+    if ($src !== null) {
+      $galleryImages[$src] = $src;
+    }
+  }
+
+  $legacyImage = $imageUrl($p['imagas'] ?? null);
+  if ($legacyImage !== null) {
+    $galleryImages[$legacyImage] = $legacyImage;
+  }
+  $galleryImages = array_values($galleryImages);
+
   $typeLabel   = ucfirst($p['property_type']);
   $statusLabel = ucfirst($p['status']);
   $hasPrice    = $p['price'] !== null;
@@ -71,7 +115,7 @@ if ($p) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102b2b">
+  <meta name="theme-color" content="#fff2f2">
   <meta name="description" content="Explore the details of a thoughtfully selected EstateFlow home.">
   <title><?= $p ? htmlspecialchars($p['title']) . ' | EstateFlow' : 'Property not found | EstateFlow' ?></title>
   <link rel="stylesheet" href="partials/style.css">
@@ -94,20 +138,27 @@ if ($p) {
       <span><?= htmlspecialchars($shortLoc) ?></span>
     </div>
 
-    <section class="shell detail-gallery" aria-label="Property photo gallery">
+    <section class="shell detail-gallery<?= count($galleryImages) <= 1 ? ' detail-gallery-single' : '' ?>" aria-label="Property photo gallery">
       <div class="gallery-main">
-        <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&amp;fit=crop&amp;w=1400&amp;q=85" alt="<?= htmlspecialchars($p['title']) ?>">
+        <?php if ($galleryImages): ?>
+          <img src="<?= htmlspecialchars($galleryImages[0], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8') ?>">
+          <span class="gallery-count">1 / <?= count($galleryImages) ?> photos</span>
+        <?php else: ?>
+          <span class="gallery-empty">No photos uploaded yet.</span>
+        <?php endif; ?>
         <span class="listing-tag"><?= htmlspecialchars($tag) ?></span>
-        <span class="gallery-count">1 / 4 photos</span>
       </div>
-      <div class="gallery-side">
-        <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&amp;fit=crop&amp;w=800&amp;q=82" alt="Exterior view">
-        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&amp;fit=crop&amp;w=800&amp;q=82" alt="Living area">
-        <button class="gallery-more" type="button" aria-label="View all 4 property photos">
-          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&amp;fit=crop&amp;w=800&amp;q=82" alt="">
-          <span>View all photos <strong>＋</strong></span>
-        </button>
-      </div>
+      <?php if (count($galleryImages) > 1): ?>
+        <div class="gallery-side">
+          <?php foreach (array_slice($galleryImages, 1) as $index => $src): ?>
+            <figure>
+              <img src="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>"
+                   alt="<?= htmlspecialchars($p['title'], ENT_QUOTES, 'UTF-8') ?> photo <?= $index + 2 ?>"
+                   loading="lazy">
+            </figure>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
     </section>
 
     <section class="shell property-detail-layout">

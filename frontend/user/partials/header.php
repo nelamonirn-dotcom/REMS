@@ -1,5 +1,14 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
+$accountRole = $_SESSION['role'] ?? '';
+$dashboardLinks = [
+  'admin' => '../../backend/admin/users_dashboard.php',
+  'agent' => '../../backend/agent/agents_dashboard.php',
+  'owner' => '../../backend/owner/owner_dashboard.php',
+  'customer' => 'customers_dashboard.php',
+];
+$dashboardLink = $dashboardLinks[$accountRole] ?? null;
+$isSignedIn = isset($_SESSION['email']) && $dashboardLink !== null;
 ?>
   <div class="topline">
     <div class="shell topline-inner">
@@ -25,10 +34,22 @@ $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
         <li><a href="projects.php" <?= $currentPage === 'projects.php' ? 'aria-current="page"' : '' ?>>Projects</a></li>
         <li><a href="about.php" <?= $currentPage === 'about.php' ? 'aria-current="page"' : '' ?>>About</a></li>
         <li><a href="contact.php" <?= $currentPage === 'contact.php' ? 'aria-current="page"' : '' ?>>Contact</a></li>
+        <?php if ($isSignedIn): ?>
+          <li class="nav-mobile-account"><a href="<?= htmlspecialchars($dashboardLink, ENT_QUOTES, 'UTF-8') ?>">Dashboard</a></li>
+          <li class="nav-mobile-account"><a href="../../backend/shared/partials/logout.php">Sign out</a></li>
+        <?php else: ?>
+          <li class="nav-mobile-account"><a href="../../backend/admin/index.php">Sign in</a></li>
+          <li class="nav-mobile-account"><a href="../../backend/admin/sign_up.php">Create account</a></li>
+        <?php endif; ?>
       </ul>
       <div class="nav-actions">
-        <a class="sign-in" href="../../backend/admin/index.php">Sign in</a> |
-        <a class="sign-in" href="../../backend/admin/sign_up.php">Sign Up</a>
+        <?php if ($isSignedIn): ?>
+          <a class="sign-in" href="<?= htmlspecialchars($dashboardLink, ENT_QUOTES, 'UTF-8') ?>">Dashboard</a>
+          <a class="sign-in" href="../../backend/shared/partials/logout.php">Sign out</a>
+        <?php else: ?>
+          <a class="sign-in" href="../../backend/admin/index.php">Sign in</a>
+          <a class="sign-in" href="../../backend/admin/sign_up.php">Create account</a>
+        <?php endif; ?>
         <a class="button" href="properties.php">Explore homes <span aria-hidden="true">↗</span></a>
         <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-links">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>

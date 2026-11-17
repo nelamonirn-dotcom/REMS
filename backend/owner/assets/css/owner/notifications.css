@@ -25,11 +25,11 @@
     place-items: center;
     border-radius: 11px;
     color: #fff;
-    background: #315d9a;
+    background: #2d336b;
 }
 
 .owner-notifications-page .eyebrow {
-    color: #4775af;
+    color: #2d336b;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -42,13 +42,13 @@
 
 .owner-notifications-page .btn-outline-primary {
     border-color: #b8c8dd;
-    color: #315d9a;
+    color: #2d336b;
 }
 
 .owner-notifications-page .btn-outline-primary:hover {
-    border-color: #315d9a;
+    border-color: #2d336b;
     color: #fff;
-    background: #315d9a;
+    background: #2d336b;
 }
 
 .owner-notifications-page .preview-notice {
@@ -81,7 +81,7 @@
 }
 
 .owner-notifications-page .summary-blue {
-    color: #315d9a;
+    color: #2d336b;
 }
 
 .owner-notifications-page .summary-green {
@@ -183,7 +183,7 @@
     height: 8px;
     flex: 0 0 8px;
     border-radius: 50%;
-    background: #3974bd;
+    background: #2d336b;
 }
 
 .owner-notifications-page .notification-copy p {
@@ -224,7 +224,7 @@
 }
 
 .owner-notifications-page .page-footer a {
-    color: #315d9a;
+    color: #2d336b;
     text-decoration: none;
 }
 

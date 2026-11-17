@@ -25,7 +25,7 @@
     place-items: center;
     border-radius: 11px;
     color: #fff;
-    background: #315d9a;
+    background: #2d336b;
 }
 
 .my-properties-page .page-heading h1 {
@@ -34,20 +34,20 @@
 }
 
 .my-properties-page .eyebrow {
-    color: #4775af;
+    color: #2d336b;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
 }
 
 .my-properties-page .add-property-button {
-    border-color: #315d9a;
-    background: #315d9a;
+    border-color: #2d336b;
+    background: #2d336b;
 }
 
 .my-properties-page .add-property-button:hover {
-    border-color: #274f88;
-    background: #274f88;
+    border-color: #2d336b;
+    background: #2d336b;
 }
 
 .my-properties-page .preview-notice {
@@ -176,8 +176,12 @@
 }
 
 .my-properties-page .property-price strong {
-    color: #315d9a;
+    color: #2d336b;
     font-size: 1.05rem;
+}
+
+.my-properties-page .property-actions form {
+    margin: 0;
 }
 
 .my-properties-page .page-footer {
@@ -191,7 +195,7 @@
 }
 
 .my-properties-page .page-footer a {
-    color: #315d9a;
+    color: #2d336b;
     text-decoration: none;
 }
 

@@ -59,6 +59,7 @@ $statusClass = $status === 'active' ? 'status-active' : 'status-inactive';
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
     <link rel="stylesheet" href="../assets/css/owner/profile.css">
+    <link rel="stylesheet" href="../../shared/assets/css/palette.css">
 </head>
 <body class="owner-profile-page">
     <div class="owner-layout">

@@ -73,6 +73,7 @@ function h($s) { return htmlspecialchars((string)$s); }
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
     <link rel="stylesheet" href="../assets/css/owner/bookings.css">
+    <link rel="stylesheet" href="../../shared/assets/css/palette.css">
     <style>
         .status-cancelled { background:#fdecea; color:#b3261e; }
         .action-form { display:inline-block; margin:0; }

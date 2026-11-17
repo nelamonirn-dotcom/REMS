@@ -45,16 +45,39 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
+    <link rel="stylesheet" href="../../shared/assets/css/palette.css">
 
     <style>
+        body {
+            background: #fff2f2;
+        }
+
         table {
-            width: 50%;
-            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #a9b5df;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff2f2;
         }
 
         th {
-            background-color: #4f60fa;
-            color: white;
+            padding: 12px 14px;
+            border-bottom: 1px solid #a9b5df;
+            background-color: #a9b5df;
+            color: #2d336b;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eceef7;
+            background: #fff2f2;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
         }
 
         .action {
@@ -75,18 +98,19 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
             text-decoration: none;
         }
         .new-entry {
-    display: inline-block;
-    padding: 10px 16px;
-    background-color: #5cf748;
-    color: black;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-}
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background-color: #2d336b;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+        }
 
-.new-entry:hover {
-    background-color: #146c43;
-}
+        .new-entry:hover {
+            background-color: #a9b5df;
+            color: #2d336b;
+        }
 
         .pagination {
             display: flex;
@@ -97,15 +121,15 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
 
         .pagination a {
             padding: 6px 10px;
-            border: 1px solid #4f60fa;
+            border: 1px solid #a9b5df;
             border-radius: 4px;
-            color: #000205;
+            color: #2d336b;
             text-decoration: none;
         }
 
         .pagination a:hover {
-            background-color: #4f60fa;
-            color: white;
+            background-color: #a9b5df;
+            color: #2d336b;
         }
     </style>
 </head>

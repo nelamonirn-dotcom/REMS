@@ -40,6 +40,7 @@ $arts = ['art-lakeview', 'art-palm', 'art-cedar'];
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
     <link rel="stylesheet" href="../assets/css/owner/property-status.css">
+    <link rel="stylesheet" href="../../shared/assets/css/palette.css">
 </head>
 <body class="property-status-page">
     <div class="owner-layout">

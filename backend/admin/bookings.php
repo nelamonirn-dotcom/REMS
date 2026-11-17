@@ -95,7 +95,7 @@ function statusLabel($s) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101d35">
+  <meta name="theme-color" content="#fff2f2">
   <meta name="description" content="Review and manage property booking requests in the EstateFlow admin workspace.">
   <title>Bookings | EstateFlow Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,6 +106,7 @@ function statusLabel($s) {
   <link rel="stylesheet" href="../shared/assets/css/global.css">
   <link rel="stylesheet" href="assets/css/admin/dashboard.css">
   <link rel="stylesheet" href="assets/css/admin/bookings.css">
+  <link rel="stylesheet" href="../shared/assets/css/palette.css">
 </head>
 
 <body class="admin-dashboard">

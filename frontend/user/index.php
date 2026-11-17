@@ -68,7 +68,7 @@ $total  = $result->num_rows;
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102b2b">
+  <meta name="theme-color" content="#fff2f2">
   <meta name="description" content="Find a home that feels like yours with EstateFlow. Explore thoughtfully selected properties for sale and rent.">
   <title>EstateFlow | Find your place</title>
   <link rel="stylesheet" href="partials/style.css">
@@ -90,10 +90,10 @@ $total  = $result->num_rows;
   <?php include __DIR__ . '/partials/customar_header.php'; ?>
   <!--end header-->
   <style>
-    .customer-subnav { background:#102b2b; }
+    .customer-subnav { background:var(--green-deep); }
     .customer-subnav .shell { display:flex; gap:22px; padding:12px 0; flex-wrap:wrap; }
-    .customer-subnav a { color:#e8f1f1; text-decoration:none; font-size:15px; font-weight:500; padding-bottom:4px; border-bottom:2px solid transparent; }
-    .customer-subnav a:hover, .customer-subnav a.active { color:#fff; border-bottom-color:#fff; }
+    .customer-subnav a { color:#f5f4e9; text-decoration:none; font-size:15px; font-weight:500; padding-bottom:4px; border-bottom:2px solid transparent; }
+    .customer-subnav a:hover, .customer-subnav a.active { color:#fff2f2; border-bottom-color:var(--green); }
   </style>
   <nav class="customer-subnav" aria-label="Customer menu">
     <div class="shell">

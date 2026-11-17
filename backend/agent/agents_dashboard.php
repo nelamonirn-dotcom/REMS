@@ -21,7 +21,7 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101d35">
+  <meta name="theme-color" content="#fff2f2">
   <meta name="description" content="Agent workspace for assigned properties, customers, visits, bookings and commission.">
   <title>Agent Dashboard | EstateFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,15 +30,14 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="../shared/assets/css/global.css">
   <link rel="stylesheet" href="../admin/assets/css/admin/dashboard.css">
+  <link rel="stylesheet" href="../shared/assets/css/palette.css">
 </head>
 
 <body class="admin-dashboard agent-dashboard">
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="admin-layout" id="admin-layout">
     <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
-   <-----start lefbar------>
- <?php include __DIR__ . '/../shared/partials/agents_leftber.php'; ?>
-<--endlefbar-->
+    <?php include __DIR__ . '/../shared/partials/agents_leftber.php'; ?>
     <div class="main-shell">
       <header class="topbar">
         <div class="topbar-start">
@@ -49,8 +48,8 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
         </div>
         <div class="topbar-actions">
           <div class="topbar-date"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span id="current-date"></span></div>
-          <a class="icon-button notification-button" href="#notifications" aria-label="View notifications, 2 unread" title="View notifications">
-            <i class="fa-regular fa-bell" aria-hidden="true"></i><span class="notification-dot"></span>
+          <a class="icon-button notification-button" href="#notifications" aria-label="View notifications" title="View notifications">
+            <i class="fa-regular fa-bell" aria-hidden="true"></i>
           </a>
           <span class="topbar-divider" aria-hidden="true"></span>
           <a class="topbar-user" href="#profile" aria-label="View profile">
@@ -69,7 +68,6 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
             <p class="page-subtitle">Your assigned properties, customers and next steps at a glance.</p>
           </div>
           <div class="heading-actions">
-            <span class="sample-label"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Sample data preview</span>
             <a class="button button-primary" href="#property-management"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>Manage properties</span></a>
           </div>
         </section>

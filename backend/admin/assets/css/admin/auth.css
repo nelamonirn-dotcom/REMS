@@ -30,7 +30,7 @@
 }
 
 .auth-brand > span:last-child > span {
-  color: #188879;
+  color: #2d336b;
 }
 
 .auth-brand-symbol {
@@ -40,13 +40,13 @@
   place-items: center;
   border-radius: 11px;
   color: #fff;
-  background: linear-gradient(145deg, #5195c8, #3370b3);
+  background: linear-gradient(145deg, #2d336b, #2d336b);
   font-size: 23px;
 }
 
 .auth-eyebrow {
   margin: 35px 0 9px;
-  color: #4775af;
+  color: #2d336b;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .13em;
@@ -113,7 +113,7 @@
 }
 
 .auth-form input:focus {
-  border-color: #4775af;
+  border-color: #2d336b;
 }
 
 .auth-form button,
@@ -127,7 +127,7 @@
   border: 0;
   border-radius: 8px;
   color: #fff;
-  background: #315d9a;
+  background: #2d336b;
   font-size: 13px;
   font-weight: 700;
   transition: background 160ms ease, transform 160ms ease;
@@ -136,7 +136,7 @@
 .auth-form button:hover,
 .auth-primary-link:hover {
   transform: translateY(-1px);
-  background: #274f88;
+  background: #2d336b;
 }
 
 .auth-footnote {
@@ -150,7 +150,7 @@
 .auth-secondary-link {
   display: block;
   margin-top: 19px;
-  color: #4775af;
+  color: #2d336b;
   font-size: 12px;
   font-weight: 600;
   text-align: center;
@@ -203,7 +203,7 @@
 .signup-brand .auth-brand-symbol,
 .signup-mobile-brand .auth-brand-symbol {
   color: #fff;
-  background: #188879;
+  background: #2d336b;
 }
 
 .signup-brand > span:last-child > span,
@@ -273,7 +273,7 @@
 
 .signup-content > .auth-eyebrow {
   margin: 0 0 9px;
-  color: #4775af;
+  color: #2d336b;
 }
 
 .signup-content h2 {
@@ -327,8 +327,12 @@
   transition: border-color 160ms ease, background 160ms ease;
 }
 
+.signup-intent-option-owner {
+  grid-column: 1 / -1;
+}
+
 .signup-intent-option:has(input:checked) {
-  border-color: #188879;
+  border-color: #2d336b;
   background: #f0f8f4;
 }
 
@@ -337,7 +341,7 @@
   height: 15px;
   flex: 0 0 auto;
   margin: 0;
-  accent-color: #188879;
+  accent-color: #2d336b;
 }
 
 .signup-intent-option span {
@@ -398,7 +402,7 @@
 }
 
 .signup-field input:focus {
-  border-color: #188879;
+  border-color: #2d336b;
 }
 
 .signup-form button {

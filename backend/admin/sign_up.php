@@ -2,45 +2,73 @@
 session_start();
 include_once __DIR__ . '/dbconfig.php'; // database connection ($conn)
 
+$escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+if (empty($_SESSION['signup_csrf'])) {
+  $_SESSION['signup_csrf'] = bin2hex(random_bytes(32));
+}
+
 $error = '';
+$name = '';
+$email = '';
+$phone = '';
+$accountType = 'buyer';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $name     = trim($_POST['name'] ?? '');
-  $email    = strtolower(trim($_POST['email'] ?? ''));
-  $phone    = trim($_POST['phone'] ?? '');
-  $password = $_POST['password'] ?? '';
-  $confirm  = $_POST['confirm_password'] ?? '';
+  $csrf = $_POST['csrf'] ?? '';
+  if (!is_string($csrf) || !hash_equals($_SESSION['signup_csrf'], $csrf)) {
+    http_response_code(400);
+    exit('Invalid request.');
+  }
+
+  $nameInput = $_POST['name'] ?? '';
+  $emailInput = $_POST['email'] ?? '';
+  $phoneInput = $_POST['phone'] ?? '';
+  $accountTypeInput = $_POST['customer_type'] ?? '';
+  $passwordInput = $_POST['password'] ?? '';
+  $confirmInput = $_POST['confirm_password'] ?? '';
+
+  $name = is_string($nameInput) ? trim($nameInput) : '';
+  $email = is_string($emailInput) ? strtolower(trim($emailInput)) : '';
+  $phone = is_string($phoneInput) ? trim($phoneInput) : '';
+  $accountType = is_string($accountTypeInput) ? $accountTypeInput : '';
+  $password = is_string($passwordInput) ? $passwordInput : '';
+  $confirm = is_string($confirmInput) ? $confirmInput : '';
 
   if ($name === '' || $email === '' || $password === '') {
     $error = 'Name, email ar password dite hobe.';
+  } elseif (strlen($name) > 100 || strlen($email) > 100 || strlen($phone) > 20) {
+    $error = 'Name, email, or phone number exceeds the allowed length.';
   } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $error = 'Email thik nai.';
+  } elseif (!in_array($accountType, ['buyer', 'tenant', 'owner'], true)) {
+    $error = 'Account type thik nai.';
   } elseif (strlen($password) < 8) {
     $error = 'Password komporkhome 8 ta character hote hobe.';
   } elseif ($password !== $confirm) {
     $error = 'Password duto mile ni.';
   } else {
-    try {
-      // email ager theke ache kina check
-      $check = $conn->prepare("SELECT user_id FROM users WHERE email = ?");
-      $check->bind_param('s', $email);
-      $check->execute();
-      if ($check->get_result()->num_rows > 0) {
-        $error = 'Ei email diye ager theke account ache. Sign in koro.';
-      } else {
-        $hash      = password_hash($password, PASSWORD_DEFAULT);
-        $phoneVal  = $phone !== '' ? $phone : null;
-        $role      = 'customer';
+    $check = $conn->prepare('SELECT user_id FROM users WHERE email = ?');
+    $check->bind_param('s', $email);
+    $check->execute();
+    if ($check->get_result()->num_rows > 0) {
+      $error = 'Ei email diye ager theke account ache. Sign in koro.';
+    } else {
+      $hash = password_hash($password, PASSWORD_DEFAULT);
+      $phoneValue = $phone !== '' ? $phone : null;
+      $role = $accountType === 'owner' ? 'owner' : 'customer';
 
-        $stmt = $conn->prepare("INSERT INTO users (name, email, password_hash, phone, role) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param('sssss', $name, $email, $hash, $phoneVal, $role);
+      try {
+        $stmt = $conn->prepare('INSERT INTO users (name, email, password_hash, phone, role) VALUES (?, ?, ?, ?, ?)');
+        $stmt->bind_param('sssss', $name, $email, $hash, $phoneValue, $role);
         $stmt->execute();
-
-        header("Location: index.php?registered=1");
+        header('Location: index.php?registered=1');
         exit;
+      } catch (mysqli_sql_exception $exception) {
+        if ((int)$exception->getCode() !== 1062) {
+          throw $exception;
+        }
+        $error = 'Ei email diye ager theke account ache. Sign in koro.';
       }
-    } catch (Throwable $e) {
-      $error = 'Account toiri hoy ni: ' . $e->getMessage();
     }
   }
 }
@@ -51,14 +79,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102b2b">
-  <meta name="description" content="Create your EstateFlow account and find a place to call home.">
+  <meta name="theme-color" content="#fff2f2">
+  <meta name="description" content="Create an EstateFlow account to find or list a property.">
   <title>Create your account | EstateFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../shared/assets/css/global.css">
   <link rel="stylesheet" href="assets/css/admin/auth.css">
+  <link rel="stylesheet" href="../shared/assets/css/palette.css">
 </head> 
 
 <body class="admin-auth signup-page">
@@ -88,19 +117,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <p class="auth-eyebrow">YOUR NEXT CHAPTER STARTS HERE</p>
       <h2 id="signup-heading">Create your account</h2>
-      <p class="auth-intro">Join EstateFlow to explore homes and keep your search moving.</p>
+      <p class="auth-intro">Join EstateFlow to explore homes or manage your property listings.</p>
 
       <form class="auth-form signup-form" id="signup-form" method="post" action="">
+        <input type="hidden" name="csrf" value="<?= $escape($_SESSION['signup_csrf']) ?>">
         <fieldset class="signup-intent">
-          <legend>I’m looking to</legend>
+          <legend>Choose your account type</legend>
           <div class="signup-intent-options">
             <label class="signup-intent-option">
-              <input type="radio" name="customer_type" value="buyer" <?= ($_POST['customer_type'] ?? 'buyer') === 'buyer' ? 'checked' : '' ?>>
+              <input type="radio" name="customer_type" value="buyer" <?= $accountType === 'buyer' ? 'checked' : '' ?> required>
               <span><strong>Buy a home</strong><small>Find a place to call yours</small></span>
             </label>
             <label class="signup-intent-option">
-              <input type="radio" name="customer_type" value="tenant" <?= ($_POST['customer_type'] ?? '') === 'tenant' ? 'checked' : '' ?>>
+              <input type="radio" name="customer_type" value="tenant" <?= $accountType === 'tenant' ? 'checked' : '' ?>>
               <span><strong>Rent a home</strong><small>Find your next place</small></span>
+            </label>
+            <label class="signup-intent-option signup-intent-option-owner">
+              <input type="radio" name="customer_type" value="owner" <?= $accountType === 'owner' ? 'checked' : '' ?>>
+              <span><strong>List a property</strong><small>Manage your properties</small></span>
             </label>
           </div>
         </fieldset>
@@ -108,15 +142,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="signup-field-grid">
           <div class="signup-field signup-field-wide">
             <label for="name">Full name</label>
-            <input id="name" name="name" type="text" autocomplete="name" placeholder="e.g. Samira Rahman" maxlength="100" required value="<?= htmlspecialchars($_POST['name'] ?? '') ?>">
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="e.g. Samira Rahman" maxlength="100" required value="<?= $escape($name) ?>">
           </div>
           <div class="signup-field">
             <label for="email">Email address</label>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="100" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="100" required value="<?= $escape($email) ?>">
           </div>
           <div class="signup-field">
             <label for="phone">Phone number <span class="signup-optional">Optional</span></label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+880 1XXX-XXXXXX" maxlength="20" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+880 1XXX-XXXXXX" maxlength="20" value="<?= $escape($phone) ?>">
           </div>
           <div class="signup-field">
             <label for="password">Password</label>
@@ -128,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <p class="signup-notice" id="signup-notice" role="status" <?= $error === '' ? 'hidden' : '' ?>><?= htmlspecialchars($error) ?></p>
+        <p class="signup-notice" id="signup-notice" role="alert" <?= $error === '' ? 'hidden' : '' ?>><?= $escape($error) ?></p>
         <button type="submit">Create my account <span aria-hidden="true">→</span></button>
       </form>
 

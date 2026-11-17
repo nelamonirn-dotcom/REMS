@@ -45,7 +45,7 @@ $statusClasses = [
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101d35">
+  <meta name="theme-color" content="#fff2f2">
   <meta name="description" content="<?= $escape($managementPage['description']) ?>">
   <title><?= $escape($managementPage['title']) ?> | EstateFlow Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,6 +56,7 @@ $statusClasses = [
   <link rel="stylesheet" href="../shared/assets/css/global.css">
   <link rel="stylesheet" href="assets/css/admin/dashboard.css">
   <link rel="stylesheet" href="assets/css/admin/management.css">
+  <link rel="stylesheet" href="../shared/assets/css/palette.css">
 </head>
 
 <body class="admin-dashboard">

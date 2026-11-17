@@ -25,7 +25,7 @@
     place-items: center;
     border-radius: 11px;
     color: #fff;
-    background: #315d9a;
+    background: #2d336b;
 }
 
 .need-a-hand-page .support-hero {
@@ -34,7 +34,7 @@
     padding: 34px;
     border-radius: 18px;
     color: #fff;
-    background: linear-gradient(120deg, #172d50, #315d9a);
+    background: linear-gradient(120deg, #2d336b, #2d336b);
 }
 
 .need-a-hand-page .support-hero::after {
@@ -76,7 +76,7 @@
 }
 
 .need-a-hand-page .eyebrow {
-    color: #4775af;
+    color: #2d336b;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -128,7 +128,7 @@
 }
 
 .need-a-hand-page .support-link {
-    color: #315d9a;
+    color: #2d336b;
     font-weight: 600;
     text-decoration: none;
 }
@@ -253,7 +253,7 @@
 }
 
 .need-a-hand-page .page-footer a {
-    color: #315d9a;
+    color: #2d336b;
     text-decoration: none;
 }
 

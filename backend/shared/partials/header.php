@@ -15,9 +15,9 @@
       </nav>
     </div>
     <div class="owner-topbar-actions">
-      <span class="owner-today"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span id="owner-date"></span></span>
+      <span class="owner-today"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span id="owner-date"><?= htmlspecialchars(date('D, M j'), ENT_QUOTES, 'UTF-8') ?></span></span>
       <a class="owner-icon-button owner-notifications" href="<?= htmlspecialchars($ownerPageBase . 'property_crud/notifications.php', ENT_QUOTES, 'UTF-8') ?>" aria-label="View notifications">
-        <i class="fa-regular fa-bell" aria-hidden="true"></i><span></span>
+        <i class="fa-regular fa-bell" aria-hidden="true"></i>
       </a>
       <span class="owner-topbar-divider" aria-hidden="true"></span>
       <a class="owner-topbar-profile" href="<?= htmlspecialchars($ownerPageBase . 'property_crud/profile.php', ENT_QUOTES, 'UTF-8') ?>">
@@ -30,6 +30,10 @@
     </div>
   </header>
 <?php else: ?>
+<?php
+$adminName = $_SESSION['name'] ?? 'Administrator';
+$adminInitial = strtoupper(substr($adminName, 0, 1));
+?>
 <header class="topbar">
         <div class="topbar-start">
           <button
@@ -44,13 +48,15 @@
           <div class="breadcrumb"><span>Workspace</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><strong><?= htmlspecialchars($adminPageTitle ?? 'Overview', ENT_QUOTES, 'UTF-8') ?></strong></div>
         </div>
         <div class="topbar-actions">
-          <div class="topbar-date"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span id="current-date">Today</span></div>
-          <a class="icon-button notification-button" href="notifications.php" aria-label="Notifications, 3 unread" title="View notifications">
-            <i class="fa-regular fa-bell" aria-hidden="true"></i><span class="notification-dot"></span>
+          <div class="topbar-date"><i class="fa-regular fa-calendar" aria-hidden="true"></i><span id="current-date"><?= htmlspecialchars(date('D, M j'), ENT_QUOTES, 'UTF-8') ?></span></div>
+          <a class="icon-button notification-button" href="notifications.php" aria-label="View notifications" title="View notifications">
+            <i class="fa-regular fa-bell" aria-hidden="true"></i>
           </a>
           <span class="topbar-divider" aria-hidden="true"></span>
-          <a class="topbar-user" href="../shared/partials/logout.php" aria-label="Sign out" title="Sign in">
-            <span class="profile-avatar"></span><span class="topbar-user-name"></span><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+          <a class="topbar-user" href="../shared/partials/logout.php" aria-label="Sign out" title="Sign out">
+            <span class="profile-avatar"><?= htmlspecialchars($adminInitial, ENT_QUOTES, 'UTF-8') ?></span>
+            <span class="topbar-user-name"><?= htmlspecialchars($adminName, ENT_QUOTES, 'UTF-8') ?></span>
+            <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
           </a>
         </div>
       </header>

@@ -3,21 +3,34 @@ session_start();
 include_once 'dbconfig.php';
 
 if (!isset($_SESSION['email'])) {
-    header('Location: ../admin/index.php');
+    header('Location: ../../admin/index.php');
     exit;
 }
 
 if (($_SESSION['role'] ?? '') !== 'owner') {
-    header('Location: ../admin/unauthorize.php');
+    header('Location: ../../admin/unauthorize.php');
     exit;
 }
 
-$owner_id = $_SESSION['user_id'];
+$owner_id = (int)($_SESSION['user_id'] ?? 0);
+if (empty($_SESSION['property_csrf'])) {
+    $_SESSION['property_csrf'] = bin2hex(random_bytes(32));
+}
 
 $stmt = $conn->prepare("SELECT * FROM properties WHERE owner_id = ? ORDER BY created_at DESC");
-$stmt->bind_param("s", $owner_id);
+$stmt->bind_param("i", $owner_id);
 $stmt->execute();
 $properties = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$flashMessages = [
+    'added' => 'Property added successfully.',
+    'updated' => 'Property updated successfully.',
+    'deleted' => 'Property deleted successfully.',
+    'linked' => 'This property cannot be deleted because it has related records.',
+    'not_found' => 'Property not found or you do not have permission to delete it.',
+];
+$flashKey = $_GET['msg'] ?? '';
+$flash = is_string($flashKey) ? ($flashMessages[$flashKey] ?? null) : null;
 
 $total = count($properties);
 $available = count(array_filter($properties, fn($p) => ($p['status'] ?? '') === 'available'));
@@ -41,6 +54,7 @@ $imageUrl = static function (?string $path): string {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
     <link rel="stylesheet" href="../assets/css/owner/myproperty.css">
+    <link rel="stylesheet" href="../../shared/assets/css/palette.css">
 </head>
 <body class="my-properties-page">
     <div class="owner-layout">
@@ -85,10 +99,21 @@ $imageUrl = static function (?string $path): string {
             </div>
         </section>
 
+        <?php if ($flash): ?>
+            <div class="alert <?= in_array($flashKey, ['added', 'updated', 'deleted'], true) ? 'alert-success' : 'alert-danger' ?>" role="status">
+                <?= htmlspecialchars($flash, ENT_QUOTES, 'UTF-8') ?>
+            </div>
+        <?php endif; ?>
+
         <section aria-label="Property listings">
             <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                 <h2 class="h4 mb-0">All listings</h2>
-                <span class="text-secondary small"><?= $total ?> properties</span>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-secondary small"><?= $total ?> properties</span>
+                    <a class="btn btn-primary btn-sm" href="Addproperty.php">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i> Add property
+                    </a>
+                </div>
             </div>
 
             <?php if ($total === 0): ?>
@@ -120,6 +145,20 @@ $imageUrl = static function (?string $path): string {
                             <div class="property-price mt-auto pt-3">
                                 <span><?= $isRent ? 'Monthly rent' : 'Price' ?></span>
                                 <strong>৳ <?= number_format((float)($isRent ? $p['monthly_rent'] : ($p['price'] ?? 0))) ?></strong>
+                            </div>
+                            <div class="property-actions d-flex flex-wrap gap-2 mt-3">
+                                <a class="btn btn-outline-primary btn-sm"
+                                   href="property_edit.php?id=<?= (int)$p['property_id'] ?>">
+                                    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit
+                                </a>
+                                <form method="post" action="property_Delete.php"
+                                      onsubmit="return confirm('Permanently delete this property and its related bookings, visits, agreements, payments, commissions, and maintenance records?');">
+                                    <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['property_csrf'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <input type="hidden" name="property_id" value="<?= (int)$p['property_id'] ?>">
+                                    <button class="btn btn-outline-danger btn-sm" type="submit">
+                                        <i class="fa-solid fa-trash" aria-hidden="true"></i> Delete
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </article>

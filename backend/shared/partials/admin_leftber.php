@@ -1,5 +1,9 @@
 
-  <?php $currentAdminPage = basename($_SERVER['PHP_SELF'] ?? ''); ?>
+  <?php
+  $currentAdminPage = basename($_SERVER['PHP_SELF'] ?? '');
+  $adminName = $_SESSION['name'] ?? 'Administrator';
+  $adminInitial = strtoupper(substr($adminName, 0, 1));
+  ?>
   <aside class="sidebar" id="admin-sidebar" aria-label="Administrator navigation">
       <div class="sidebar-brand">
         <a class="brand-lockup" href="../../frontend/user/index.php" aria-label="EstateFlow home">
@@ -37,7 +41,6 @@
 
         <a class="sidebar-link<?= $currentAdminPage === 'bookings.php' ? ' is-active' : '' ?>" href="bookings.php"<?= $currentAdminPage === 'bookings.php' ? ' aria-current="page"' : '' ?> title="Bookings">
           <i class="fa-solid fa-calendar-check" aria-hidden="true"></i><span>Bookings</span>
-          <span class="nav-count">8</span>
         </a>
         <a class="sidebar-link<?= $currentAdminPage === 'property_visits.php' ? ' is-active' : '' ?>" href="property_visits.php"<?= $currentAdminPage === 'property_visits.php' ? ' aria-current="page"' : '' ?> title="Property visits">
           <i class="fa-solid fa-calendar-days" aria-hidden="true"></i><span>Property visits</span>
@@ -58,7 +61,6 @@
         </a>
         <a class="sidebar-link<?= $currentAdminPage === 'maintenance.php' ? ' is-active' : '' ?>" href="maintenance.php"<?= $currentAdminPage === 'maintenance.php' ? ' aria-current="page"' : '' ?> title="Maintenance">
           <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i><span>Maintenance</span>
-          <span class="nav-count nav-count-warm">3</span>
         </a>
         <a class="sidebar-link<?= $currentAdminPage === 'reports_analytics.php' ? ' is-active' : '' ?>" href="reports_analytics.php"<?= $currentAdminPage === 'reports_analytics.php' ? ' aria-current="page"' : '' ?> title="Reports &amp; analytics">
           <i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Reports &amp; analytics</span>
@@ -70,6 +72,9 @@
         </a>
         <a class="sidebar-link<?= $currentAdminPage === 'users_roles.php' ? ' is-active' : '' ?>" href="users_roles.php"<?= $currentAdminPage === 'users_roles.php' ? ' aria-current="page"' : '' ?> title="Users &amp; roles">
           <i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Users &amp; roles</span>
+        </a>
+        <a class="sidebar-link<?= $currentAdminPage === 'add_admin.php' ? ' is-active' : '' ?>" href="add_admin.php"<?= $currentAdminPage === 'add_admin.php' ? ' aria-current="page"' : '' ?> title="Add administrator">
+          <i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>Add administrator</span>
         </a>
         <a class="sidebar-link<?= $currentAdminPage === 'settings.php' ? ' is-active' : '' ?>" href="settings.php"<?= $currentAdminPage === 'settings.php' ? ' aria-current="page"' : '' ?> title="Settings">
           <i class="fa-solid fa-gear" aria-hidden="true"></i><span>Settings</span>
@@ -83,8 +88,8 @@
           <i class="fa-solid fa-arrow-up-right-from-square help-arrow" aria-hidden="true"></i>
         </div>
         <div class="sidebar-profile">
-          <span class="profile-avatar"></span>
-          <span class="profile-copy"><strong></strong><small>Administrator</small></span>
+          <span class="profile-avatar"><?= htmlspecialchars($adminInitial, ENT_QUOTES, 'UTF-8') ?></span>
+          <span class="profile-copy"><strong><?= htmlspecialchars($adminName, ENT_QUOTES, 'UTF-8') ?></strong><small>Administrator</small></span>
           <a class="profile-menu" href="../shared/partials/logout.php" aria-label="Sign out"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i></a>
         </div>
       </div>

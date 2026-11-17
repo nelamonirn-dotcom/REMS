@@ -4,20 +4,21 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#101d35">
+    <meta name="theme-color" content="#fff2f2">
     <meta name="description" content="You do not have permission to access this EstateFlow page.">
     <title>Access denied | EstateFlow</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../shared/assets/css/global.css">
+    <link rel="stylesheet" href="../shared/assets/css/palette.css">
     <style>
       body {
         display: flex;
         min-height: 100vh;
         flex-direction: column;
         background:
-          radial-gradient(ellipse at 82% 15%, rgb(49 93 154 / 9%), transparent 32rem),
+          radial-gradient(ellipse at 82% 15%, rgb(120 134 199 / 22%), transparent 32rem),
           var(--ef-page);
       }
 

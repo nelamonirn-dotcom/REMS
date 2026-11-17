@@ -1,42 +1,96 @@
+<?php
+session_start();
+require_once __DIR__ . '/dbconfig.php';
 
-<?php session_start(); ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="../assets/css/owner/dashboard.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="owner-layout">
-        <?php
-        $ownerPageBase = '../';
-        $ownerPageTitle = 'Delete Property';
-        $ownerActivePage = '';
-        include __DIR__ . '/../include/owner_leftber.php';
-        ?>
-        <div class="owner-main-shell">
-            <?php include __DIR__ . '/../../shared/partials/header.php'; ?>
-            <main class="container py-4">
-    <h1>abc</h1>
-    <?php
-  $id = $_GET['id'];
-include_once __DIR__ . "/dbconfig.php"; // database Connection
-
-    $conn->query (" DELETE FROM allstudents WHERE id ='$id'");
-
-    if ($conn->affected_rows){
-
-header("Location: index.php");
+if (!isset($_SESSION['email'])) {
+    header('Location: ../../admin/index.php');
+    exit;
 }
-        ?>
-            </main>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+if (($_SESSION['role'] ?? '') !== 'owner') {
+    header('Location: ../../admin/unauthorize.php');
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Method not allowed.');
+}
+
+$csrf = $_POST['csrf'] ?? '';
+if (
+    !is_string($csrf)
+    || empty($_SESSION['property_csrf'])
+    || !hash_equals($_SESSION['property_csrf'], $csrf)
+) {
+    http_response_code(400);
+    exit('Invalid request.');
+}
+
+$ownerId = (int)($_SESSION['user_id'] ?? 0);
+$propertyId = filter_input(INPUT_POST, 'property_id', FILTER_VALIDATE_INT, [
+    'options' => ['min_range' => 1],
+]);
+if ($ownerId < 1 || !$propertyId) {
+    header('Location: myproperty.php?msg=not_found');
+    exit;
+}
+
+$message = 'not_found';
+$conn->begin_transaction();
+try {
+    $check = $conn->prepare('SELECT property_id FROM properties WHERE property_id = ? AND owner_id = ? FOR UPDATE');
+    $check->bind_param('ii', $propertyId, $ownerId);
+    if (!$check->execute()) {
+        throw new RuntimeException('Unable to verify property ownership.');
+    }
+
+    if ($check->get_result()->num_rows === 1) {
+        $deleteForProperty = static function (string $sql) use ($conn, $propertyId): void {
+            $statement = $conn->prepare($sql);
+            $statement->bind_param('i', $propertyId);
+            if (!$statement->execute()) {
+                throw new RuntimeException('Unable to delete related property records.');
+            }
+        };
+
+        // Remove dependent records before their parent rows to satisfy foreign keys.
+        $deleteForProperty(
+            'DELETE c FROM commissions AS c
+             INNER JOIN agreements AS a ON a.agreement_id = c.agreement_id
+             WHERE a.property_id = ?'
+        );
+        $deleteForProperty(
+            'DELETE p FROM payments AS p
+             INNER JOIN agreements AS a ON a.agreement_id = p.agreement_id
+             WHERE a.property_id = ?'
+        );
+        $deleteForProperty('DELETE FROM visits WHERE property_id = ?');
+        $deleteForProperty('DELETE FROM agreements WHERE property_id = ?');
+        $deleteForProperty('DELETE FROM bookings WHERE property_id = ?');
+        $deleteForProperty('DELETE FROM maintenance WHERE property_id = ?');
+        $deleteForProperty('DELETE FROM agent_properties WHERE property_id = ?');
+
+        $delete = $conn->prepare('DELETE FROM properties WHERE property_id = ? AND owner_id = ?');
+        $delete->bind_param('ii', $propertyId, $ownerId);
+        if (!$delete->execute()) {
+            throw new RuntimeException('Unable to delete property.');
+        }
+        if ($delete->affected_rows !== 1) {
+            throw new RuntimeException('Unable to delete property after removing related records.');
+        }
+        $message = 'deleted';
+    }
+
+    $conn->commit();
+} catch (Throwable $error) {
+    $conn->rollback();
+    if ($error instanceof mysqli_sql_exception && (int)$error->getCode() === 1451) {
+        $message = 'linked';
+    } else {
+        throw $error;
+    }
+}
+
+header('Location: myproperty.php?msg=' . $message);
+exit;

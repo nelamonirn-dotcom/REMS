@@ -126,10 +126,11 @@ $upcomingVisits = $conn->query("SELECT v.visit_id, v.visit_time, p.title, p.addr
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101d35">
+  <meta name="theme-color" content="#fff2f2">
   <meta
     name="description"
     content="EstateFlow administrator dashboard overview for properties, bookings, visits, and operations.">
+  <title>Admin Dashboard | EstateFlow</title>
        <!--start leftbar-->
   <?php include __DIR__ . '/../shared/partials/home_styles.php'; ?>
   <!--end leftbar-->

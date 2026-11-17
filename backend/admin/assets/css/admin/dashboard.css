@@ -80,7 +80,7 @@
   place-items: center;
   border-radius: 11px;
   color: #fff;
-  background: linear-gradient(145deg, #5195c8, #3370b3);
+  background: linear-gradient(145deg, #2d336b, #2d336b);
   font-size: 15px;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .brand-name span {
-  color: #76c8b3;
+  color: #a9b5df;
 }
 
 .icon-button {
@@ -144,7 +144,7 @@
   place-items: center;
   border-radius: 9px;
   color: #e5f5ee;
-  background: #335b58;
+  background: #2d336b;
   font-family: var(--ef-font-heading);
   font-size: 14px;
   font-weight: 800;
@@ -233,7 +233,7 @@
 }
 
 .sidebar-link.is-active > i {
-  color: #82c8b3;
+  color: #a9b5df;
 }
 
 .sidebar-link:disabled {
@@ -478,8 +478,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #57aa83;
-  box-shadow: 0 0 0 3px rgb(87 170 131 / 13%);
+  background: #7886c7;
+  box-shadow: 0 0 0 3px rgb(120 134 199 / 13%);
 }
 
 .page-heading h1 {
@@ -521,7 +521,7 @@
 }
 
 .sample-label i {
-  color: #7891b7;
+  color: #2d336b;
   font-size: 11px;
 }
 
@@ -550,7 +550,7 @@
 }
 
 .button-primary:hover {
-  background: #274f88;
+  background: #2d336b;
   box-shadow: 0 5px 13px rgb(49 93 154 / 22%);
 }
 
@@ -607,9 +607,9 @@
   font-size: 12px;
 }
 
-.stat-icon-blue { color: #4270b1; background: #edf3fd; }
-.stat-icon-green { color: #328a70; background: #e8f6f0; }
-.stat-icon-purple { color: #8068b5; background: #f0edfa; }
+.stat-icon-blue { color: #2d336b; background: #a9b5df; }
+.stat-icon-green { color: #2d336b; background: #a9b5df; }
+.stat-icon-purple { color: #2d336b; background: #a9b5df; }
 .stat-icon-amber { color: #bd8732; background: #fff4e1; }
 
 .stat-value {
@@ -644,7 +644,7 @@
   font-weight: 700;
 }
 
-.trend-positive { color: #348765; }
+.trend-positive { color: #2d336b; }
 .trend-attention { color: #b17a24; }
 .trend i { font-size: 9px; }
 
@@ -671,9 +671,9 @@
 .stat-spark i:nth-child(5) { height: 13px; }
 .stat-spark i:nth-child(6) { height: 20px; }
 .stat-spark i:nth-child(7) { height: 22px; }
-.spark-blue i { background: #90b0e2; }
-.spark-green i { background: #79c4a4; }
-.spark-purple i { background: #b4a1dd; }
+.spark-blue i { background: #7886c7; }
+.spark-green i { background: #a9b5df; }
+.spark-purple i { background: #7886c7; }
 .spark-amber i { background: #e4bd7d; }
 
 .chart-grid {
@@ -743,9 +743,9 @@
   border-radius: 50%;
 }
 
-.legend-revenue { background: #4b80c2; }
-.legend-available { background: #5183c2; }
-.legend-rented { background: #61b99a; }
+.legend-revenue { background: #2d336b; }
+.legend-available { background: #7886c7; }
+.legend-rented { background: #a9b5df; }
 .legend-sold { background: #edbd68; }
 .legend-review { background: #a6afbf; }
 
@@ -1004,8 +1004,8 @@
   font-size: 11px;
 }
 
-.thumb-one { color: #5a7db0; background: #e9f0fa; }
-.thumb-two { color: #619383; background: #e8f3ed; }
+.thumb-one { color: #2d336b; background: #a9b5df; }
+.thumb-two { color: #2d336b; background: #a9b5df; }
 .thumb-three { color: #aa8050; background: #f7f0e5; }
 .thumb-four { color: #8174a7; background: #f0edf8; }
 
@@ -1045,8 +1045,8 @@
 
 .avatar-lilac { color: #735f9e; background: #eee8f8; }
 .avatar-peach { color: #a56648; background: #fff0e8; }
-.avatar-blue { color: #467195; background: #e6f1f8; }
-.avatar-green { color: #438069; background: #e4f2e9; }
+.avatar-blue { color: #2d336b; background: #a9b5df; }
+.avatar-green { color: #2d336b; background: #a9b5df; }
 
 .amount-cell {
   color: #394861 !important;
@@ -1070,9 +1070,9 @@
   background: currentcolor;
 }
 
-.status-confirmed { color: #39805f; background: #eaf5ee; }
+.status-confirmed { color: #2d336b; background: #a9b5df; }
 .status-pending { color: #a97722; background: #fff4df; }
-.status-review { color: #5c77a5; background: #edf2fb; }
+.status-review { color: #2d336b; background: #a9b5df; }
 
 .empty-table {
   margin: 0;
@@ -1788,7 +1788,7 @@
   flex: 0 0 38px;
   place-items: center;
   border-radius: 10px;
-  color: #4775af;
+  color: #2d336b;
   background: #edf3fb;
 }
 
@@ -1961,8 +1961,8 @@
 }
 
 .agent-notification-icon.notification-green {
-  color: #438069;
-  background: #e8f3ed;
+  color: #2d336b;
+  background: #a9b5df;
 }
 
 .agent-notification-row strong {
@@ -2180,4 +2180,225 @@
     padding-inline: 8px;
     font-size: 9px;
   }
+}
+
+.admin-dashboard {
+  background: #f3f6fa;
+}
+
+.admin-dashboard .nav-caption {
+  font-size: 10px;
+  letter-spacing: .09em;
+}
+
+.admin-dashboard .sidebar-link {
+  min-height: 44px;
+  font-size: 12px;
+}
+
+.admin-dashboard .topbar {
+  min-height: 72px;
+}
+
+.admin-dashboard .breadcrumb,
+.admin-dashboard .topbar-date,
+.admin-dashboard .topbar-user-name {
+  font-size: 12px;
+}
+
+.admin-dashboard .dashboard-main {
+  padding: 32px 38px 30px;
+}
+
+.admin-dashboard .page-heading h1 {
+  font-size: clamp(24px, 2.4vw, 30px);
+  letter-spacing: -.035em;
+}
+
+.admin-dashboard .page-subtitle {
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.admin-dashboard .stat-card {
+  border-radius: 15px;
+  box-shadow: 0 8px 22px rgba(28, 43, 66, .045);
+}
+
+@media (max-width: 1199px) {
+  .admin-dashboard .dashboard-main {
+    padding: 28px 25px;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-dashboard .dashboard-main {
+    padding: 23px 17px;
+  }
+
+  .admin-dashboard .topbar {
+    min-height: 64px;
+  }
+}
+
+.admin-dashboard .sidebar-link {
+  font-size: 13px;
+}
+
+.admin-dashboard .breadcrumb,
+.admin-dashboard .topbar-date,
+.admin-dashboard .topbar-user-name {
+  font-size: 13px;
+}
+
+.admin-dashboard .button {
+  min-height: 42px;
+  padding-inline: 16px;
+  font-size: 13px;
+}
+
+.admin-dashboard .btn {
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.admin-dashboard .btn-sm {
+  min-height: 34px;
+}
+
+.admin-dashboard .form-control,
+.admin-dashboard .form-select {
+  min-height: 42px;
+  border-color: var(--ef-border);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.admin-dashboard .form-control:focus,
+.admin-dashboard .form-select:focus {
+  border-color: #9ab0d2;
+  box-shadow: 0 0 0 3px rgb(49 93 154 / 10%);
+}
+
+.admin-dashboard .stat-label {
+  font-size: 12px;
+}
+
+.admin-dashboard .stat-foot,
+.admin-dashboard .trend {
+  font-size: 11px;
+}
+
+.admin-dashboard .panel-heading h2 {
+  font-size: 17px;
+}
+
+.admin-dashboard .panel-heading p {
+  font-size: 12px;
+}
+
+.admin-dashboard .data-table th {
+  padding-block: 12px;
+  font-size: 11px;
+}
+
+.admin-dashboard .data-table td {
+  padding-block: 13px;
+  font-size: 12px;
+}
+
+.admin-dashboard .property-cell strong,
+.admin-dashboard .customer-cell strong {
+  font-size: 12px;
+}
+
+.admin-dashboard .property-cell small,
+.admin-dashboard .customer-cell small {
+  font-size: 11px;
+}
+
+.admin-dashboard .status-badge {
+  font-size: 11px;
+}
+
+.admin-dashboard .table-search,
+.admin-dashboard .status-filter {
+  min-height: 38px;
+  font-size: 12px;
+}
+
+.admin-dashboard .table-search input {
+  font-size: 12px;
+}
+
+.admin-dashboard .form-field {
+  font-size: 12px;
+}
+
+.admin-dashboard .form-field input,
+.admin-dashboard .form-field select,
+.admin-dashboard .form-field textarea {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+.admin-dashboard .form-field textarea {
+  min-height: 112px;
+}
+
+.admin-dashboard .dialog-heading h2 {
+  font-size: 19px;
+}
+
+.admin-dashboard .dialog-heading p,
+.admin-dashboard .form-notice {
+  font-size: 12px;
+}
+
+.admin-dashboard .agent-preview-notice,
+.admin-dashboard .agent-action-feedback {
+  font-size: 12px;
+}
+
+.admin-dashboard .agent-module-heading .page-eyebrow {
+  font-size: 10px;
+}
+
+.admin-dashboard .agent-module-heading h2 {
+  font-size: 19px;
+}
+
+.admin-dashboard .agent-module-heading > div > p:last-child,
+.admin-dashboard .agent-action-panel p {
+  font-size: 12px;
+}
+
+.admin-dashboard .agent-table-property strong,
+.admin-dashboard .agent-action-panel h3,
+.admin-dashboard .agent-operation-copy strong,
+.admin-dashboard .agent-notification-row strong {
+  font-size: 13px;
+}
+
+.admin-dashboard .agent-panel-foot,
+.admin-dashboard .agent-operation-copy small,
+.admin-dashboard .agent-notification-row p,
+.admin-dashboard .agent-commission-card small {
+  font-size: 11px;
+}
+
+.admin-dashboard .agent-operation-date small,
+.admin-dashboard .agent-notification-row > small,
+.admin-dashboard .agent-profile-note,
+.admin-dashboard .agent-profile-form .form-field {
+  font-size: 12px;
+}
+
+.admin-dashboard .agent-text-button {
+  font-size: 12px;
+}
+
+.admin-dashboard .agent-profile-form .form-field input {
+  min-height: 44px;
 }

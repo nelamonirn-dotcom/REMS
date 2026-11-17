@@ -20,7 +20,7 @@ $agentInitial = strtoupper(substr($agentName, 0, 1));
   </div>
 
   <div class="workspace-switcher">
-    <span class="workspace-avatar" aria-hidden="true">A</span>
+    <span class="workspace-avatar" aria-hidden="true"><?= htmlspecialchars($agentInitial, ENT_QUOTES, 'UTF-8') ?></span>
     <span class="workspace-copy">
       <span class="workspace-label">Workspace</span>
       <span class="workspace-name">Agent workspace</span>
@@ -36,7 +36,6 @@ $agentInitial = strtoupper(substr($agentName, 0, 1));
     <p class="nav-caption">Operations</p>
     <a class="sidebar-link" href="#properties" title="My Properties">
       <i class="fa-solid fa-building" aria-hidden="true"></i><span>My Properties</span>
-      <span class="nav-count">12</span>
     </a>
     <a class="sidebar-link" href="#property-management" title="Property Management">
       <i class="fa-solid fa-list-check" aria-hidden="true"></i><span>Property Management</span>
@@ -49,14 +48,12 @@ $agentInitial = strtoupper(substr($agentName, 0, 1));
     </a>
     <a class="sidebar-link" href="#bookings" title="Booking Management">
       <i class="fa-regular fa-calendar-check" aria-hidden="true"></i><span>Booking Management</span>
-      <span class="nav-count nav-count-warm">4</span>
     </a>
     <a class="sidebar-link" href="#commission" title="Commission">
       <i class="fa-solid fa-percent" aria-hidden="true"></i><span>Commission</span>
     </a>
     <a class="sidebar-link" href="#notifications" title="Notifications">
       <i class="fa-regular fa-bell" aria-hidden="true"></i><span>Notifications</span>
-      <span class="nav-count nav-count-warm">2</span>
     </a>
     <p class="nav-caption">Account</p>
     <a class="sidebar-link" href="#profile" title="Profile">

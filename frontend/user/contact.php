@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102b2b">
+  <meta name="theme-color" content="#fff2f2">
   <meta name="description" content="Contact EstateFlow for help with buying, renting, selling, or managing a property.">
   <title>Contact | EstateFlow</title>
   <link rel="stylesheet" href="partials/style.css">
