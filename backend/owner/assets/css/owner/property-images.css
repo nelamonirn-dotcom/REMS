@@ -25,11 +25,11 @@
     place-items: center;
     border-radius: 11px;
     color: #fff;
-    background: #2d336b;
+    background: #1b5e20;
 }
 
 .property-images-page .eyebrow {
-    color: #2d336b;
+    color: #1b5e20;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -42,23 +42,23 @@
 
 .property-images-page .btn-outline-primary {
     border-color: #b8c8dd;
-    color: #2d336b;
+    color: #1b5e20;
 }
 
 .property-images-page .btn-outline-primary:hover {
-    border-color: #2d336b;
+    border-color: #1b5e20;
     color: #fff;
-    background: #2d336b;
+    background: #1b5e20;
 }
 
 .property-images-page .btn-primary {
-    border-color: #2d336b;
-    background: #2d336b;
+    border-color: #1b5e20;
+    background: #1b5e20;
 }
 
 .property-images-page .btn-primary:hover {
-    border-color: #2d336b;
-    background: #2d336b;
+    border-color: #1b5e20;
+    background: #1b5e20;
 }
 
 .property-images-page .preview-notice {
@@ -83,7 +83,7 @@
 .property-images-page .form-select:focus,
 .property-images-page .form-control:focus {
     border-color: #7d9bc4;
-    box-shadow: 0 0 0 0.2rem rgba(49, 93, 154, 0.12);
+    box-shadow: 0 0 0 0.2rem rgba(27, 94, 32, 0.12);
 }
 
 .property-images-page .upload-dropzone {
@@ -105,7 +105,7 @@
     height: 34px;
     place-items: center;
     border-radius: 10px;
-    color: #2d336b;
+    color: #1b5e20;
     background: #eaf1fa;
     font-size: 1.3rem;
 }
@@ -189,7 +189,7 @@
 }
 
 .property-images-page .page-footer a {
-    color: #2d336b;
+    color: #1b5e20;
     text-decoration: none;
 }
 

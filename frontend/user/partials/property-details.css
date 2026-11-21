@@ -1,9 +1,9 @@
 .property-details-page {
-  --detail-ink: #2d336b;
-  --detail-muted: #525a8a;
-  --detail-green: #2d336b;
-  --detail-line: #a9b5df;
-  --detail-paper: #fff2f2;
+  --detail-ink: #1b5e20;
+  --detail-muted: #4f7652;
+  --detail-green: #1b5e20;
+  --detail-line: #a5d6a7;
+  --detail-paper: #e8f5e9;
 }
 
 .details-breadcrumb {
@@ -16,7 +16,7 @@
 }
 
 .details-breadcrumb a {
-  color: #2d336b;
+  color: #1b5e20;
   font-weight: 700;
 }
 
@@ -34,7 +34,7 @@
   min-width: 0;
   overflow: hidden;
   border-radius: 9px;
-  background: #fff2f2;
+  background: #e8f5e9;
 }
 
 .gallery-main img,
@@ -133,7 +133,7 @@
   align-items: center;
   gap: 6px;
   margin: 0 0 10px;
-  color: #2d336b;
+  color: #1b5e20;
   font-size: 11px;
   font-weight: 700;
 }
@@ -161,9 +161,9 @@
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  border: 1px solid #a9b5df;
+  border: 1px solid #a5d6a7;
   border-radius: 7px;
-  color: #2d336b;
+  color: #1b5e20;
   background: #fff;
   cursor: pointer;
   font-size: 11px;
@@ -171,8 +171,8 @@
 }
 
 .save-property:hover {
-  border-color: #7886c7;
-  background: #fff2f2;
+  border-color: #66bb6a;
+  background: #e8f5e9;
 }
 
 .property-highlights {
@@ -209,13 +209,13 @@
   grid-row: span 2;
   place-items: center;
   border-radius: 9px;
-  color: #2d336b;
-  background: #a9b5df;
+  color: #1b5e20;
+  background: #a5d6a7;
   font-size: 16px;
 }
 
 .property-highlights strong {
-  color: #2d336b;
+  color: #1b5e20;
   font-size: 10px;
 }
 
@@ -231,7 +231,7 @@
 .detail-section .section-kicker,
 .more-homes .section-kicker {
   margin-bottom: 9px;
-  color: #2d336b;
+  color: #1b5e20;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: .17em;
@@ -250,7 +250,7 @@
 .detail-description {
   max-width: 760px;
   margin: 0 0 12px;
-  color: #525a8a;
+  color: #4f7652;
   font-size: 12px;
   line-height: 1.9;
 }
@@ -266,7 +266,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #525a8a;
+  color: #4f7652;
   font-size: 11px;
 }
 
@@ -277,8 +277,8 @@
   flex: 0 0 22px;
   place-items: center;
   border-radius: 50%;
-  color: #2d336b;
-  background: #a9b5df;
+  color: #1b5e20;
+  background: #a5d6a7;
   font-size: 10px;
   font-weight: 800;
 }
@@ -292,9 +292,9 @@
   height: 230px;
   margin-top: 18px;
   overflow: hidden;
-  border: 1px solid #a9b5df;
+  border: 1px solid #a5d6a7;
   border-radius: 9px;
-  background-color: #fff2f2;
+  background-color: #e8f5e9;
   background-image:
     linear-gradient(32deg, transparent 47%, rgba(255,255,255,.9) 48%, rgba(255,255,255,.9) 51%, transparent 52%),
     linear-gradient(145deg, transparent 43%, rgba(255,255,255,.95) 44%, rgba(255,255,255,.95) 47%, transparent 48%),
@@ -308,7 +308,7 @@
   border: 2px solid #fff;
   border-right: 0;
   border-left: 0;
-  background: #a9b5df;
+  background: #a5d6a7;
   transform-origin: left center;
 }
 
@@ -339,9 +339,9 @@
   bottom: 12%;
   width: 100px;
   height: 62px;
-  border: 1px solid #a9b5df;
+  border: 1px solid #a5d6a7;
   border-radius: 50% 38% 48% 35%;
-  background: #a9b5df;
+  background: #a5d6a7;
   transform: rotate(-12deg);
 }
 
@@ -371,7 +371,7 @@
   left: calc(52% + 24px);
   padding: 7px 10px;
   border-radius: 5px;
-  color: #405349;
+  color: #4f7652;
   background: #fff;
   box-shadow: 0 3px 10px rgba(23, 43, 43, .09);
   font-size: 10px;
@@ -388,7 +388,7 @@
 .price-card,
 .advisor-card {
   padding: 22px;
-  border: 1px solid #a9b5df;
+  border: 1px solid #a5d6a7;
   border-radius: 10px;
   background: #fff;
   box-shadow: 0 8px 26px rgba(28, 48, 39, .06);
@@ -418,7 +418,7 @@
 
 .price-divider {
   margin: 18px 0 14px;
-  border-top: 1px solid #a9b5df;
+  border-top: 1px solid #a5d6a7;
 }
 
 .sidebar-fact {
@@ -445,7 +445,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #2d336b;
+  background: #1b5e20;
 }
 
 .viewing-button {
@@ -465,7 +465,7 @@
   display: grid;
   grid-template-columns: 42px 1fr;
   gap: 12px;
-  background: #fff2f2;
+  background: #e8f5e9;
   box-shadow: none;
 }
 
@@ -476,7 +476,7 @@
   place-items: center;
   border-radius: 50%;
   color: #fff;
-  background: #2d336b;
+  background: #1b5e20;
   font-family: var(--serif);
   font-size: 12px;
 }
@@ -509,15 +509,15 @@
   grid-column: 1 / -1;
   justify-content: space-between;
   padding-top: 12px;
-  border-top: 1px solid #a9b5df;
-  color: #2d336b;
+  border-top: 1px solid #a5d6a7;
+  color: #1b5e20;
   font-size: 10px;
   font-weight: 700;
 }
 
 .more-homes {
   padding: 44px 0;
-  background: #fff2f2;
+  background: #e8f5e9;
 }
 
 .more-homes-inner {
@@ -661,52 +661,52 @@
 .more-homes .section-kicker,
 .property-detail-price,
 .advisor-link {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .gallery-main,
 .gallery-side > *,
 .location-visual {
-  border-color: #a9b5df;
-  background-color: #fff2f2;
+  border-color: #a5d6a7;
+  background-color: #e8f5e9;
 }
 
 .listing-tag,
 .price-card,
 .advisor-card,
 .map-label {
-  border-color: #a9b5df;
-  background-color: #fff2f2;
+  border-color: #a5d6a7;
+  background-color: #e8f5e9;
 }
 
 .highlight-icon,
 .feature-item > span,
 .advisor-avatar {
-  color: #2d336b;
-  background: #a9b5df;
+  color: #1b5e20;
+  background: #a5d6a7;
 }
 
 .map-pin {
-  color: #2d336b;
-  background: #a9b5df;
+  color: #1b5e20;
+  background: #a5d6a7;
 }
 
 .viewing-button {
   color: #fff;
-  background: #2d336b;
+  background: #1b5e20;
 }
 
 .save-property {
-  border-color: #a9b5df;
-  color: #2d336b;
-  background: #fff2f2;
+  border-color: #a5d6a7;
+  color: #1b5e20;
+  background: #e8f5e9;
 }
 
 .save-property:hover {
-  border-color: #7886c7;
-  background: #fff2f2;
+  border-color: #66bb6a;
+  background: #e8f5e9;
 }
 
 .more-homes {
-  background: #fff2f2;
+  background: #e8f5e9;
 }

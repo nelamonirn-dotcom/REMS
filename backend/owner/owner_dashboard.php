@@ -111,7 +111,7 @@ foreach (array_slice($bookings, 0, 5) as $b) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f2">
+  <meta name="theme-color" content="#e8f5e9">
   <meta name="description" content="Manage your properties, bookings, payments and maintenance in the EstateFlow owner workspace.">
   <title>Owner Dashboard | EstateFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">

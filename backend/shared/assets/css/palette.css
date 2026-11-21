@@ -1,22 +1,22 @@
 :root {
   color-scheme: light;
-  --ef-cream: #fff2f2;
-  --ef-cream-alt: #fff2f2;
-  --ef-green-soft: #a9b5df;
-  --ef-green: #2d336b;
-  --ef-accent: #7886c7;
-  --ef-ink: #2d336b;
-  --ef-muted: #525a8a;
-  --ef-border: #a9b5df;
-  --ef-surface: #fff2f2;
-  --ef-page: #fff2f2;
-  --ef-blue-700: #2d336b;
-  --ef-blue-100: #a9b5df;
-  --ef-teal-700: #2d336b;
-  --ef-teal-100: #a9b5df;
-  --ef-navy-950: #2d336b;
-  --ef-navy-900: #2d336b;
-  --ef-navy-800: #2d336b;
+  --ef-cream: #ffffff;
+  --ef-cream-alt: #f8fafc;
+  --ef-green-soft: #e7f4ea;
+  --ef-green: #2f7d4a;
+  --ef-accent: #2f7d4a;
+  --ef-ink: #172943;
+  --ef-muted: #667085;
+  --ef-border: #e5eaf1;
+  --ef-surface: #ffffff;
+  --ef-page: #ffffff;
+  --ef-blue-700: #2f7d4a;
+  --ef-blue-100: #e7f4ea;
+  --ef-teal-700: #2f7d4a;
+  --ef-teal-100: #e7f4ea;
+  --ef-navy-950: #ffffff;
+  --ef-navy-900: #ffffff;
+  --ef-navy-800: #26364d;
 }
 
 .admin-dashboard {
@@ -49,7 +49,7 @@
 }
 
 .admin-dashboard .brand-name span {
-  color: #2d336b;
+  color: #66bb6a;
 }
 
 .admin-dashboard .workspace-switcher {
@@ -66,13 +66,13 @@
 }
 
 .admin-dashboard .nav-caption {
-  color: #525a8a;
+  color: #4f7652;
 }
 
 .admin-dashboard .sidebar-link,
 .admin-dashboard .sidebar-link > .fa-solid,
 .admin-dashboard .sidebar-link > .fa-regular {
-  color: #424a7a;
+  color: #4f7652;
 }
 
 .admin-dashboard .sidebar-link:not(:disabled):hover,
@@ -82,7 +82,7 @@
 }
 
 .admin-dashboard .sidebar-link.is-active > i {
-  color: #2d336b;
+  color: #66bb6a;
 }
 
 .admin-dashboard .sidebar-help,
@@ -92,7 +92,7 @@
 
 .admin-dashboard .help-icon {
   border-color: var(--ef-border);
-  color: #2d336b;
+  color: #66bb6a;
 }
 
 .admin-dashboard .profile-avatar {
@@ -102,7 +102,7 @@
 }
 
 .admin-dashboard .profile-menu {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .admin-dashboard .nav-count,
@@ -116,13 +116,13 @@
 .admin-dashboard .stat-icon-green,
 .admin-dashboard .stat-icon-purple,
 .admin-dashboard .stat-icon-amber {
-  color: #2d336b;
+  color: #66bb6a;
   background: var(--ef-green-soft);
 }
 
 .admin-dashboard .topbar {
   border-color: var(--ef-border);
-  background: rgb(255 242 242 / 94%);
+  background: rgb(232 245 233 / 94%);
 }
 
 .admin-dashboard .breadcrumb,
@@ -144,7 +144,7 @@
 .admin-dashboard .panel {
   border-color: var(--ef-border);
   background: var(--ef-surface);
-  box-shadow: 0 8px 22px rgb(45 51 107 / 6%);
+  box-shadow: 0 8px 22px rgb(27 94 32 / 6%);
 }
 
 .admin-dashboard .button-primary,
@@ -182,7 +182,7 @@
 }
 
 .admin-dashboard .trend-positive {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .admin-dashboard .form-control,
@@ -200,22 +200,22 @@
 .admin-dashboard .form-field input:focus,
 .admin-dashboard .form-field select:focus,
 .admin-dashboard .form-field textarea:focus {
-  border-color: #a9b5df;
-  box-shadow: 0 0 0 3px rgb(120 134 199 / 25%);
+  border-color: #a5d6a7;
+  box-shadow: 0 0 0 3px rgb(102 187 106 / 25%);
 }
 
 .admin-auth {
   color: var(--ef-ink);
   background:
-    radial-gradient(ellipse at 12% 18%, rgb(169 181 223 / 48%), transparent 32%),
-    radial-gradient(ellipse at 91% 87%, rgb(120 134 199 / 28%), transparent 30%),
+    radial-gradient(ellipse at 12% 18%, rgb(165 214 167 / 48%), transparent 32%),
+    radial-gradient(ellipse at 91% 87%, rgb(102 187 106 / 28%), transparent 30%),
     var(--ef-cream-alt);
 }
 
 .admin-auth .auth-card {
   border-color: var(--ef-border);
   background: var(--ef-cream);
-  box-shadow: 0 18px 60px rgb(45 51 107 / 9%);
+  box-shadow: 0 18px 60px rgb(27 94 32 / 9%);
 }
 
 .admin-auth .auth-brand,
@@ -225,7 +225,7 @@
 
 .admin-auth .auth-brand > span:last-child > span,
 .admin-auth .auth-secondary-link {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .admin-auth .auth-brand-symbol,
@@ -238,7 +238,7 @@
 .admin-auth .auth-form button:hover,
 .admin-auth .auth-primary-link:hover {
   color: var(--ef-ink);
-  background: #a9b5df;
+  background: #a5d6a7;
 }
 
 .admin-auth .auth-form input {
@@ -248,15 +248,15 @@
 }
 
 .admin-auth .auth-form input:focus {
-  border-color: #a9b5df;
-  box-shadow: 0 0 0 3px rgb(120 134 199 / 25%);
+  border-color: #a5d6a7;
+  box-shadow: 0 0 0 3px rgb(102 187 106 / 25%);
 }
 
 .admin-auth .signup-story {
   background:
-    linear-gradient(180deg, rgb(45 51 107 / 74%), rgb(45 51 107 / 55%) 48%, rgb(45 51 107 / 84%)),
+    linear-gradient(180deg, rgb(27 94 32 / 74%), rgb(27 94 32 / 55%) 48%, rgb(27 94 32 / 84%)),
     url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85") center / cover,
-    #2d336b;
+    #1b5e20;
 }
 
 .admin-auth .signup-story-copy .auth-eyebrow {
@@ -300,7 +300,7 @@
 
 .owner-dashboard button:focus-visible,
 .owner-dashboard a:focus-visible {
-  outline: 3px solid #2d336b;
+  outline: 3px solid #1b5e20;
   outline-offset: 3px;
 }
 
@@ -321,7 +321,7 @@
 }
 
 .owner-brand > span:last-child > span {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .owner-brand-mark,
@@ -337,7 +337,7 @@
 }
 
 .owner-dashboard .owner-brand > span:last-child > span {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .owner-workspace {
@@ -379,23 +379,23 @@
 }
 
 .owner-nav-link {
-  color: #424a7a !important;
+  color: #4f7652 !important;
 }
 
 .owner-dashboard .owner-nav-link {
-  color: #424a7a !important;
+  color: #4f7652 !important;
 }
 
 .owner-nav-link > i,
 .owner-help-card > a,
 .owner-logout {
-  color: #525a8a !important;
+  color: #4f7652 !important;
 }
 
 .owner-dashboard .owner-nav-link > i,
 .owner-dashboard .owner-help-card > a,
 .owner-dashboard .owner-logout {
-  color: #525a8a !important;
+  color: #4f7652 !important;
 }
 
 .owner-nav-link:hover,
@@ -411,11 +411,11 @@
 }
 
 .owner-nav-link.is-active > i {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .owner-dashboard .owner-nav-link.is-active > i {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .owner-dashboard .owner-sidebar-collapse {
@@ -429,7 +429,7 @@
 
 .owner-help-icon {
   border-color: var(--ef-border);
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .owner-avatar {
@@ -452,7 +452,7 @@ body.owner-dashboard {
 .owner-topbar,
 .owner-dashboard .owner-topbar {
   border-color: var(--ef-border);
-  background: rgb(255 242 242 / 94%);
+  background: rgb(232 245 233 / 94%);
 }
 
 .owner-breadcrumb,
@@ -499,7 +499,7 @@ body.owner-dashboard {
 .owner-dashboard .icon-green,
 .owner-dashboard .icon-purple,
 .owner-dashboard .icon-amber {
-  color: #2d336b;
+  color: #1b5e20;
   background: var(--ef-green-soft);
 }
 
@@ -514,8 +514,8 @@ body.owner-dashboard {
 .owner-dashboard .owner-form-field input:focus,
 .owner-dashboard .owner-form-field select:focus,
 .owner-dashboard .owner-form-field textarea:focus {
-  border-color: #a9b5df;
-  box-shadow: 0 0 0 3px rgb(120 134 199 / 25%);
+  border-color: #a5d6a7;
+  box-shadow: 0 0 0 3px rgb(102 187 106 / 25%);
 }
 
 .owner-dashboard .owner-image-picker {
@@ -528,7 +528,7 @@ body.owner-dashboard {
 .owner-dashboard .operation-icon,
 .owner-dashboard .maintenance-icon,
 .owner-dashboard .operation-date {
-  color: #2d336b;
+  color: #1b5e20;
   background: var(--ef-green-soft);
 }
 
@@ -559,7 +559,7 @@ body.owner-dashboard {
 }
 
 .owner-main-shell .text-success {
-  color: #2d336b !important;
+  color: #1b5e20 !important;
 }
 
 .owner-dashboard .owner-section-heading > a,
@@ -567,7 +567,7 @@ body.owner-dashboard {
 .owner-dashboard .property-card-footer > a,
 .owner-dashboard .owner-inline-action,
 .owner-main-shell .btn-outline-primary {
-  color: #2d336b;
+  color: #1b5e20;
 }
 
 .owner-main-shell .btn-outline-primary {
@@ -608,8 +608,8 @@ body.owner-dashboard {
 
 .owner-main-shell .form-control:focus,
 .owner-main-shell .form-select:focus {
-  border-color: #a9b5df;
-  box-shadow: 0 0 0 3px rgb(120 134 199 / 25%);
+  border-color: #a5d6a7;
+  box-shadow: 0 0 0 3px rgb(102 187 106 / 25%);
 }
 
 .owner-main-shell .page-footer {
@@ -624,11 +624,127 @@ body.owner-dashboard {
 }
 
 .owner-profile-page .profile-cover {
-  background: linear-gradient(115deg, #a9b5df, #7886c7 62%, #fff2f2);
+  background: linear-gradient(115deg, #a5d6a7, #66bb6a 62%, #e8f5e9);
+}
+
+/* Dashboard-wide green typography and font pairing */
+.admin-dashboard,
+.owner-layout,
+.owner-dashboard,
+.agent-dashboard {
+  color: var(--ef-ink);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+.admin-dashboard h1,
+.admin-dashboard h2,
+.admin-dashboard h3,
+.admin-dashboard h4,
+.owner-dashboard h1,
+.owner-dashboard h2,
+.owner-dashboard h3,
+.owner-dashboard h4 {
+  color: var(--ef-ink);
+  font-family: "Manrope", "Segoe UI", Arial, sans-serif;
+}
+
+.admin-dashboard p,
+.owner-dashboard p {
+  color: inherit;
 }
 
 @media (max-width: 575.98px) {
   .owner-main-shell .owner-topbar-actions {
     gap: 8px;
   }
+}
+
+/* White workspace theme overrides */
+.admin-dashboard .sidebar,
+.owner-sidebar {
+  border-right: 1px solid #e5eaf1;
+  color: #172943;
+  background: #ffffff;
+}
+
+.admin-dashboard .sidebar-brand,
+.admin-dashboard .workspace-switcher,
+.admin-dashboard .sidebar-bottom,
+.admin-dashboard .sidebar-profile,
+.owner-sidebar-head,
+.owner-workspace,
+.owner-sidebar-bottom,
+.owner-account {
+  border-color: #e5eaf1;
+}
+
+.admin-dashboard .brand-name,
+.admin-dashboard .workspace-name,
+.admin-dashboard .help-copy strong,
+.admin-dashboard .profile-copy strong,
+.owner-brand,
+.owner-workspace strong,
+.owner-help-copy strong,
+.owner-account-name strong {
+  color: #172943 !important;
+}
+
+.admin-dashboard .brand-name span,
+.admin-dashboard .nav-caption,
+.admin-dashboard .workspace-label,
+.admin-dashboard .workspace-chevron,
+.admin-dashboard .help-copy small,
+.admin-dashboard .profile-copy small,
+.owner-workspace small,
+.owner-workspace .workspace-chevron,
+.owner-nav-label,
+.owner-help-copy small,
+.owner-account-name small {
+  color: #667085;
+}
+
+.admin-dashboard .sidebar-link,
+.admin-dashboard .sidebar-link > .fa-solid,
+.admin-dashboard .sidebar-link > .fa-regular,
+.owner-nav-link,
+.owner-nav-link > i,
+.owner-help-card > a,
+.owner-logout {
+  color: #667085 !important;
+}
+
+.admin-dashboard .sidebar-link:not(:disabled):hover,
+.admin-dashboard .sidebar-link.is-active,
+.owner-nav-link:hover,
+.owner-nav-link.is-active {
+  color: #172943 !important;
+  background: #edf6ef;
+}
+
+.admin-dashboard .brand-symbol,
+.admin-dashboard .workspace-avatar,
+.admin-dashboard .profile-avatar,
+.owner-brand-mark,
+.owner-workspace .workspace-avatar,
+.owner-avatar {
+  color: #2f7d4a;
+  background: #edf6ef;
+}
+
+.owner-bookings-page {
+  color: #172943;
+  background: #ffffff;
+}
+
+.owner-main-shell,
+.owner-dashboard,
+.owner-layout,
+.admin-dashboard,
+.admin-layout {
+  background: #ffffff;
+}
+
+.owner-topbar,
+.admin-dashboard .topbar {
+  background: rgb(255 255 255 / 96%);
 }

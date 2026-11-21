@@ -83,6 +83,19 @@ CREATE TABLE `bookings` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_interests`
+--
+
+CREATE TABLE `booking_interests` (
+  `booking_id` bigint UNSIGNED NOT NULL,
+  `interest_type` enum('buy','rent') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('pending','invoiced') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 --
 -- Dumping data for table `bookings`
 --
@@ -325,7 +338,7 @@ CREATE TABLE `visits` (
   `booking_id` bigint UNSIGNED NOT NULL,
   `property_id` bigint UNSIGNED NOT NULL,
   `customer_id` bigint UNSIGNED NOT NULL,
-  `agent_id` bigint UNSIGNED NOT NULL,
+  `agent_id` bigint UNSIGNED DEFAULT NULL,
   `visit_time` datetime NOT NULL,
   `status` enum('scheduled','completed','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'scheduled',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -366,6 +379,12 @@ ALTER TABLE `bookings`
   ADD PRIMARY KEY (`booking_id`),
   ADD KEY `fk_bookings_property` (`property_id`),
   ADD KEY `fk_bookings_customer` (`customer_id`);
+
+--
+-- Indexes for table `booking_interests`
+--
+ALTER TABLE `booking_interests`
+  ADD PRIMARY KEY (`booking_id`);
 
 --
 -- Indexes for table `commissions`
@@ -576,6 +595,12 @@ ALTER TABLE `agreements`
 ALTER TABLE `bookings`
   ADD CONSTRAINT `fk_bookings_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`),
   ADD CONSTRAINT `fk_bookings_property` FOREIGN KEY (`property_id`) REFERENCES `properties` (`property_id`);
+
+--
+-- Constraints for table `booking_interests`
+--
+ALTER TABLE `booking_interests`
+  ADD CONSTRAINT `fk_booking_interests_booking` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `commissions`

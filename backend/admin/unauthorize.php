@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#fff2f2">
+    <meta name="theme-color" content="#e8f5e9">
     <meta name="description" content="You do not have permission to access this EstateFlow page.">
     <title>Access denied | EstateFlow</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +18,7 @@
         min-height: 100vh;
         flex-direction: column;
         background:
-          radial-gradient(ellipse at 82% 15%, rgb(120 134 199 / 22%), transparent 32rem),
+          radial-gradient(ellipse at 82% 15%, rgb(102 187 106 / 22%), transparent 32rem),
           var(--ef-page);
       }
 

@@ -104,8 +104,8 @@
   bookingStatus.addEventListener("change", filterBookings);
 
   const chartColors = {
-    navy: "#4b80c2",
-    green: "#61b99a",
+    navy: "#1b5e20",
+    green: "#66bb6a",
     amber: "#edbd68",
     gray: "#a6afbf",
     grid: "#edf0f5",
@@ -138,10 +138,10 @@
           borderColor: chartColors.navy,
           backgroundColor: (context) => {
             const { ctx, chartArea } = context.chart;
-            if (!chartArea) return "rgb(75 128 194 / 10%)";
+            if (!chartArea) return "rgb(102 187 106 / 10%)";
             const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-            gradient.addColorStop(0, "rgb(75 128 194 / 22%)");
-            gradient.addColorStop(1, "rgb(75 128 194 / 0%)");
+            gradient.addColorStop(0, "rgb(102 187 106 / 22%)");
+            gradient.addColorStop(1, "rgb(102 187 106 / 0%)");
             return gradient;
           },
           borderWidth: 2,
@@ -160,7 +160,7 @@
           legend: { display: false },
           tooltip: {
             displayColors: false,
-            backgroundColor: "#172744",
+            backgroundColor: "#1b5e20",
             padding: 9,
             titleFont: { size: 9, weight: "600" },
             bodyFont: { size: 9 },
@@ -209,7 +209,7 @@
           legend: { display: false },
           tooltip: {
             displayColors: false,
-            backgroundColor: "#172744",
+            backgroundColor: "#1b5e20",
             padding: 8,
             titleFont: { size: 9, weight: "600" },
             bodyFont: { size: 9 }

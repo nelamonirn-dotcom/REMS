@@ -25,11 +25,11 @@
     place-items: center;
     border-radius: 11px;
     color: #fff;
-    background: #2d336b;
+    background: #1b5e20;
 }
 
 .owner-profile-page .eyebrow {
-    color: #2d336b;
+    color: #1b5e20;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -49,7 +49,7 @@
 }
 
 .owner-profile-page .profile-secure-label span {
-    color: #328064;
+    color: #1b5e20;
 }
 
 .owner-profile-page h1,
@@ -75,7 +75,7 @@
 
 .owner-profile-page .profile-cover {
     height: 132px;
-    background: linear-gradient(115deg, #2d336b, #2d336b 62%, #7886c7);
+    background: linear-gradient(115deg, #1b5e20, #1b5e20 62%, #66bb6a);
 }
 
 .owner-profile-page .profile-identity {
@@ -94,7 +94,7 @@
     place-items: center;
     border: 5px solid #fff;
     border-radius: 50%;
-    color: #2d336b;
+    color: #1b5e20;
     background: #eaf1fa;
     font-size: 1.35rem;
     font-weight: 700;
@@ -170,7 +170,7 @@
 
 .owner-profile-page .form-control:focus {
     border-color: #7d9bc4;
-    box-shadow: 0 0 0 0.2rem rgba(49, 93, 154, 0.12);
+    box-shadow: 0 0 0 0.2rem rgba(27, 94, 32, 0.12);
 }
 
 .owner-profile-page .form-note {
@@ -229,8 +229,8 @@
 }
 
 .owner-profile-page .portfolio-icon {
-    color: #328064;
-    background: #e8f6f0;
+    color: #1b5e20;
+    background: #e8f5e9;
 }
 
 .owner-profile-page .profile-details {
@@ -310,7 +310,7 @@
 }
 
 .owner-profile-page .account-info-row .account-status-text {
-    color: #328064;
+    color: #1b5e20;
 }
 
 .owner-profile-page .account-info-note {
@@ -369,8 +369,8 @@
 }
 
 .owner-profile-page .stat-green {
-    color: #328064;
-    background: #e8f6f0;
+    color: #1b5e20;
+    background: #e8f5e9;
 }
 
 .owner-profile-page .stat-purple {
@@ -380,23 +380,23 @@
 
 .owner-profile-page .btn-outline-primary {
     border-color: #b8c8dd;
-    color: #2d336b;
+    color: #1b5e20;
 }
 
 .owner-profile-page .btn-outline-primary:hover {
-    border-color: #2d336b;
+    border-color: #1b5e20;
     color: #fff;
-    background: #2d336b;
+    background: #1b5e20;
 }
 
 .owner-profile-page .btn-primary {
-    border-color: #2d336b;
-    background: #2d336b;
+    border-color: #1b5e20;
+    background: #1b5e20;
 }
 
 .owner-profile-page .btn-primary:hover {
-    border-color: #2d336b;
-    background: #2d336b;
+    border-color: #1b5e20;
+    background: #1b5e20;
 }
 
 .owner-profile-page .page-footer {
@@ -410,7 +410,7 @@
 }
 
 .owner-profile-page .page-footer a {
-    color: #2d336b;
+    color: #1b5e20;
     text-decoration: none;
 }
 

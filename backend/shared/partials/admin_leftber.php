@@ -50,7 +50,7 @@
         </a>
 
         <p class="nav-caption">Finance &amp; operations</p>
-        <a class="sidebar-link<?= $currentAdminPage === 'payments.php' ? ' is-active' : '' ?>" href="payments.php"<?= $currentAdminPage === 'payments.php' ? ' aria-current="page"' : '' ?> title="Payments">
+        <a class="sidebar-link<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php'], true) ? ' is-active' : '' ?>" href="payments.php"<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php'], true) ? ' aria-current="page"' : '' ?> title="Payments">
           <i class="fa-solid fa-wallet" aria-hidden="true"></i><span>Payments</span>
         </a>
         <a class="sidebar-link<?= $currentAdminPage === 'commissions.php' ? ' is-active' : '' ?>" href="commissions.php"<?= $currentAdminPage === 'commissions.php' ? ' aria-current="page"' : '' ?> title="Commissions">

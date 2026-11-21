@@ -25,7 +25,7 @@
     place-items: center;
     border-radius: 11px;
     color: #fff;
-    background: #2d336b;
+    background: #1b5e20;
 }
 
 .need-a-hand-page .support-hero {
@@ -34,7 +34,7 @@
     padding: 34px;
     border-radius: 18px;
     color: #fff;
-    background: linear-gradient(120deg, #2d336b, #2d336b);
+    background: linear-gradient(120deg, #1b5e20, #1b5e20);
 }
 
 .need-a-hand-page .support-hero::after {
@@ -76,7 +76,7 @@
 }
 
 .need-a-hand-page .eyebrow {
-    color: #2d336b;
+    color: #1b5e20;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -114,8 +114,8 @@
 }
 
 .need-a-hand-page .guide-icon {
-    color: #328064;
-    background: #e8f6f0;
+    color: #1b5e20;
+    background: #e8f5e9;
 }
 
 .need-a-hand-page .support-card h2 {
@@ -128,7 +128,7 @@
 }
 
 .need-a-hand-page .support-link {
-    color: #2d336b;
+    color: #1b5e20;
     font-weight: 600;
     text-decoration: none;
 }
@@ -181,8 +181,8 @@
 }
 
 .need-a-hand-page .topic-green {
-    color: #328064;
-    background: #e8f6f0;
+    color: #1b5e20;
+    background: #e8f5e9;
 }
 
 .need-a-hand-page .topic-purple {
@@ -253,7 +253,7 @@
 }
 
 .need-a-hand-page .page-footer a {
-    color: #2d336b;
+    color: #1b5e20;
     text-decoration: none;
 }
 

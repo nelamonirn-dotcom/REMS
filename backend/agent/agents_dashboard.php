@@ -21,7 +21,7 @@ $escape = static fn(string $value): string => htmlspecialchars($value, ENT_QUOTE
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f2">
+  <meta name="theme-color" content="#e8f5e9">
   <meta name="description" content="Agent workspace for assigned properties, customers, visits, bookings and commission.">
   <title>Agent Dashboard | EstateFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -48,9 +48,9 @@
   font-size: 13px;
 }
 
-.stat-blue { color: #4270b1; background: #edf3fd; }
+.stat-blue { color: #1b5e20; background: #a5d6a7; }
 .stat-amber { color: #bd8732; background: #fff4e1; }
-.stat-green { color: #328a70; background: #e8f6f0; }
+.stat-green { color: #1b5e20; background: #e8f5e9; }
 .stat-purple { color: #8068b5; background: #f0edfa; }
 .stat-red { color: #b64e54; background: #fbebec; }
 
@@ -195,7 +195,7 @@
 .status-success { color: #338064; background: #eaf5ee; }
 .status-pending { color: #a87625; background: #fff4df; }
 .status-danger { color: #b25158; background: #fbebec; }
-.status-info { color: #456b9f; background: #edf3fd; }
+.status-info { color: #1b5e20; background: #a5d6a7; }
 .status-neutral { color: #707c90; background: #f0f2f6; }
 
 .management-more {
@@ -444,7 +444,7 @@
   width: 100%;
   min-height: 12px;
   border-radius: 5px 5px 0 0;
-  background: linear-gradient(180deg, #76a3d8, #4b80c2);
+  background: linear-gradient(180deg, #a5d6a7, #66bb6a);
 }
 
 .analytics-bar-label {
@@ -483,8 +483,8 @@
   border-radius: 50%;
 }
 
-.breakdown-blue { background: #4b80c2; }
-.breakdown-green { background: #61b99a; }
+.breakdown-blue { background: #1b5e20; }
+.breakdown-green { background: #66bb6a; }
 .breakdown-amber { background: #edbd68; }
 
 .analytics-progress {

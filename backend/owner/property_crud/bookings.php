@@ -14,13 +14,85 @@ if (($_SESSION['role'] ?? '') !== 'owner') {
 
 $owner_id = (int)$_SESSION['user_id'];
 
-// Approve / Cancel (shudhu nijer property r booking e)
+// Booking actions (shudhu nijer property-r booking e)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $bookingId = (int)($_POST['booking_id'] ?? 0); 
   $action    = $_POST['action'] ?? '';
   $map       = ['approve' => 'approved', 'cancel' => 'cancelled'];
 
-  if ($bookingId > 0 && isset($map[$action])) {
+  if ($bookingId > 0 && $action === 'mark_visited') {
+    $conn->begin_transaction();
+
+    $bookingStmt = $conn->prepare("SELECT b.property_id, b.customer_id
+                                   FROM bookings b
+                                   JOIN properties p ON p.property_id = b.property_id
+                                   WHERE b.booking_id = ? AND p.owner_id = ? AND b.status = 'approved'
+                                   FOR UPDATE");
+    $bookingStmt->bind_param('ii', $bookingId, $owner_id);
+    $bookingStmt->execute();
+    $booking = $bookingStmt->get_result()->fetch_assoc();
+
+    if (!$booking) {
+      $conn->rollback();
+      $visitMessage = 'unavailable';
+    } else {
+      $completedStmt = $conn->prepare("SELECT visit_id FROM visits
+                                       WHERE booking_id = ? AND status = 'completed'
+                                       LIMIT 1");
+      $completedStmt->bind_param('i', $bookingId);
+      $completedStmt->execute();
+
+      if ($completedStmt->get_result()->num_rows > 0) {
+        $conn->commit();
+        $visitMessage = 'already_completed';
+      } else {
+        $scheduledStmt = $conn->prepare("SELECT visit_id FROM visits
+                                         WHERE booking_id = ? AND status = 'scheduled'
+                                         ORDER BY visit_time
+                                         LIMIT 1");
+        $scheduledStmt->bind_param('i', $bookingId);
+        $scheduledStmt->execute();
+        $scheduledVisit = $scheduledStmt->get_result()->fetch_assoc();
+
+        if ($scheduledVisit) {
+          $visitStmt = $conn->prepare("UPDATE visits
+                                       SET status = 'completed', visit_time = NOW()
+                                       WHERE visit_id = ?");
+          $visitStmt->bind_param('i', $scheduledVisit['visit_id']);
+        } else {
+          $agentStmt = $conn->prepare("SELECT a.agent_id
+                                       FROM agent_properties ap
+                                       JOIN agents a ON a.agent_id = ap.agent_id AND a.status = 'active'
+                                       WHERE ap.property_id = ?
+                                       ORDER BY ap.assigned_at, ap.agent_id
+                                       LIMIT 1");
+          $agentStmt->bind_param('i', $booking['property_id']);
+          $agentStmt->execute();
+          $agent = $agentStmt->get_result()->fetch_assoc();
+
+          if ($agent) {
+            $agentId = (int)$agent['agent_id'];
+            $visitStmt = $conn->prepare("INSERT INTO visits
+                                           (booking_id, property_id, customer_id, agent_id, visit_time, status)
+                                         VALUES (?, ?, ?, ?, NOW(), 'completed')");
+            $visitStmt->bind_param('iiii', $bookingId, $booking['property_id'], $booking['customer_id'], $agentId);
+          } else {
+            $visitStmt = $conn->prepare("INSERT INTO visits
+                                           (booking_id, property_id, customer_id, visit_time, status)
+                                         VALUES (?, ?, ?, NOW(), 'completed')");
+            $visitStmt->bind_param('iii', $bookingId, $booking['property_id'], $booking['customer_id']);
+          }
+        }
+
+        $visitStmt->execute();
+        $conn->commit();
+        $visitMessage = 'completed';
+      }
+    }
+
+    header('Location: bookings.php?visit=' . urlencode($visitMessage));
+    exit;
+  } elseif ($bookingId > 0 && isset($map[$action])) {
     $newStatus = $map[$action];
     $stmt = $conn->prepare("UPDATE bookings b
                             JOIN properties p ON p.property_id = b.property_id
@@ -36,7 +108,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Owner-er property gulor shob booking
 $stmt = $conn->prepare("SELECT b.booking_id, b.booking_date, b.status, b.created_at,
                                p.title, p.address,
-                               u.name AS customer_name, u.email AS customer_email
+                               u.name AS customer_name, u.email AS customer_email,
+                               EXISTS(SELECT 1 FROM visits v
+                                      WHERE v.booking_id = b.booking_id AND v.status = 'completed') AS visit_completed,
+                               (SELECT pay.status
+                                FROM agreements ag
+                                JOIN payments pay ON pay.agreement_id = ag.agreement_id
+                                WHERE ag.booking_id = b.booking_id
+                                ORDER BY pay.payment_id DESC
+                                LIMIT 1) AS payment_status,
+                               (SELECT pay.payment_type
+                                FROM agreements ag
+                                JOIN payments pay ON pay.agreement_id = ag.agreement_id
+                                WHERE ag.booking_id = b.booking_id
+                                ORDER BY pay.payment_id DESC
+                                LIMIT 1) AS payment_type
                         FROM bookings b
                         JOIN properties p ON p.property_id = b.property_id
                         JOIN customers c  ON c.customer_id = b.customer_id
@@ -107,6 +193,21 @@ function h($s) { return htmlspecialchars((string)$s); }
             <a class="btn btn-outline-primary" href="myproperty.php">View my properties</a>
         </header>
 
+        <?php
+        $visitMessages = [
+            'completed' => ['success', 'Visit marked as completed. Admin can now see it in Property visits.'],
+            'already_completed' => ['info', 'This booking already has a completed visit.'],
+            'unavailable' => ['danger', 'Only approved bookings for your properties can be marked as visited.'],
+        ];
+        $visitNotice = $visitMessages[$_GET['visit'] ?? ''] ?? null;
+        ?>
+        <?php if ($visitNotice): ?>
+            <div class="alert alert-<?= h($visitNotice[0]) ?> alert-dismissible fade show" role="status">
+                <?= h($visitNotice[1]) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
         <section class="row g-3 mb-4" aria-label="Booking totals">
             <div class="col-12 col-sm-4">
                 <article class="summary-card h-100">
@@ -146,12 +247,13 @@ function h($s) { return htmlspecialchars((string)$s); }
                             <th scope="col">Requested on</th>
                             <th scope="col">Viewing date</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Payment</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php if ($total === 0): ?>
-                        <tr><td colspan="6" class="text-center text-secondary py-4">Ekhono kono booking request ashe ni.</td></tr>
+                        <tr><td colspan="7" class="text-center text-secondary py-4">Ekhono kono booking request ashe ni.</td></tr>
                     <?php else: ?>
                         <?php foreach ($bookings as $i => $b): ?>
                         <tr>
@@ -164,6 +266,15 @@ function h($s) { return htmlspecialchars((string)$s); }
                             <td><?= h(date('M d, Y · g:i A', strtotime($b['booking_date']))) ?></td>
                             <td><span class="status-badge status-<?= h($b['status']) ?>"><?= h($labels[$b['status']] ?? ucfirst($b['status'])) ?></span></td>
                             <td>
+                                <?php if ($b['payment_status'] === 'paid'): ?>
+                                    <span class="badge text-bg-success">Paid · <?= h(ucfirst($b['payment_type'])) ?></span>
+                                <?php elseif ($b['payment_status'] !== null): ?>
+                                    <span class="badge text-bg-warning">Awaiting payment</span>
+                                <?php else: ?>
+                                    <span class="text-secondary">—</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
                                 <?php if ($b['status'] === 'pending'): ?>
                                     <form class="action-form" method="post">
                                         <input type="hidden" name="booking_id" value="<?= (int)$b['booking_id'] ?>">
@@ -174,6 +285,12 @@ function h($s) { return htmlspecialchars((string)$s); }
                                 <?php elseif ($b['status'] === 'approved'): ?>
                                     <form class="action-form" method="post">
                                         <input type="hidden" name="booking_id" value="<?= (int)$b['booking_id'] ?>">
+                                        <?php if ($b['visit_completed']): ?>
+                                            <span class="badge text-bg-success">Visited</span>
+                                        <?php else: ?>
+                                            <button class="btn btn-sm btn-outline-primary" name="action" value="mark_visited" type="submit"
+                                                    onclick="return confirm('Mark this property visit as completed? Admin will be able to see it.');">Mark visited</button>
+                                        <?php endif; ?>
                                         <button class="btn btn-sm btn-outline-danger" name="action" value="cancel" type="submit"
                                                 onclick="return confirm('Ei booking cancel korben?');">Cancel</button>
                                     </form>

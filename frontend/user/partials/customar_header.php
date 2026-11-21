@@ -34,6 +34,9 @@ $isSignedIn = isset($_SESSION['email']) && $dashboardLink !== null;
         <li><a href="projects.php" <?= $currentPage === 'projects.php' ? 'aria-current="page"' : '' ?>>Projects</a></li>
         <li><a href="about.php" <?= $currentPage === 'about.php' ? 'aria-current="page"' : '' ?>>About</a></li>
         <li><a href="contact.php" <?= $currentPage === 'contact.php' ? 'aria-current="page"' : '' ?>>Contact</a></li>
+        <?php if ($isSignedIn && $accountRole === 'customer'): ?>
+          <li><a href="payments.php" <?= $currentPage === 'payments.php' ? 'aria-current="page"' : '' ?>>Payments</a></li>
+        <?php endif; ?>
         <?php if ($isSignedIn): ?>
           <li class="nav-mobile-account"><a href="<?= htmlspecialchars($dashboardLink, ENT_QUOTES, 'UTF-8') ?>">Dashboard</a></li>
           <li class="nav-mobile-account"><a href="../../backend/shared/partials/logout.php">Sign out</a></li>

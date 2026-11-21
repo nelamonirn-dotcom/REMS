@@ -35,6 +35,6 @@
 
 .add-property-page .form-control:focus,
 .add-property-page .form-select:focus {
-    border-color: #6b8afd;
-    box-shadow: 0 0 0 0.2rem rgba(79, 104, 237, 0.14);
+    border-color: #66bb6a;
+    box-shadow: 0 0 0 0.2rem rgba(102, 187, 106, 0.14);
 }

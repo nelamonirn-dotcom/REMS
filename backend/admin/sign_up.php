@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f2">
+  <meta name="theme-color" content="#e8f5e9">
   <meta name="description" content="Create an EstateFlow account to find or list a property.">
   <title>Create your account | EstateFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">

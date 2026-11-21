@@ -17,21 +17,27 @@ if ($r && ($s = $r->fetch_assoc())) {
   $cancelled = (int)$s['cancelled'];
 }
 
-// ---------- Visit list: kon customer kon property visit korse ----------
+// ---------- Visit list: customer/property/date/agent from the visits table ----------
 $rows = [];
 $res = $conn->query("SELECT v.visit_id, v.customer_id, v.agent_id, v.visit_time, v.status,
-                            p.title, p.address
+                            v.booking_id, p.title, p.address,
+                            customer_user.name AS customer_name,
+                            agent_user.name AS agent_name
                      FROM visits v
                      LEFT JOIN properties p ON p.property_id = v.property_id
-                     ORDER BY v.visit_time DESC
-                     LIMIT 50");
+                     LEFT JOIN customers c ON c.customer_id = v.customer_id
+                     LEFT JOIN users customer_user ON customer_user.user_id = c.user_id
+                     LEFT JOIN agents a ON a.agent_id = v.agent_id
+                     LEFT JOIN users agent_user ON agent_user.user_id = a.user_id
+                     ORDER BY v.visit_time DESC");
 while ($v = $res->fetch_assoc()) {
   $rows[] = [
     'id'       => 'VIS-' . str_pad($v['visit_id'], 4, '0', STR_PAD_LEFT),
-    'guest'    => 'Customer #' . (int)$v['customer_id'],
+    'booking'  => '#BK-' . (int)$v['booking_id'],
+    'guest'    => $v['customer_name'] ?: 'Customer #' . (int)$v['customer_id'],
     'property' => ($v['title'] ?? 'Property removed') . (!empty($v['address']) ? ', ' . $v['address'] : ''),
     'date'     => date('M d · h:i A', strtotime($v['visit_time'])),
-    'agent'    => 'Agent #' . (int)$v['agent_id'],
+    'agent'    => $v['agent_name'] ?: 'Unassigned',
     'status'   => ucfirst($v['status']),
   ];
 }
@@ -40,6 +46,8 @@ $managementPage = [
   'title' => 'Property visits',
   'category' => 'Management',
   'description' => 'Coordinate upcoming property tours and keep track of visit requests.',
+  'liveData' => true,
+  'emptyMessage' => 'No property visits have been scheduled yet.',
   'stats' => [
     ['label' => 'Scheduled visits', 'value' => sprintf('%02d', $scheduled), 'note' => 'Across all properties', 'icon' => 'fa-solid fa-calendar-days', 'color' => 'stat-blue'],
     ['label' => 'Today', 'value' => sprintf('%02d', $today), 'note' => 'Visits on the calendar', 'icon' => 'fa-regular fa-clock', 'color' => 'stat-amber'],
@@ -50,7 +58,8 @@ $managementPage = [
   'listDescription' => 'Who visited which property, and when.',
   'columns' => [
     ['label' => 'Visit ID', 'key' => 'id'],
-    ['label' => 'Customer', 'key' => 'guest'],
+    ['label' => 'Booking ID', 'key' => 'booking'],
+    ['label' => 'Visitor', 'key' => 'guest'],
     ['label' => 'Property', 'key' => 'property'],
     ['label' => 'Date & time', 'key' => 'date'],
     ['label' => 'Assigned agent', 'key' => 'agent'],

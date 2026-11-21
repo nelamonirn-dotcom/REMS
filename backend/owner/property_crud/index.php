@@ -49,31 +49,31 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
 
     <style>
         body {
-            background: #fff2f2;
+            background: #e8f5e9;
         }
 
         table {
             width: 100%;
-            border: 1px solid #a9b5df;
+            border: 1px solid #a5d6a7;
             border-collapse: separate;
             border-spacing: 0;
             border-radius: 12px;
             overflow: hidden;
-            background: #fff2f2;
+            background: #e8f5e9;
         }
 
         th {
             padding: 12px 14px;
-            border-bottom: 1px solid #a9b5df;
-            background-color: #a9b5df;
-            color: #2d336b;
+            border-bottom: 1px solid #a5d6a7;
+            background-color: #a5d6a7;
+            color: #1b5e20;
             text-align: left;
         }
 
         td {
             padding: 12px 14px;
             border-bottom: 1px solid #eceef7;
-            background: #fff2f2;
+            background: #e8f5e9;
         }
 
         tbody tr:last-child td {
@@ -101,15 +101,15 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
             display: inline-block;
             padding: 10px 16px;
             border-radius: 8px;
-            background-color: #2d336b;
+            background-color: #1b5e20;
             color: #fff;
             text-decoration: none;
             font-weight: 700;
         }
 
         .new-entry:hover {
-            background-color: #a9b5df;
-            color: #2d336b;
+            background-color: #a5d6a7;
+            color: #1b5e20;
         }
 
         .pagination {
@@ -121,15 +121,15 @@ $lastRecord = min($offset + $recordsPerPage, $totalRecords);
 
         .pagination a {
             padding: 6px 10px;
-            border: 1px solid #a9b5df;
+            border: 1px solid #a5d6a7;
             border-radius: 4px;
-            color: #2d336b;
+            color: #1b5e20;
             text-decoration: none;
         }
 
         .pagination a:hover {
-            background-color: #a9b5df;
-            color: #2d336b;
+            background-color: #a5d6a7;
+            color: #1b5e20;
         }
     </style>
 </head>

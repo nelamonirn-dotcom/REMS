@@ -1,11 +1,11 @@
 :root {
-    --bg: #f4f7fb;
+    --bg: #e8f5e9;
     --card: #ffffff;
-    --primary: #2f6fed;
-    --primary-dark: #214fb3;
-    --border: #dfe7f5;
-    --text: #1f2937;
-    --muted: #6b7280;
+    --primary: #1b5e20;
+    --primary-dark: #1b5e20;
+    --border: #a5d6a7;
+    --text: #1b5e20;
+    --muted: #4f7652;
     --danger: #dc2626;
     --success: #16a34a;
 }
@@ -54,7 +54,7 @@ th, td {
 }
 
 th {
-    background: #eef4ff;
+    background: #a5d6a7;
     color: var(--primary-dark);
 }
 
@@ -116,8 +116,8 @@ button:hover {
 }
 
 .action-btn.edit {
-    background: #e0f2fe;
-    color: #075985;
+    background: #a5d6a7;
+    color: #1b5e20;
 }
 
 .action-btn.delete {
@@ -126,6 +126,6 @@ button:hover {
 }
 
 .action-btn.add {
-    background: #dcfce7;
-    color: #166534;
+    background: #e8f5e9;
+    color: #1b5e20;
 }

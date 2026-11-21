@@ -16,6 +16,7 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
 }
 
 $adminPageTitle = $managementPage['title'];
+$isLiveData = !empty($managementPage['liveData']);
 $escape = static function ($value) {
   return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
@@ -45,7 +46,7 @@ $statusClasses = [
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f2">
+  <meta name="theme-color" content="#e8f5e9">
   <meta name="description" content="<?= $escape($managementPage['description']) ?>">
   <title><?= $escape($managementPage['title']) ?> | EstateFlow Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,7 +76,7 @@ $statusClasses = [
             <h1 id="management-title"><?= $escape($managementPage['title']) ?></h1>
             <p class="page-subtitle"><?= $escape($managementPage['description']) ?></p>
           </div>
-          <span class="sample-label"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Sample data preview</span>
+          <span class="sample-label"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> <?= $isLiveData ? 'Live database records' : 'Sample data preview' ?></span>
         </section>
 
         <section class="row g-3 management-stats" aria-label="<?= $escape($managementPage['title']) ?> summary">
@@ -157,10 +158,17 @@ $statusClasses = [
                 <h2 id="management-list-title"><?= $escape($managementPage['listTitle']) ?></h2>
                 <p><?= $escape($managementPage['listDescription']) ?></p>
               </div>
+              <?php if ($adminPageTitle === 'Payments') { ?>
+              <a class="btn btn-primary management-action" href="payment_invoice.php">
+                <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>Create invoice
+              </a>
+              <?php } elseif (!$isLiveData) { ?>
               <button class="btn btn-outline-secondary management-action" type="button">
                 <i class="fa-solid fa-arrow-down-to-line me-2" aria-hidden="true"></i>Export
               </button>
+              <?php } ?>
             </div>
+            <?php if (!$isLiveData) { ?>
             <div class="management-toolbar">
               <label class="management-search" for="management-search">
                 <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -171,6 +179,7 @@ $statusClasses = [
                 <i class="fa-solid fa-filter me-2" aria-hidden="true"></i>Filters
               </button>
             </div>
+            <?php } ?>
             <div class="table-responsive">
               <table class="table management-table align-middle mb-0">
                 <thead>
@@ -178,10 +187,15 @@ $statusClasses = [
                     <?php foreach ($managementPage['columns'] as $column) { ?>
                       <th scope="col"><?= $escape($column['label']) ?></th>
                     <?php } ?>
-                    <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    <?php if (!$isLiveData) { ?>
+                      <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    <?php } ?>
                   </tr>
                 </thead>
                 <tbody>
+                  <?php if ($isLiveData && count($managementPage['rows']) === 0) { ?>
+                    <tr><td colspan="<?= $escape(count($managementPage['columns'])) ?>" class="text-center text-secondary py-4"><?= $escape($managementPage['emptyMessage'] ?? 'No records found.') ?></td></tr>
+                  <?php } ?>
                   <?php foreach ($managementPage['rows'] as $row) { ?>
                     <tr>
                       <?php foreach ($managementPage['columns'] as $column) {
@@ -197,14 +211,23 @@ $statusClasses = [
                           <?php } ?>
                         </td>
                       <?php } ?>
-                      <td><button class="management-more" type="button" aria-label="More actions for <?= $escape(reset($row)) ?>"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></td>
+                      <?php if (!$isLiveData) { ?>
+                        <td><button class="management-more" type="button" aria-label="More actions for <?= $escape(reset($row)) ?>"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></td>
+                      <?php } ?>
                     </tr>
                   <?php } ?>
                 </tbody>
               </table>
             </div>
             <div class="management-table-footer">
-              <span>Showing <strong>1–<?= $escape(count($managementPage['rows'])) ?></strong> sample records</span>
+              <span>
+                <?php if ($isLiveData) { ?>
+                  Showing <strong><?= $escape(count($managementPage['rows'])) ?></strong> database records
+                <?php } else { ?>
+                  Showing <strong>1–<?= $escape(count($managementPage['rows'])) ?></strong> sample records
+                <?php } ?>
+              </span>
+              <?php if (!$isLiveData) { ?>
               <nav aria-label="<?= $escape($managementPage['title']) ?> pages">
                 <ul class="pagination pagination-sm mb-0">
                   <li class="page-item disabled"><span class="page-link" aria-label="Previous page"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></span></li>
@@ -215,13 +238,14 @@ $statusClasses = [
                   <li class="page-item"><span class="page-link"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span></li>
                 </ul>
               </nav>
+              <?php } ?>
             </div>
           </section>
         <?php } ?>
 
         <footer class="management-footer">
           <span>EstateFlow Admin <span aria-hidden="true">·</span> Administrator workspace</span>
-          <span>All information on this page is sample preview content.</span>
+          <span><?= $isLiveData ? 'Visit records are loaded from the database.' : 'All information on this page is sample preview content.' ?></span>
         </footer>
       </main>
     </div>

@@ -1,14 +1,5 @@
 <?php
 session_start();
-if (!isset($_SESSION['email'])) {
-  header("Location: ../../backend/admin/index.php");
-  exit;
-}
-
-if ($_SESSION['role'] != "customer") {
-  header("Location: ../../backend/admin/unauthorize.php");
-  exit;
-}
 
 // dbconfig.php koi ache seta auto khuje nibe
 $dbCandidates = [
@@ -68,7 +59,7 @@ $total  = $result->num_rows;
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f2">
+  <meta name="theme-color" content="#e8f5e9">
   <meta name="description" content="Find a home that feels like yours with EstateFlow. Explore thoughtfully selected properties for sale and rent.">
   <title>EstateFlow | Find your place</title>
   <link rel="stylesheet" href="partials/style.css">
@@ -93,12 +84,12 @@ $total  = $result->num_rows;
     .customer-subnav { background:var(--green-deep); }
     .customer-subnav .shell { display:flex; gap:22px; padding:12px 0; flex-wrap:wrap; }
     .customer-subnav a { color:#f5f4e9; text-decoration:none; font-size:15px; font-weight:500; padding-bottom:4px; border-bottom:2px solid transparent; }
-    .customer-subnav a:hover, .customer-subnav a.active { color:#fff2f2; border-bottom-color:var(--green); }
+    .customer-subnav a:hover, .customer-subnav a.active { color:#e8f5e9; border-bottom-color:var(--green); }
   </style>
   <nav class="customer-subnav" aria-label="Customer menu">
     <div class="shell">
-      <a href="customers_dashboard.php" class="active">Home</a>
-      <a href="customers_dashboard.php#properties">Properties</a>
+      <a href="index.php" class="active">Home</a>
+      <a href="properties.php">Properties</a>
       <a href="my_bookings.php">My bookings</a>
     </div>
   </nav>

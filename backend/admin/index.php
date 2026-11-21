@@ -30,9 +30,9 @@ if (isset($_POST['login'])) {
   }
 
   if (!$valid) {
-    $error = 'Email ba password thik nai.';
+    $error = 'Email and password are incorrect.';
   } elseif ($row['status'] !== 'active') {
-    $error = 'Ei account ta inactive. Admin er shathe jogajog koro.';
+    $error = 'This account is inactive. Please contact the administrator..';
   } else {
     session_regenerate_id(true);
     $_SESSION['email']   = $row['email'];
@@ -64,7 +64,7 @@ if (isset($_POST['login'])) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f2">
+  <meta name="theme-color" content="#e8f5e9">
   <title>Administrator sign in | EstateFlow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,7 +85,7 @@ if (isset($_POST['login'])) {
     <p class="auth-intro">Sign in with your administrator account to continue.</p>
 
     <?php if (isset($_GET['registered'])): ?>
-      <p class="signup-notice" role="status">Account toiri hoyeche. Ekhon sign in koro.</p>
+      <p class="signup-notice" role="status">Account created. Now sign in .</p>
     <?php endif; ?>
     <?php if ($error !== ''): ?>
       <p class="signup-notice" role="alert"><?= htmlspecialchars($error) ?></p>

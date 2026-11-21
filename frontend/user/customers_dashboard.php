@@ -70,7 +70,7 @@ $total  = $result->num_rows;
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff2f2">
+  <meta name="theme-color" content="#e8f5e9">
   <meta name="description" content="Find a home that feels like yours with EstateFlow. Explore thoughtfully selected properties for sale and rent.">
   <title>EstateFlow | Find your place</title>
   <link rel="stylesheet" href="partials/style.css">
@@ -155,7 +155,7 @@ $total  = $result->num_rows;
       <div class="shell">
         <div class="section-head">
           <h2>All Properties</h2>
-          <p><?= $total ?> ta property pawa gese</p>
+          <p><?= $total ?>  properties Found</p>
         </div>
 
         <div class="property-grid">

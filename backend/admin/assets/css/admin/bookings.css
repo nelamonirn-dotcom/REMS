@@ -49,13 +49,13 @@
   font-size: 13px;
 }
 
-.booking-stat-icon-blue { color: #4270b1; background: #edf3fd; }
+.booking-stat-icon-blue { color: #1b5e20; background: #a5d6a7; }
 .booking-stat-icon-amber { color: #bd8732; background: #fff4e1; }
-.booking-stat-icon-green { color: #328a70; background: #e8f6f0; }
+.booking-stat-icon-green { color: #1b5e20; background: #e8f5e9; }
 .booking-stat-icon-red { color: #b64e54; background: #fbebec; }
 
 .booking-trend {
-  color: #348765;
+  color: #1b5e20;
   font-weight: 700;
 }
 
@@ -179,7 +179,7 @@
 }
 
 .booking-id {
-  color: #456b9f;
+  color: #1b5e20;
   font-weight: 700;
 }
 
