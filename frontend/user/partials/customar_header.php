@@ -44,7 +44,6 @@ $isSignedIn = isset($_SESSION['email']) && $dashboardLink !== null;
       </ul>
       <div class="nav-actions">
         <?php if ($isSignedIn): ?>
-          <a class="sign-in" href="<?= htmlspecialchars($dashboardLink, ENT_QUOTES, 'UTF-8') ?>">Dashboard</a>
           <a class="sign-in" href="../../backend/shared/partials/logout.php">Sign out</a>
         <?php else: ?>
           <a class="sign-in" href="../../backend/admin/index.php">Sign in</a>

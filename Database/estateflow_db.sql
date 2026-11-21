@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 15, 2026 at 06:50 AM
+-- Generation Time: Nov 21, 2026 at 03:32 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.33
 
@@ -88,9 +88,10 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`booking_id`, `property_id`, `customer_id`, `booking_date`, `status`, `created_at`) VALUES
-(2, 3, 2, '2026-11-25 14:41:00', 'cancelled', '2026-11-14 14:41:40'),
 (3, 1, 2, '2026-11-25 14:42:00', 'approved', '2026-11-14 14:42:39'),
-(4, 3, 2, '2026-11-27 00:06:00', 'approved', '2026-11-15 10:02:21');
+(5, 9, 3, '2026-11-25 14:49:00', 'approved', '2026-11-16 14:49:47'),
+(6, 9, 4, '2026-11-19 14:59:00', 'approved', '2026-11-16 14:59:18'),
+(7, 1, 4, '2026-11-17 15:02:00', 'approved', '2026-11-16 15:02:40');
 
 -- --------------------------------------------------------
 
@@ -129,7 +130,9 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `user_id`, `customer_type`, `preferred_location`, `budget`, `address`, `created_at`) VALUES
-(2, 9, 'buyer', NULL, NULL, NULL, '2026-11-14 14:41:40');
+(2, 9, 'buyer', NULL, NULL, NULL, '2026-11-14 14:41:40'),
+(3, 15, 'buyer', NULL, NULL, NULL, '2026-11-16 14:49:47'),
+(4, 14, 'buyer', NULL, NULL, NULL, '2026-11-16 14:59:18');
 
 -- --------------------------------------------------------
 
@@ -241,10 +244,12 @@ CREATE TABLE `properties` (
 
 INSERT INTO `properties` (`property_id`, `owner_id`, `title`, `property_type`, `address`, `area_sqft`, `price`, `monthly_rent`, `flat_details`, `status`, `description`, `created_at`, `imagas`) VALUES
 (1, 11, 'Tuhin', 'flat', 'Dhaka', 1500.00, 15000.00, 5000.00, '3', 'available', 'hiu', '2026-11-12 15:04:29', ''),
-(2, 11, 'Tuhin Vila', 'commercial', 'CTG', 2000.00, 45000.00, 20000.00, '5', 'available', 'Best', '2026-11-12 15:08:06', ''),
-(3, 11, 'Tuhin Vila', 'commercial', 'CTG', 2000.00, 45000.00, 20000.00, '5', 'available', 'Best', '2026-11-12 15:08:36', ''),
-(4, 11, 'nela-land', 'land', 'afthabnogor', 4567.00, 10000000.00, 100000.00, '3', 'available', 'good land', '2026-11-15 10:07:04', ''),
-(5, 11, 'ghhj', 'land', 'Dhaka', 46557.00, 456578.00, 877798.00, '7nm,,jkjkkk', 'sold', 'jjkhgjgh', '2026-11-15 12:49:04', '');
+(7, 11, 'land', 'land', 'afthabnogor', 2500.00, 100000.00, 0.00, 'nai', 'available', 'this is a land', '2026-11-16 11:17:38', 'uploads/real estate 11.jpg'),
+(8, 12, 'RSA corproat', 'commercial', 'Dhaka', 11800.00, 500000000.00, 500000.00, 'nai', 'rented', 'this is office', '2026-11-16 11:25:58', 'uploads/real estate1.jpg'),
+(9, 12, 'Nira vila', 'flat', 'mirpur', 2000.00, 200000.00, 0.00, 'badroom-3 bathroom-2 ', 'available', 'this is flat', '2026-11-16 11:28:42', 'uploads/real estate6.jpg'),
+(10, 12, 'Prestige Southern Star', 'flat', 'Begur Bannerghatta Road, Akshayanagar, in Bangalore', 2749.99, 300000000.00, 0.00, 'badroom-3 bathroom-2 ', 'available', 'Bangalore is one of the top-notch cities in India located in the southern State of Karnataka. It is famously recognized as the IT Capital of India, the city that hosts leading Multi-National Tech Companies. It is officially known as Bengaluru with a population of over 8.2 million.', '2026-11-17 12:52:35', 'uploads/real estate 9.jpg'),
+(11, 19, 'famali house', 'flat', 'mirpur', 4555.00, 3000000.00, 0.00, 'badroom-3 bathroom-2', 'sold', 'hnjjyk,ol', '2026-11-17 14:13:37', 'uploads/8665bd0e064a222162b088f597cd8365.jpg'),
+(12, 19, 'nil moni sqer', 'commercial', 'dhaka', 3000.00, 60000000.00, 0.00, 'nai', 'available', 'this is office', '2026-11-17 14:20:35', 'uploads/9c4429e8a23849365508ba6a238775e8.jpg');
 
 -- --------------------------------------------------------
 
@@ -266,7 +271,13 @@ CREATE TABLE `property_images` (
 
 INSERT INTO `property_images` (`image_id`, `property_id`, `image_path`, `is_primary`, `created_at`) VALUES
 (1, 1, '../uploads/property-images/1/b31e27b90c3a2048f72a78495bf74091.jpg', 1, '2026-11-14 11:40:19'),
-(2, 1, '../uploads/property-images/1/9af9a7cd6e63aa7f34d2d1103979144d.png', 0, '2026-11-14 13:08:34');
+(2, 1, '../uploads/property-images/1/9af9a7cd6e63aa7f34d2d1103979144d.png', 0, '2026-11-14 13:08:34'),
+(3, 12, 'uploads/9c4429e8a23849365508ba6a238775e8.jpg', 1, '2026-11-17 14:20:35'),
+(4, 12, 'uploads/73290d0d3094123799104421d296b9cf.jpg', 0, '2026-11-17 14:20:35'),
+(5, 12, 'uploads/a3077c4a5145c86c917930ab7ea5014c.jpg', 0, '2026-11-17 14:20:35'),
+(6, 12, 'uploads/ce88773a03d4fd8f7e14f0cdaf19b14a.jpg', 0, '2026-11-17 14:20:35'),
+(7, 12, 'uploads/ddecc7452ef1f71fb3fc05676ef46760.jpg', 0, '2026-11-17 14:20:35'),
+(8, 12, 'uploads/a3ac728e601066c50b3ffe34ffabd94e.jpg', 0, '2026-11-17 14:20:35');
 
 -- --------------------------------------------------------
 
@@ -290,10 +301,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone`, `status`, `created_at`, `role`) VALUES
-(8, 'nela', 'nela@gmail.com', '57b6e8a044beaa4b378ea1b8b4d78587ab5a3981', '01300700982', 'active', '2026-11-09 14:00:07', 'admin'),
-(9, 'moni', 'moni@gmail.com', '2c81f276bd8b64da1ad2356d1e3357610217e77f', NULL, 'active', '2026-11-09 14:00:07', 'customer'),
-(10, 'rasel', 'rasel@gmail.com', '661d43d1cfee362637df38790248f28d7522051f', '01300700984', 'active', '2026-11-09 14:02:00', 'agent'),
-(11, 'tuhin', 'tuhin@gmail.com', 'eb69283e156a4fe644cd9aae83a6c3bb0d055e91', NULL, 'active', '2026-11-09 14:02:00', 'owner');
+(8, 'nela', 'nela@gmail.com', '$2y$10$b0OXTqRxXBVdMB7/RjNBO.xCZcxdHcuBMiIgEyCSS3C4l0vEO2UDS', '01300700982', 'active', '2026-11-09 14:00:07', 'admin'),
+(9, 'moni', 'moni@gmail.com', '$2y$10$suQI61ldutMo6cUqB/b3kezcrCgrOlbrI2Sze/bKV1ahOlcV4Tuc6', NULL, 'active', '2026-11-09 14:00:07', 'customer'),
+(10, 'rasel', 'rasel@gmail.com', '$2y$10$5XXziNsOd9Z.u.viQI8ONObd.Zp5SLNzKxO3Spro3c5dGgLWmfxlG', '01300700984', 'active', '2026-11-09 14:02:00', 'agent'),
+(11, 'tuhin', 'tuhin@gmail.com', '$2y$10$uBhlbWt5jP9TygOyNmHaoOR8OLQ4W2XWQpDJKwioRKvwGoJeNb/.i', NULL, 'active', '2026-11-09 14:02:00', 'owner'),
+(12, 'sarmin', 'sarmin@gmail.com', '$2y$10$EuVxmu/4LSF.MIQkTcpDZumT2jleARUzSvu/nQ6Sju8NGGio2.vU6', '01609095534', 'active', '2026-11-16 11:22:34', 'owner'),
+(13, 'moni1', 'moni1@gmail.com', 'c9f68e39c1edb15171a94e3fe8ecdd00955a9ff6', '01300700984', 'active', '2026-11-16 11:32:10', 'customer'),
+(14, 'Rokon', 'rokon@gmail.com', '$2y$10$7AxRgMkjDiqvz/a.XYwO3ewO.Fzo23TTMTMZSjXx5BldCIlAMHXOq', '+8801878464115', 'active', '2026-11-16 14:36:34', 'customer'),
+(15, 'rokon', 'rokon1@gmail.com', '$2y$10$ZNP7aqiBXcCE.fOFXlD17OxYsaPApJ/gtw02a7yblxn94/xinMnFS', '0675654nmm', 'active', '2026-11-16 14:45:49', 'customer'),
+(16, 'somi', 'somi@gmail.com', '$2y$10$DMDgZU/PdCi7q1Mn2.6DTepqBCVjDeqZJOwGJIbMAheyIPRkWNUoS', '2134567890', 'active', '2026-11-17 12:34:10', 'customer'),
+(17, 'nil', 'nil@gmail.com', '$2y$10$6wZX7d1AYVxSZLisKc.R5uQAUqgf.uKat1TqJZQzhzMNW6MNsvjnC', '+8801878464114', 'active', '2026-11-17 13:57:57', 'admin'),
+(18, 'yeasin', 'yeasin@gmail.com', '$2y$10$NBgzVhq/EVn1BBzeku92X.9Dh1v9z.Tjwux3tc9hKxeYOuqBPIEPe', '+8801878464114', 'active', '2026-11-17 14:00:05', 'customer'),
+(19, 'aaaa', 'aaaa@gmil.com', '$2y$10$0cl2bSiVP3UQGYxg1CZ5ieJmtu6YLzGrFaRTMkeAt8FnFM9d.9qG6', '56695651351', 'active', '2026-11-17 14:04:00', 'owner');
 
 -- --------------------------------------------------------
 
@@ -458,7 +477,7 @@ ALTER TABLE `agreements`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `booking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `commissions`
@@ -470,7 +489,7 @@ ALTER TABLE `commissions`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `customer_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -506,19 +525,19 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `property_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `property_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `image_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `image_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `visits`
