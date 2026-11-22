@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 21, 2026 at 03:32 AM
+-- Generation Time: Nov 22, 2026 at 07:25 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.33
 
@@ -68,6 +68,15 @@ CREATE TABLE `agreements` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `agreements`
+--
+
+INSERT INTO `agreements` (`agreement_id`, `booking_id`, `property_id`, `customer_id`, `agreement_type`, `start_date`, `end_date`, `amount`, `document_path`, `status`, `created_at`) VALUES
+(5, 22, 20, 5, 'sale', '2026-11-22', NULL, 20000.00, NULL, 'active', '2026-11-22 10:44:58'),
+(6, 21, 20, 5, 'rent', '2026-11-22', NULL, 10000.00, NULL, 'active', '2026-11-22 11:02:26'),
+(7, 5, 9, 3, 'rent', '2026-11-22', NULL, 5000.00, NULL, 'active', '2026-11-22 11:21:39');
+
 -- --------------------------------------------------------
 
 --
@@ -83,6 +92,18 @@ CREATE TABLE `bookings` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`booking_id`, `property_id`, `customer_id`, `booking_date`, `status`, `created_at`) VALUES
+(5, 9, 3, '2026-11-25 14:49:00', 'approved', '2026-11-16 14:49:47'),
+(6, 9, 4, '2026-11-19 14:59:00', 'approved', '2026-11-16 14:59:18'),
+(9, 12, 2, '2026-11-26 05:29:00', 'approved', '2026-11-21 11:29:10'),
+(16, 10, 2, '2026-11-25 13:37:00', 'approved', '2026-11-22 09:37:11'),
+(21, 20, 5, '2026-11-26 10:45:00', 'approved', '2026-11-22 10:42:05'),
+(22, 20, 5, '2026-11-22 10:43:00', 'approved', '2026-11-22 10:43:30');
+
 -- --------------------------------------------------------
 
 --
@@ -91,20 +112,10 @@ CREATE TABLE `bookings` (
 
 CREATE TABLE `booking_interests` (
   `booking_id` bigint UNSIGNED NOT NULL,
-  `interest_type` enum('buy','rent') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('pending','invoiced') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `interest_type` enum('buy','rent') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('pending','invoiced') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `bookings`
---
-
-INSERT INTO `bookings` (`booking_id`, `property_id`, `customer_id`, `booking_date`, `status`, `created_at`) VALUES
-(3, 1, 2, '2026-11-25 14:42:00', 'approved', '2026-11-14 14:42:39'),
-(5, 9, 3, '2026-11-25 14:49:00', 'approved', '2026-11-16 14:49:47'),
-(6, 9, 4, '2026-11-19 14:59:00', 'approved', '2026-11-16 14:59:18'),
-(7, 1, 4, '2026-11-17 15:02:00', 'approved', '2026-11-16 15:02:40');
 
 -- --------------------------------------------------------
 
@@ -145,7 +156,8 @@ CREATE TABLE `customers` (
 INSERT INTO `customers` (`customer_id`, `user_id`, `customer_type`, `preferred_location`, `budget`, `address`, `created_at`) VALUES
 (2, 9, 'buyer', NULL, NULL, NULL, '2026-11-14 14:41:40'),
 (3, 15, 'buyer', NULL, NULL, NULL, '2026-11-16 14:49:47'),
-(4, 14, 'buyer', NULL, NULL, NULL, '2026-11-16 14:59:18');
+(4, 14, 'buyer', NULL, NULL, NULL, '2026-11-16 14:59:18'),
+(5, 20, 'buyer', NULL, NULL, NULL, '2026-11-22 10:17:27');
 
 -- --------------------------------------------------------
 
@@ -229,6 +241,15 @@ CREATE TABLE `payments` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ;
 
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `agreement_id`, `amount`, `due_date`, `paid_at`, `payment_type`, `payment_method`, `transaction_ref`, `status`, `created_at`) VALUES
+(5, 5, 20000.00, '2026-11-29', NULL, 'sale', 'SSLCommerz Sandbox', 'EF26B2165F0A7DE5DF', 'pending', '2026-11-22 10:44:58'),
+(6, 6, 100000.00, '2026-11-22', NULL, 'rent', 'SSLCommerz Sandbox', 'EF8DF2196775DD6063', 'pending', '2026-11-22 11:02:26'),
+(7, 7, 300000.00, '2026-11-22', NULL, 'rent', NULL, NULL, 'pending', '2026-11-22 11:21:39');
+
 -- --------------------------------------------------------
 
 --
@@ -256,13 +277,18 @@ CREATE TABLE `properties` (
 --
 
 INSERT INTO `properties` (`property_id`, `owner_id`, `title`, `property_type`, `address`, `area_sqft`, `price`, `monthly_rent`, `flat_details`, `status`, `description`, `created_at`, `imagas`) VALUES
-(1, 11, 'Tuhin', 'flat', 'Dhaka', 1500.00, 15000.00, 5000.00, '3', 'available', 'hiu', '2026-11-12 15:04:29', ''),
-(7, 11, 'land', 'land', 'afthabnogor', 2500.00, 100000.00, 0.00, 'nai', 'available', 'this is a land', '2026-11-16 11:17:38', 'uploads/real estate 11.jpg'),
 (8, 12, 'RSA corproat', 'commercial', 'Dhaka', 11800.00, 500000000.00, 500000.00, 'nai', 'rented', 'this is office', '2026-11-16 11:25:58', 'uploads/real estate1.jpg'),
 (9, 12, 'Nira vila', 'flat', 'mirpur', 2000.00, 200000.00, 0.00, 'badroom-3 bathroom-2 ', 'available', 'this is flat', '2026-11-16 11:28:42', 'uploads/real estate6.jpg'),
 (10, 12, 'Prestige Southern Star', 'flat', 'Begur Bannerghatta Road, Akshayanagar, in Bangalore', 2749.99, 300000000.00, 0.00, 'badroom-3 bathroom-2 ', 'available', 'Bangalore is one of the top-notch cities in India located in the southern State of Karnataka. It is famously recognized as the IT Capital of India, the city that hosts leading Multi-National Tech Companies. It is officially known as Bengaluru with a population of over 8.2 million.', '2026-11-17 12:52:35', 'uploads/real estate 9.jpg'),
 (11, 19, 'famali house', 'flat', 'mirpur', 4555.00, 3000000.00, 0.00, 'badroom-3 bathroom-2', 'sold', 'hnjjyk,ol', '2026-11-17 14:13:37', 'uploads/8665bd0e064a222162b088f597cd8365.jpg'),
-(12, 19, 'nil moni sqer', 'commercial', 'dhaka', 3000.00, 60000000.00, 0.00, 'nai', 'available', 'this is office', '2026-11-17 14:20:35', 'uploads/9c4429e8a23849365508ba6a238775e8.jpg');
+(12, 19, 'nil moni sqer', 'commercial', 'dhaka', 3000.00, 60000000.00, 0.00, 'nai', 'available', 'this is office', '2026-11-17 14:20:35', 'uploads/9c4429e8a23849365508ba6a238775e8.jpg'),
+(15, 11, 'New  Bedroom', 'flat', 'mirpor', 2700.00, 200000.00, 0.00, 'bad room 1 bathroom 2 kacthin-1', 'available', 'Starting a new construction project gives you the unique opportunity to design a bedroom that perfectly fits your lifestyle and personal aesthetic from the very beginning. Instead of working around existing limitations, you can plan for structural elements like vaulted ceilings, strategic window placements, and integrated storage solutions that enhance both form and function. This phase of home building is the best time to consider how natural light, traffic flow, and modern technology will interact within your private sanctuary. By focusing on cohesive design themes rather than just furniture, you create a harmonious space that feels intentional and truly polished for many years to come.', '2026-11-22 10:22:36', 'uploads/97f6d911b6a25570c54b084b45832cbd.jpg'),
+(17, 11, 'nil-kutir', 'commercial', 'afthabnogor', 3000.00, 3000000.00, 0.00, 'nai', 'available', 'Starting a new construction project gives you the unique opportunity to design a bedroom that perfectly fits your lifestyle and personal aesthetic from the very beginning. Instead of working around existing limitations, you can plan for structural elements like vaulted ceilings, strategic window placements, and integrated storage solutions that enhance both form and function. This phase of home building is the best time to consider how natural light, traffic flow, and modern technology will interact within your private sanctuary. By focusing on cohesive design themes rather than just furniture, you create a harmonious space that feels intentional and truly polished for many years to come.', '2026-11-22 10:29:03', 'uploads/4b78eb8be4e3b010180cf92d374cb5e9.jpg'),
+(18, 11, 'land-1', 'land', 'mirpor', 2000.00, 500000.00, 0.00, 'nai', 'available', 'Starting a new construction project gives you the unique opportunity to design a bedroom that perfectly fits your lifestyle and personal aesthetic from the very beginning. Instead of working around existing limitations, you can plan for structural elements like vaulted ceilings, strategic window placements, and integrated storage solutions that enhance both form and function. This phase of home building is the best time to consider how natural light, traffic flow, and modern technology will interact within your private sanctuary. By focusing on cohesive design themes rather than just furniture, you create a harmonious space that feels intentional and truly polished for many years to come.', '2026-11-22 10:30:05', 'uploads/87397654eef4c73e4ef1eef5978d946a.jpg'),
+(19, 11, 'tuhin vila', 'flat', 'dhaka', 3000.00, 500000.00, 0.00, 'badroom-3 bathroom-2 kichen-1 dingroom-1', 'available', 'When you are building a new home from the ground up, adding a vaulted ceiling can completely transform the atmosphere of your sleeping quarters. This architectural feature creates an immediate sense of grandeur and airiness that flat ceilings simply cannot match. You can leave the rafters exposed for a rustic look or keep things clean with smooth drywall for a contemporary feel. The extra vertical space allows for larger windows and much more natural light to flood the room throughout the day. It also provides the perfect opportunity to hang a statement chandelier that anchors the entire furniture arrangement. This design choice makes even smaller floor plans feel incredibly spacious and luxurious.', '2026-11-22 10:32:05', 'uploads/5488dd0031921830531c8105350039b4.jpg'),
+(20, 11, 'land 2', 'land', 'dhaka', 40000.00, 20000.00, 0.00, 'N/A', 'available', 'When you are building a new home from the ground up, adding a vaulted ceiling can completely transform the atmosphere of your sleeping quarters. This architectural feature creates an immediate sense of grandeur and airiness that flat ceilings simply cannot match. You can leave the rafters exposed for a rustic look or keep things clean with smooth drywall for a contemporary feel. The extra vertical space allows for larger windows and much more natural light to flood the room throughout the day. It also provides the perfect opportunity to hang a statement chandelier that anchors the entire furniture arrangement. This design choice makes even smaller floor plans feel incredibly spacious and luxurious.', '2026-11-22 10:33:21', 'uploads/580b3a191a001d25b85e24a2e51c0823.jpg'),
+(21, 11, 'thikana', 'flat', 'dhaka', 3300.00, 500000.00, 0.00, 'badroom-4 bathroom-3 kichen-1 dingroom-1', 'available', 'Beautiful house \r\nA warm minimalist living room works because of subtraction, not addition — and the rooms that actually feel warm share three decisions: a beige-to-oatmeal palette, at least four different material textures in the same space, and lighting that stays under 2700K after 6 p.m. I’ve pulled apart dozens of warm minimalist living room references to figure out why some rooms look calm and inviting while others look like staged showrooms, and the gap almost always comes down to those same three levers. Get them right and the space runs itself.', '2026-11-22 12:08:17', 'uploads/f0718ae02af3a5b3b18c4be729332ffa.jpg'),
+(22, 11, 'family vila', 'flat', 'dhaka', 2200.00, 500000.00, 0.00, 'badroom-3 bathroom-2 kichen-1 dingroom-1', 'available', '• Per-sq.-ft. rates: Older resale flats can start around BDT 12,000–14,000 per sq. ft., while prime or lake-facing properties on roads like Road 8A, Road 11A, or Road 32 can reach BDT 25,000 to BDT 30,000+ per sq. ft..\r\n• Typical sale prices: A ~1,000 sq. ft. apartment commonly costs roughly BDT 1.4 crore to BDT 3 crore (often excluding parking, registration, and utility fees), while larger 2,500+ sq. ft. luxury residences can reach BDT 5 crore to BDT 9', '2026-11-22 12:15:19', 'uploads/0125d3d009c6ffe42096a88d56c3fcfe.jpg');
 
 -- --------------------------------------------------------
 
@@ -283,14 +309,30 @@ CREATE TABLE `property_images` (
 --
 
 INSERT INTO `property_images` (`image_id`, `property_id`, `image_path`, `is_primary`, `created_at`) VALUES
-(1, 1, '../uploads/property-images/1/b31e27b90c3a2048f72a78495bf74091.jpg', 1, '2026-11-14 11:40:19'),
-(2, 1, '../uploads/property-images/1/9af9a7cd6e63aa7f34d2d1103979144d.png', 0, '2026-11-14 13:08:34'),
 (3, 12, 'uploads/9c4429e8a23849365508ba6a238775e8.jpg', 1, '2026-11-17 14:20:35'),
 (4, 12, 'uploads/73290d0d3094123799104421d296b9cf.jpg', 0, '2026-11-17 14:20:35'),
 (5, 12, 'uploads/a3077c4a5145c86c917930ab7ea5014c.jpg', 0, '2026-11-17 14:20:35'),
 (6, 12, 'uploads/ce88773a03d4fd8f7e14f0cdaf19b14a.jpg', 0, '2026-11-17 14:20:35'),
 (7, 12, 'uploads/ddecc7452ef1f71fb3fc05676ef46760.jpg', 0, '2026-11-17 14:20:35'),
-(8, 12, 'uploads/a3ac728e601066c50b3ffe34ffabd94e.jpg', 0, '2026-11-17 14:20:35');
+(8, 12, 'uploads/a3ac728e601066c50b3ffe34ffabd94e.jpg', 0, '2026-11-17 14:20:35'),
+(19, 15, 'uploads/97f6d911b6a25570c54b084b45832cbd.jpg', 1, '2026-11-22 10:22:36'),
+(20, 15, 'uploads/8971bfd3307fdee669205989904dcc53.jpg', 0, '2026-11-22 10:22:36'),
+(21, 15, 'uploads/d8ca7587fac9aa21c9482eb9de14e434.jpg', 0, '2026-11-22 10:22:36'),
+(22, 15, 'uploads/a0fedae6bd6ef64e112122c6f02c0ecb.jpg', 0, '2026-11-22 10:22:36'),
+(23, 15, 'uploads/cc05639a8198148154f655533ff45c46.jpg', 0, '2026-11-22 10:22:36'),
+(28, 17, 'uploads/4b78eb8be4e3b010180cf92d374cb5e9.jpg', 1, '2026-11-22 10:29:03'),
+(29, 18, 'uploads/87397654eef4c73e4ef1eef5978d946a.jpg', 1, '2026-11-22 10:30:05'),
+(30, 19, 'uploads/5488dd0031921830531c8105350039b4.jpg', 1, '2026-11-22 10:32:05'),
+(31, 20, 'uploads/580b3a191a001d25b85e24a2e51c0823.jpg', 1, '2026-11-22 10:33:21'),
+(32, 21, 'uploads/f0718ae02af3a5b3b18c4be729332ffa.jpg', 1, '2026-11-22 12:08:17'),
+(33, 21, 'uploads/a7cbfd430fe997841ff7cbc1e21423c9.jpg', 0, '2026-11-22 12:08:17'),
+(34, 21, 'uploads/65f0ebbab524f5fa6d689cb16e7dc99e.jpg', 0, '2026-11-22 12:08:17'),
+(35, 21, 'uploads/b5a137cf36cd9688d66c5ae12f6db0f7.jpg', 0, '2026-11-22 12:08:17'),
+(36, 21, 'uploads/be6d70914d9466602afc76f60de42bf5.jpg', 0, '2026-11-22 12:08:17'),
+(37, 22, 'uploads/0125d3d009c6ffe42096a88d56c3fcfe.jpg', 1, '2026-11-22 12:15:19'),
+(38, 22, 'uploads/9faf64704a58fadfb1eb593d361c8fcc.jpg', 0, '2026-11-22 12:15:19'),
+(39, 22, 'uploads/7f1b1b87a0f3b2f58bef3973cdff6568.jpg', 0, '2026-11-22 12:15:19'),
+(40, 22, 'uploads/1ba60b6d71793173b821f5a0e3339ea2.jpg', 0, '2026-11-22 12:15:19');
 
 -- --------------------------------------------------------
 
@@ -325,7 +367,8 @@ INSERT INTO `users` (`user_id`, `name`, `email`, `password_hash`, `phone`, `stat
 (16, 'somi', 'somi@gmail.com', '$2y$10$DMDgZU/PdCi7q1Mn2.6DTepqBCVjDeqZJOwGJIbMAheyIPRkWNUoS', '2134567890', 'active', '2026-11-17 12:34:10', 'customer'),
 (17, 'nil', 'nil@gmail.com', '$2y$10$6wZX7d1AYVxSZLisKc.R5uQAUqgf.uKat1TqJZQzhzMNW6MNsvjnC', '+8801878464114', 'active', '2026-11-17 13:57:57', 'admin'),
 (18, 'yeasin', 'yeasin@gmail.com', '$2y$10$NBgzVhq/EVn1BBzeku92X.9Dh1v9z.Tjwux3tc9hKxeYOuqBPIEPe', '+8801878464114', 'active', '2026-11-17 14:00:05', 'customer'),
-(19, 'aaaa', 'aaaa@gmil.com', '$2y$10$0cl2bSiVP3UQGYxg1CZ5ieJmtu6YLzGrFaRTMkeAt8FnFM9d.9qG6', '56695651351', 'active', '2026-11-17 14:04:00', 'owner');
+(19, 'aaaa', 'aaaa@gmil.com', '$2y$10$0cl2bSiVP3UQGYxg1CZ5ieJmtu6YLzGrFaRTMkeAt8FnFM9d.9qG6', '56695651351', 'active', '2026-11-17 14:04:00', 'owner'),
+(20, 'jakiya', 'jakiya@gmail.com', '$2y$10$.Cf2pNbhKZ0OjN7Sg9DKfOy/4BoJlPIlX99qAydqg8GdNOKiJqL2u', '01300700982', 'active', '2026-11-22 10:17:04', 'customer');
 
 -- --------------------------------------------------------
 
@@ -343,6 +386,16 @@ CREATE TABLE `visits` (
   `status` enum('scheduled','completed','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'scheduled',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `visits`
+--
+
+INSERT INTO `visits` (`visit_id`, `booking_id`, `property_id`, `customer_id`, `agent_id`, `visit_time`, `status`, `created_at`) VALUES
+(8, 16, 10, 2, NULL, '2026-11-25 13:37:00', 'scheduled', '2026-11-22 09:37:11'),
+(11, 9, 12, 2, NULL, '2026-11-26 05:29:00', 'scheduled', '2026-11-22 09:51:57'),
+(14, 21, 20, 5, NULL, '2026-11-26 10:45:00', 'completed', '2026-11-22 10:42:05'),
+(15, 22, 20, 5, NULL, '2026-11-22 10:44:14', 'completed', '2026-11-22 10:43:30');
 
 --
 -- Indexes for dumped tables
@@ -490,13 +543,13 @@ ALTER TABLE `agent_properties`
 -- AUTO_INCREMENT for table `agreements`
 --
 ALTER TABLE `agreements`
-  MODIFY `agreement_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `agreement_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `booking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `commissions`
@@ -508,7 +561,7 @@ ALTER TABLE `commissions`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `customer_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -544,25 +597,25 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `property_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `property_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `property_images`
 --
 ALTER TABLE `property_images`
-  MODIFY `image_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `image_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `user_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `visits`
 --
 ALTER TABLE `visits`
-  MODIFY `visit_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `visit_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables

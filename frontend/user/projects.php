@@ -19,27 +19,45 @@
       </div>
     </section>
 
-    <section class="page-section">
-      <div class="shell">
-        <div class="section-head">
-          <div><p class="section-kicker">Selected opportunities</p><h2 class="section-title">Discover our projects.</h2><p class="section-description">A growing collection of homes in communities across Dhaka.</p></div>
+    <div class="shell search-wrap">
+      <form class="search-panel" id="property-search" role="search">
+        <div class="search-tabs" role="tablist" aria-label="Listing type">
+          <button class="search-tab" type="button" role="tab" aria-selected="true" data-mode="buy">Buy</button>
+          <button class="search-tab" type="button" role="tab" aria-selected="false" data-mode="rent">Rent</button>
         </div>
-        <div class="project-grid">
-          <article class="project-card">
-            <div class="project-image project-image-one" role="img" aria-label="Modern apartment homes surrounded by greenery"></div>
-            <div class="project-copy"><span class="project-status">Now welcoming inquiries</span><p class="project-location">Bashundhara R/A · Dhaka</p><h3>Courtyard Residences</h3><p>A calm, connected residential community planned around open space, daylight, and everyday convenience.</p><div class="project-meta"><span>2–4 bedrooms</span><span>Contemporary apartments</span></div><a class="text-link" href="contact.php?project=courtyard-residences">Ask about this project <span aria-hidden="true">→</span></a></div>
-          </article>
-          <article class="project-card">
-            <div class="project-image project-image-two" role="img" aria-label="Bright city residence with landscaped outdoor areas"></div>
-            <div class="project-copy"><span class="project-status project-status-planning">In planning</span><p class="project-location">Uttara · Dhaka</p><h3>Northlight Living</h3><p>Well-considered homes with flexible spaces, practical amenities, and easy access to the city.</p><div class="project-meta"><span>1–3 bedrooms</span><span>Urban apartments</span></div><a class="text-link" href="contact.php?project=northlight-living">Register your interest <span aria-hidden="true">→</span></a></div>
-          </article>
-          <article class="project-card">
-            <div class="project-image project-image-three" role="img" aria-label="Warm family home with a landscaped courtyard"></div>
-            <div class="project-copy"><span class="project-status">Limited homes</span><p class="project-location">Dhanmondi · Dhaka</p><h3>Garden Lane Homes</h3><p>A small collection of family-focused residences shaped by greenery, privacy, and room to grow.</p><div class="project-meta"><span>3–4 bedrooms</span><span>Family residences</span></div><a class="text-link" href="contact.php?project=garden-lane-homes">Ask about availability <span aria-hidden="true">→</span></a></div>
-          </article>
+        <div class="search-fields">
+          <div class="field">
+            <label for="location">Location</label>
+            <div class="input-wrap"><input id="location" name="location" type="search" placeholder="Area or neighborhood"></div>
+          </div>
+          <div class="field">
+            <label for="property-type">Property type</label>
+            <div class="input-wrap">
+              <select id="property-type" name="type">
+                <option value="">All property types</option>
+                <option value="flat">Flat</option>
+                <option value="land">Land</option>
+                <option value="commercial">Commercial</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="budget">Maximum budget</label>
+            <div class="input-wrap">
+              <select id="budget" name="budget">
+                <option value="">Any budget</option>
+                <option value="10000000">Up to ৳1 crore</option>
+                <option value="20000000">Up to ৳2 crore</option>
+                <option value="30000000">Up to ৳3 crore</option>
+              </select>
+            </div>
+          </div>
+          <button class="button search-submit" type="submit">Find a home</button>
         </div>
-      </div>
-    </section>
+      </form>
+    </div>
+
+    <?php include __DIR__ . '/partials/card.php'; ?>
 
     <section class="cta">
       <div class="shell cta-inner">
