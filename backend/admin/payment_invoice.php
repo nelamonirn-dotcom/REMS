@@ -318,6 +318,7 @@ $escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOT
               </div>
               <div class="col-12">
                 <button class="btn btn-primary" type="submit"><i class="fa-solid fa-file-invoice-dollar me-2" aria-hidden="true"></i>Create invoice</button>
+                <!-- <button type="submit">Create invoice <span aria-hidden="true">→</span></button> -->
               </div>
             </form>
           <?php endif; ?>

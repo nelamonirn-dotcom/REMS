@@ -48,7 +48,9 @@
         <a class="sidebar-link<?= $currentAdminPage === 'agreements.php' ? ' is-active' : '' ?>" href="agreements.php"<?= $currentAdminPage === 'agreements.php' ? ' aria-current="page"' : '' ?> title="Agreements">
           <i class="fa-solid fa-file-signature" aria-hidden="true"></i><span>Agreements</span>
         </a>
-
+        <a class="sidebar-link<?= $currentAdminPage === 'payment_invoice.php' ? ' is-active' : '' ?>" href="payment_invoice.php"<?= $currentAdminPage === 'payment_invoice.php' ? ' aria-current="page"' : '' ?> title="paymentinvoice">
+          <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i><span>payment_invoice</span>
+        </a>
         <p class="nav-caption">Finance &amp; operations</p>
         <a class="sidebar-link<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php', 'payment_settings.php'], true) ? ' is-active' : '' ?>" href="payments.php"<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php', 'payment_settings.php'], true) ? ' aria-current="page"' : '' ?> title="Payments">
           <i class="fa-solid fa-wallet" aria-hidden="true"></i><span>Payments</span>
@@ -59,9 +61,7 @@
         <a class="sidebar-link<?= $currentAdminPage === 'expenses.php' ? ' is-active' : '' ?>" href="expenses.php"<?= $currentAdminPage === 'expenses.php' ? ' aria-current="page"' : '' ?> title="Expenses">
           <i class="fa-solid fa-receipt" aria-hidden="true"></i><span>Expenses</span>
         </a>
-        <!-- <a class="sidebar-link<?= $currentAdminPage === 'maintenance.php' ? ' is-active' : '' ?>" href="maintenance.php"<?= $currentAdminPage === 'maintenance.php' ? ' aria-current="page"' : '' ?> title="Maintenance">
-          <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i><span>Maintenance</span>
-        </a> -->
+       
         <!-- <a class="sidebar-link<?= $currentAdminPage === 'reports_analytics.php' ? ' is-active' : '' ?>" href="reports_analytics.php"<?= $currentAdminPage === 'reports_analytics.php' ? ' aria-current="page"' : '' ?> title="Reports &amp; analytics">
           <i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Reports &amp; analytics</span>
         </a> -->
