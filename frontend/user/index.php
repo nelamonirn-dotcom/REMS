@@ -52,6 +52,33 @@ if ($params) { $stmt->bind_param($types, ...$params); }
 $stmt->execute();
 $result = $stmt->get_result();
 $total  = $result->num_rows;
+
+// Find visited and scheduled properties for this customer
+$visitedPropertyIds = [];
+$scheduledPropertyIds = [];
+if (!empty($_SESSION['email'])) {
+  $sessionUserId = (int)($_SESSION['user_id'] ?? 0);
+  if ($sessionUserId > 0) {
+    $cQ = $conn->prepare("SELECT customer_id FROM customers WHERE user_id = ? LIMIT 1");
+    $cQ->bind_param('i', $sessionUserId);
+    $cQ->execute();
+    $cRes = $cQ->get_result()->fetch_assoc();
+    $sessionCustId = (int)($cRes['customer_id'] ?? 0);
+    if ($sessionCustId > 0) {
+      $vQ = $conn->prepare("SELECT property_id, status FROM visits WHERE customer_id = ?");
+      $vQ->bind_param('i', $sessionCustId);
+      $vQ->execute();
+      $vRes = $vQ->get_result();
+      while ($vRow = $vRes->fetch_assoc()) {
+        if ($vRow['status'] === 'completed') {
+          $visitedPropertyIds[(int)$vRow['property_id']] = true;
+        } elseif ($vRow['status'] === 'scheduled') {
+          $scheduledPropertyIds[(int)$vRow['property_id']] = true;
+        }
+      }
+    }
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -173,6 +200,11 @@ $total  = $result->num_rows;
                 <?php endif; ?>
                 <span class="badge"><?= htmlspecialchars(ucfirst($p['property_type'])) ?></span>
                 <span class="badge"><?= htmlspecialchars(ucfirst($p['status'] ?? 'available')) ?></span>
+                <?php if (!empty($visitedPropertyIds[(int)$p['property_id']])): ?>
+                  <span class="badge" style="background:#15803d; color:#ffffff; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Visited</span>
+                <?php elseif (!empty($scheduledPropertyIds[(int)$p['property_id']])): ?>
+                  <span class="badge" style="background:#0284c7; color:#ffffff; font-weight:600;"><i class="fa-regular fa-calendar-check"></i> Scheduled</span>
+                <?php endif; ?>
                 <h3><?= htmlspecialchars($p['title']) ?></h3>
                 <p><?= htmlspecialchars($p['address']) ?></p>
                 <p class="price">

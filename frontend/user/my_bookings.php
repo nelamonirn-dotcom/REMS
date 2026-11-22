@@ -171,11 +171,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                          JOIN bookings b ON b.booking_id = v.booking_id
                          SET v.status = 'completed'
                          WHERE v.visit_id = ? AND v.customer_id = ?
-                           AND v.status = 'scheduled' AND v.visit_time <= NOW()
+                           AND v.status = 'scheduled'
                            AND b.status = 'approved'");
     $s->bind_param('ii', $id, $customerId);
     $s->execute();
-    $msg = $s->affected_rows > 0 ? 'visit_completed' : 'visit_not_due';
+    $msg = $s->affected_rows > 0 ? 'visit_completed' : 'error';
+
+    $redirect = $_POST['redirect_to'] ?? '';
+    $propId = (int)($_POST['property_id'] ?? 0);
+    if ($redirect === 'property_details' && $propId > 0) {
+      header("Location: property-details.php?id=$propId&booking=visited#booking");
+      exit;
+    }
   } elseif ($action === 'request_interest') {
     $intent = $_POST['intent'] ?? '';
     if ($id > 0 && $customerId > 0 && in_array($intent, ['buy', 'rent'], true)) {
@@ -736,16 +743,12 @@ function visitStatusLabel($s)
                   <p class="my-meta">This property is no longer available for a new buy/rent request.</p>
                 <?php elseif ($v['status'] === 'scheduled'): ?>
                   <div class="my-actions">
-                    <?php if (strtotime($v['visit_time']) <= time()): ?>
-                      <form method="post" onsubmit="return confirm('Confirm that you completed this property visit?');">
-                        <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'], ENT_QUOTES, 'UTF-8') ?>">
-                        <input type="hidden" name="action" value="confirm_visit">
-                        <input type="hidden" name="id" value="<?= (int)$v['visit_id'] ?>">
-                        <button class="btn-sm" type="submit">Mark as visited</button>
-                      </form>
-                    <?php else: ?>
-                      <p class="my-meta">You can mark this visit after its scheduled time.</p>
-                    <?php endif; ?>
+                    <form method="post" onsubmit="return confirm('Confirm that you completed this property visit?');">
+                      <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'], ENT_QUOTES, 'UTF-8') ?>">
+                      <input type="hidden" name="action" value="confirm_visit">
+                      <input type="hidden" name="id" value="<?= (int)$v['visit_id'] ?>">
+                      <button class="btn-sm btn-primary" type="submit"><i class="fa-solid fa-check"></i> Mark as visited</button>
+                    </form>
                     <details class="edit-box">
                       <summary class="btn-sm">Reschedule</summary>
                       <form method="post">

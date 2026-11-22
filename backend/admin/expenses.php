@@ -44,16 +44,18 @@ if ($r && ($t = $r->fetch_assoc()) && $monthTotal > 0) {
 
 // ---------- Expense list ----------
 $rows = [];
-$res = $conn->query("SELECT expense_id, recorded_by, category, amount, expense_date, description
-                     FROM expenses
-                     ORDER BY expense_date DESC, expense_id DESC
+$res = $conn->query("SELECT e.expense_id, e.recorded_by, e.category, e.amount, e.expense_date, e.description,
+                            u.name AS recorded_by_name
+                     FROM expenses e
+                     LEFT JOIN users u ON u.user_id = e.recorded_by
+                     ORDER BY e.expense_date DESC, e.expense_id DESC
                      LIMIT 50");
 while ($e = $res->fetch_assoc()) {
   $rows[] = [
     'id'          => 'EXP-' . str_pad($e['expense_id'], 4, '0', STR_PAD_LEFT),
     'description' => $e['description'] !== null && $e['description'] !== '' ? $e['description'] : '—',
     'category'    => $e['category'],
-    'person'      => 'User #' . (int)$e['recorded_by'],
+    'person'      => $e['recorded_by_name'] ?: 'User #' . (int)$e['recorded_by'],
     'amount'      => taka($e['amount']),
     'date'        => date('M d, Y', strtotime($e['expense_date'])),
   ];
@@ -79,6 +81,8 @@ $managementPage = [
     ['label' => 'Amount', 'key' => 'amount'],
     ['label' => 'Date', 'key' => 'date'],
   ],
+  'liveData' => true,
+  'emptyMessage' => 'No expenses have been recorded.',
   'rows' => $rows,
 ];
 require __DIR__ . '/_management_page.php';

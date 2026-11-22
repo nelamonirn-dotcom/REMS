@@ -1,0 +1,137 @@
+/*** 
+
+====================================================================
+    Feature Block
+====================================================================
+
+***/
+.feature-box1{
+  .inner-box{
+    align-items: center;
+    display: flex;
+    gap: 25px;
+    position: relative;
+    .content-box{
+      flex-shrink: 0;
+      position: relative;
+      .title{
+        margin: 0;
+        align-items: center;
+        background-color: rgba(var(--theme-color3-rgb), 0.1);
+        border-radius: 100px;
+        display: flex;
+        padding: 23px 59px;
+        color: var(--text-color);
+        font-weight: 400;
+        @include media-breakpoint-down(xxxl){
+          padding: 20px 30px;
+        }
+      }
+    }
+    .image-box{
+      border-radius: 100px;
+      overflow: hidden;
+      position: relative;
+      width: 214px;
+      max-height: 57px;
+      img{
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        @include transition(all 400ms ease);
+        width: 100%;
+        &:first-child{
+          position: absolute;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 1;
+          -webkit-transform: translateX(50%) scaleX(2);
+          transform: translate(50%) scaleX(2);
+          opacity: 0;
+          -webkit-filter: blur(10px);
+          filter: blur(10px)
+        }
+      }
+    }
+    &:hover{
+      cursor: pointer;
+      .image-box{
+        img {
+          &:first-child {
+            -webkit-transform: translateX(0) scaleX(1);
+            transform: translate(0) scaleX(1);
+            opacity: 1;
+            -webkit-filter: blur(0);
+            filter: blur(0)
+          }
+          &:nth-child(2){
+            -webkit-transform: translateX(-50%) scaleX(2);
+            transform: translateX(-50%) scaleX(2);
+            opacity: 0;
+            -webkit-filter: blur(10px);
+            filter: blur(10px);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/*** 
+
+====================================================================
+    feature-section
+====================================================================
+
+***/
+
+.feature-section {
+  position: relative;
+  padding: 120px 0;
+  overflow: hidden;
+  @include media-breakpoint-down(lg){
+    padding: 80px 0;
+  }
+}
+
+.feature-block {
+  .inner-block {
+    position: relative;
+    padding: 40px;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    @include transition(all 300ms ease);
+    margin-bottom: 30px;
+    &:hover {
+      .icon {
+        background-color: var(--theme-color2);
+        color: var(--theme-color2-text-color);
+      }
+    }
+    .icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      line-height: 80px;
+      text-align: center;
+      background-color: var(--theme-color1);
+      color: var(--theme-color1-text-color);
+      @include transition(all 300ms ease);
+      i {
+        font-size: 40px;
+        font-weight: 400;
+      }
+    }
+    .title {
+      color: var(--theme-color-white);
+      margin: 29px 0 15px;
+    }
+    .text {
+      color: var(--theme-color-white);
+    }
+  }
+}

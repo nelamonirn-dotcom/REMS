@@ -1,10 +1,13 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
 if (!isset($managementPage) || !is_array($managementPage)) {
   header('Location: users_dashboard.php');
   exit;
 }
 
-session_start();
+
 if (!isset($_SESSION['email'])) {
   header('Location: index.php');
   exit;
@@ -34,6 +37,8 @@ $statusClasses = [
   'Read' => 'neutral',
   'Review' => 'pending',
   'Overdue' => 'danger',
+  'Expired' => 'danger',
+  'Terminated' => 'danger',
   'Cancelled' => 'danger',
   'Inactive' => 'danger',
   'Unread' => 'info',
@@ -159,9 +164,14 @@ $statusClasses = [
                 <p><?= $escape($managementPage['listDescription']) ?></p>
               </div>
               <?php if ($adminPageTitle === 'Payments') { ?>
-              <a class="btn btn-primary management-action" href="payment_invoice.php">
-                <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>Create invoice
-              </a>
+              <div class="d-flex gap-2">
+                <a class="btn btn-outline-primary management-action" href="payment_settings.php">
+                  <i class="fa-solid fa-gear me-2" aria-hidden="true"></i>SSL Gateway Settings
+                </a>
+                <a class="btn btn-primary management-action" href="payment_invoice.php">
+                  <i class="fa-solid fa-plus me-2" aria-hidden="true"></i>Create invoice
+                </a>
+              </div>
               <?php } elseif (!$isLiveData) { ?>
               <button class="btn btn-outline-secondary management-action" type="button">
                 <i class="fa-solid fa-arrow-down-to-line me-2" aria-hidden="true"></i>Export
@@ -206,6 +216,8 @@ $statusClasses = [
                             $statusClass = $statusClasses[$cell] ?? 'neutral';
                             ?>
                             <span class="management-status status-<?= $escape($statusClass) ?>"><span></span><?= $escape($cell) ?></span>
+                          <?php } elseif (($column['type'] ?? '') === 'raw') { ?>
+                            <?= $cell ?>
                           <?php } else { ?>
                             <?= $escape($cell) ?>
                           <?php } ?>

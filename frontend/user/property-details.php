@@ -30,6 +30,96 @@ $listingPage = 'customers_dashboard.php#properties';
 $id = (int)($_GET['id'] ?? 0);
 $p  = null;
 
+$userId = (int)($_SESSION['user_id'] ?? 0);
+$customerId = 0;
+if ($userId > 0) {
+  $cStmt = $conn->prepare("SELECT customer_id FROM customers WHERE user_id = ? LIMIT 1");
+  $cStmt->bind_param('i', $userId);
+  $cStmt->execute();
+  $cRow = $cStmt->get_result()->fetch_assoc();
+  $customerId = (int)($cRow['customer_id'] ?? 0);
+
+  if ($customerId === 0) {
+    $insC = $conn->prepare("INSERT INTO customers (user_id, customer_type) VALUES (?, 'buyer')");
+    $insC->bind_param('i', $userId);
+    $insC->execute();
+    $customerId = (int)$conn->insert_id;
+  }
+}
+
+// Handle Mark Visited directly from property details page
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'mark_visited') {
+  $visitId = (int)($_POST['visit_id'] ?? 0);
+  if ($visitId > 0 && $customerId > 0) {
+    $upd = $conn->prepare("UPDATE visits SET status = 'completed' WHERE visit_id = ? AND customer_id = ? AND status = 'scheduled'");
+    $upd->bind_param('ii', $visitId, $customerId);
+    $upd->execute();
+    header("Location: property-details.php?id=$id&booking=visited#booking");
+    exit;
+  }
+}
+
+// Handle Proceed to Buy / Proceed to Rent directly
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($_POST['action'] ?? '', ['proceed_to_buy', 'proceed_to_rent'], true)) {
+  $intent = $_POST['action'] === 'proceed_to_buy' ? 'buy' : 'rent';
+  $agreementType = $intent === 'buy' ? 'sale' : 'rent';
+  $bookingId = (int)($_POST['booking_id'] ?? 0);
+
+  if ($id > 0 && $customerId > 0) {
+    $propQ = $conn->prepare("SELECT price, monthly_rent FROM properties WHERE property_id = ? LIMIT 1");
+    $propQ->bind_param('i', $id);
+    $propQ->execute();
+    $pData = $propQ->get_result()->fetch_assoc();
+    $propAmount = $intent === 'buy' ? (float)($pData['price'] ?? 0) : (float)($pData['monthly_rent'] ?? 0);
+
+    if ($propAmount > 0) {
+      $conn->begin_transaction();
+      $agQ = $conn->prepare("SELECT agreement_id FROM agreements WHERE property_id = ? AND customer_id = ? AND status = 'active' LIMIT 1");
+      $agQ->bind_param('ii', $id, $customerId);
+      $agQ->execute();
+      $agRow = $agQ->get_result()->fetch_assoc();
+
+      if ($agRow) {
+        $agreementId = (int)$agRow['agreement_id'];
+      } else {
+        $startDate = date('Y-m-d');
+        $insAg = $conn->prepare("INSERT INTO agreements (booking_id, property_id, customer_id, agreement_type, start_date, amount, status) VALUES (?, ?, ?, ?, ?, ?, 'active')");
+        $insAg->bind_param('iiissd', $bookingId, $id, $customerId, $agreementType, $startDate, $propAmount);
+        $insAg->execute();
+        $agreementId = (int)$conn->insert_id;
+      }
+
+      $payQ = $conn->prepare("SELECT payment_id FROM payments WHERE agreement_id = ? AND status = 'pending' LIMIT 1");
+      $payQ->bind_param('i', $agreementId);
+      $payQ->execute();
+      $payRow = $payQ->get_result()->fetch_assoc();
+
+      if (!$payRow) {
+        $dueDate = date('Y-m-d', strtotime('+7 days'));
+        $insPay = $conn->prepare("INSERT INTO payments (agreement_id, amount, due_date, payment_type, status) VALUES (?, ?, ?, ?, 'pending')");
+        $insPay->bind_param('idss', $agreementId, $propAmount, $dueDate, $agreementType);
+        $insPay->execute();
+      }
+
+      $conn->commit();
+      header('Location: payments.php?result=invoice_ready');
+      exit;
+    }
+  }
+}
+
+// Find customer's latest visit for this property
+$userVisit = null;
+if ($customerId > 0 && $id > 0) {
+  $vStmt = $conn->prepare("SELECT v.visit_id, v.booking_id, v.visit_time, v.status
+                           FROM visits v
+                           WHERE v.property_id = ? AND v.customer_id = ?
+                           ORDER BY v.visit_id DESC LIMIT 1");
+  $vStmt->bind_param('ii', $id, $customerId);
+  $vStmt->execute();
+  $userVisit = $vStmt->get_result()->fetch_assoc();
+}
+
 if ($id > 0) {
   $stmt = $conn->prepare("SELECT property_id, title, property_type, address, area_sqft,
                                  price, monthly_rent, flat_details, status,imagas, description
@@ -120,6 +210,7 @@ if ($p) {
   <title><?= $p ? htmlspecialchars($p['title']) . ' | EstateFlow' : 'Property not found | EstateFlow' ?></title>
   <link rel="stylesheet" href="partials/style.css">
   <link rel="stylesheet" href="partials/property-details.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" referrerpolicy="no-referrer">
 </head>
 <body class="property-details-page">
   <?php include __DIR__ . '/partials/customar_header.php'; ?>
@@ -233,13 +324,29 @@ if ($p) {
           <div class="price-divider"></div>
           <div class="sidebar-fact"><span>Property type</span><strong><?= htmlspecialchars($typeLabel) ?></strong></div>
           <div class="sidebar-fact"><span>Availability</span><strong class="availability"><i aria-hidden="true"></i> <?= htmlspecialchars($statusLabel) ?></strong></div>
+          <?php if ($userVisit && $userVisit['status'] === 'completed'): ?>
+            <div class="sidebar-fact">
+              <span>Your Status</span>
+              <strong style="color:#15803d;"><i class="fa-solid fa-circle-check"></i> Visited</strong>
+            </div>
+          <?php elseif ($userVisit && $userVisit['status'] === 'scheduled'): ?>
+            <div class="sidebar-fact">
+              <span>Your Status</span>
+              <strong style="color:#0284c7;"><i class="fa-regular fa-calendar-check"></i> Visit Scheduled</strong>
+            </div>
+          <?php endif; ?>
+
           <?php
             $msgs = [
-              'success'     => ['Booking request pathano hoyeche. Amader team shigroi jogajog korbe.', '#1b6b3a'],
-              'exists'      => ['Ei property te apnar ekta pending booking already ache.', '#9a6a00'],
-              'baddate'     => ['Ekta bhobishyoter tarikh o somoy din.', '#b3261e'],
-              'unavailable' => ['Ei property ekhon available nei.', '#b3261e'],
-              'error'       => ['Booking kora gelo na. Abar chesta korun.', '#b3261e'],
+              'scheduled'         => ['Visit scheduled successfully! You can mark it as visited once you complete your tour.', '#15803d'],
+              'visited'           => ['Property marked as visited! You can now proceed to buy, rent, or pay.', '#15803d'],
+              'success'           => ['Visit scheduled successfully! Check My Bookings for details.', '#15803d'],
+              'already_scheduled' => ['You already have an upcoming visit scheduled for this property.', '#0284c7'],
+              'already_visited'   => ['You have already visited this property. See the options below.', '#15803d'],
+              'exists'            => ['You already have a pending booking or visit for this property.', '#9a6a00'],
+              'baddate'           => ['Please select a valid future date and time for the visit.', '#b3261e'],
+              'unavailable'       => ['This property is currently not available.', '#b3261e'],
+              'error'             => ['Unable to complete request. Please try again.', '#b3261e'],
             ];
             $bk = $_GET['booking'] ?? '';
           ?>
@@ -247,14 +354,94 @@ if ($p) {
           <?php if (isset($msgs[$bk])): ?>
             <p style="margin:12px 0; font-weight:600; color:<?= $msgs[$bk][1] ?>;"><?= $msgs[$bk][0] ?></p>
           <?php endif; ?>
-          <?php if ($p['status'] === 'available'): ?>
-            <form method="post" action="book_property.php" style="display:grid; gap:10px;">
+
+          <?php if ($userVisit && $userVisit['status'] === 'completed'): ?>
+            <!-- Already Visited Card with Next Step Options -->
+            <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:12px; padding:18px; margin:16px 0;">
+              <div style="display:flex; align-items:center; gap:8px; color:#15803d; font-size:16px; font-weight:700;">
+                <i class="fa-solid fa-circle-check fa-lg"></i> You Visited This Property
+              </div>
+              <p style="margin:6px 0 14px; font-size:13px; color:#475569;">
+                Visit completed on <strong><?= date('M d, Y · h:i A', strtotime($userVisit['visit_time'])) ?></strong>.
+              </p>
+
+              <div style="display:grid; gap:10px;">
+                <?php if ($p['status'] === 'available'): ?>
+                  <?php if ($hasPrice): ?>
+                    <form method="post">
+                      <input type="hidden" name="action" value="proceed_to_buy">
+                      <input type="hidden" name="booking_id" value="<?= (int)$userVisit['booking_id'] ?>">
+                      <button class="button" type="submit" style="width:100%; background:#0f766e; color:#fff; font-weight:700; border:none; padding:10px 14px; border-radius:8px; cursor:pointer;">
+                        <i class="fa-solid fa-handshake"></i> Proceed to Buy · <?= money($p['price']) ?>
+                      </button>
+                    </form>
+                  <?php endif; ?>
+                  <?php if ($hasRent): ?>
+                    <form method="post">
+                      <input type="hidden" name="action" value="proceed_to_rent">
+                      <input type="hidden" name="booking_id" value="<?= (int)$userVisit['booking_id'] ?>">
+                      <button class="button" type="submit" style="width:100%; background:#0284c7; color:#fff; font-weight:700; border:none; padding:10px 14px; border-radius:8px; cursor:pointer;">
+                        <i class="fa-solid fa-key"></i> Proceed to Rent · <?= money($p['monthly_rent']) ?>/mo
+                      </button>
+                    </form>
+                  <?php endif; ?>
+                <?php else: ?>
+                  <p style="margin:0; font-size:13px; font-weight:600; color:#15803d;">
+                    <i class="fa-solid fa-circle-check"></i> Status: <?= htmlspecialchars(ucfirst($p['status'])) ?>
+                  </p>
+                <?php endif; ?>
+
+                <a href="payments.php" style="display:block; text-align:center; background:#ffffff; border:1px solid #cbd5e1; color:#1e293b; padding:9px 12px; border-radius:8px; text-decoration:none; font-weight:700; font-size:13px;">
+                  <i class="fa-solid fa-credit-card"></i> View Invoices &amp; Pay via SSLCommerz
+                </a>
+              </div>
+
+              <details style="margin-top:14px; font-size:13px;">
+                <summary style="cursor:pointer; color:#0f766e; font-weight:600;">Want to book another visit?</summary>
+                <form method="post" action="book_property.php" style="display:grid; gap:8px; margin-top:8px;">
+                  <input type="hidden" name="property_id" value="<?= (int)$p['property_id'] ?>">
+                  <label for="revisit_date" style="font-size:12px;">New viewing date &amp; time</label>
+                  <input id="revisit_date" name="booking_date" type="datetime-local" required
+                         min="<?= date('Y-m-d\TH:i') ?>"
+                         style="padding:8px 10px; border:1px solid #ccc; border-radius:6px; font-size:13px;">
+                  <button class="button" type="submit" style="padding:8px; font-size:13px;">Schedule New Visit</button>
+                </form>
+              </details>
+            </div>
+
+          <?php elseif ($userVisit && $userVisit['status'] === 'scheduled'): ?>
+            <!-- Visit Scheduled Box with "Mark as Visited" Action -->
+            <div style="background:#eff6ff; border:1px solid #93c5fd; border-radius:12px; padding:18px; margin:16px 0;">
+              <div style="display:flex; align-items:center; gap:8px; color:#1d4ed8; font-size:16px; font-weight:700;">
+                <i class="fa-regular fa-calendar-check fa-lg"></i> Visit Scheduled
+              </div>
+              <p style="margin:6px 0 12px; font-size:13px; color:#334155;">
+                Scheduled for <strong><?= date('M d, Y · h:i A', strtotime($userVisit['visit_time'])) ?></strong>.
+              </p>
+
+              <form method="post" onsubmit="return confirm('Confirm that you have completed this property visit?');">
+                <input type="hidden" name="action" value="mark_visited">
+                <input type="hidden" name="visit_id" value="<?= (int)$userVisit['visit_id'] ?>">
+                <button class="button" type="submit" style="width:100%; background:#16a34a; color:#fff; font-weight:700; border:none; padding:10px 14px; border-radius:8px; cursor:pointer;">
+                  <i class="fa-solid fa-check"></i> Mark as Visited
+                </button>
+              </form>
+
+              <div style="margin-top:10px; text-align:center;">
+                <a href="my_bookings.php" style="font-size:12px; color:#64748b; text-decoration:underline;">
+                  Reschedule or manage in My Bookings
+                </a>
+              </div>
+            </div>
+
+          <?php elseif ($p['status'] === 'available'): ?>
+            <form method="post" action="book_property.php" style="display:grid; gap:10px; margin-top:12px;">
               <input type="hidden" name="property_id" value="<?= (int)$p['property_id'] ?>">
-              <label for="booking_date" style="font-size:14px;">Preferred viewing date &amp; time</label>
+              <label for="booking_date" style="font-size:14px; font-weight:600;">Preferred viewing date &amp; time</label>
               <input id="booking_date" name="booking_date" type="datetime-local" required
                      min="<?= date('Y-m-d\TH:i') ?>"
                      style="padding:10px 12px; border:1px solid #ccc; border-radius:8px;">
-              <button class="button viewing-button" type="submit">Request a viewing <span aria-hidden="true">→</span></button>
+              <button class="button viewing-button" type="submit">Schedule a Visit <span aria-hidden="true">→</span></button>
             </form>
           <?php endif; ?>
           <p class="contact-note">Our local team can help arrange a convenient visit.</p>

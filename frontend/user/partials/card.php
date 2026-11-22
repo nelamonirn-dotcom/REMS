@@ -33,6 +33,33 @@ foreach ($properties as $property) {
     }
 }
 
+// Find visited and scheduled properties for logged in customer
+$visitedPropertyIds = [];
+$scheduledPropertyIds = [];
+if (!empty($_SESSION['email'])) {
+    $sessionUserId = (int)($_SESSION['user_id'] ?? 0);
+    if ($sessionUserId > 0) {
+        $cQ = $conn->prepare("SELECT customer_id FROM customers WHERE user_id = ? LIMIT 1");
+        $cQ->bind_param('i', $sessionUserId);
+        $cQ->execute();
+        $cRes = $cQ->get_result()->fetch_assoc();
+        $sessionCustId = (int)($cRes['customer_id'] ?? 0);
+        if ($sessionCustId > 0) {
+            $vQ = $conn->prepare("SELECT property_id, status FROM visits WHERE customer_id = ?");
+            $vQ->bind_param('i', $sessionCustId);
+            $vQ->execute();
+            $vRes = $vQ->get_result();
+            while ($vRow = $vRes->fetch_assoc()) {
+                if ($vRow['status'] === 'completed') {
+                    $visitedPropertyIds[(int)$vRow['property_id']] = true;
+                } elseif ($vRow['status'] === 'scheduled') {
+                    $scheduledPropertyIds[(int)$vRow['property_id']] = true;
+                }
+            }
+        }
+    }
+}
+
 $escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
 ?>
 <section class="section" id="properties" aria-labelledby="properties-title">
@@ -73,6 +100,11 @@ $escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOT
               <img src="<?= $escape($imageUrl) ?>" alt="<?= $escape($title) ?>" loading="lazy">
             <?php endif; ?>
             <span class="badge"><?= $mode === 'rent' ? 'For rent' : 'For sale' ?></span>
+            <?php if (!empty($visitedPropertyIds[(int)$property['property_id']])): ?>
+              <span class="badge" style="background:#15803d; color:#ffffff; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Visited</span>
+            <?php elseif (!empty($scheduledPropertyIds[(int)$property['property_id']])): ?>
+              <span class="badge" style="background:#0284c7; color:#ffffff; font-weight:600;"><i class="fa-regular fa-calendar-check"></i> Scheduled</span>
+            <?php endif; ?>
             <button class="favorite" type="button" aria-label="Save <?= $escape($title) ?>" aria-pressed="false">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.8 8.8c0 5.2-8.8 10-8.8 10s-8.8-4.8-8.8-10A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
             </button>
@@ -103,7 +135,7 @@ $escape = static fn($value): string => htmlspecialchars((string)$value, ENT_QUOT
                   <small>/ <?= $mode === 'rent' ? 'month' : 'sale' ?></small>
                 <?php endif; ?>
               </div>
-              <a class="details-link" href="contact.php?property=<?= urlencode($title) ?>">Details <span aria-hidden="true">↗</span></a>
+              <a class="details-link" href="property-details.php?id=<?= (int)$property['property_id'] ?>">Details <span aria-hidden="true">↗</span></a>
             </div>
           </div>
         </article>

@@ -2,9 +2,9 @@
 include_once __DIR__ . '/../../backend/admin/dbconfig.php';
 require_once __DIR__ . '/sslcommerz_helper.php';
 
-$transactionId = is_string($_POST['tran_id'] ?? null) ? $_POST['tran_id'] : '';
-$validationId = is_string($_POST['val_id'] ?? null) ? $_POST['val_id'] : '';
-$gatewayStatus = is_string($_POST['status'] ?? null) ? strtoupper($_POST['status']) : '';
+$transactionId = is_string($_REQUEST['tran_id'] ?? null) ? trim($_REQUEST['tran_id']) : '';
+$validationId  = is_string($_REQUEST['val_id'] ?? null) ? trim($_REQUEST['val_id']) : '';
+$gatewayStatus = is_string($_REQUEST['status'] ?? null) ? strtoupper(trim($_REQUEST['status'])) : '';
 
 if (
   $transactionId === ''
@@ -22,7 +22,7 @@ try {
     echo 'Payment validation failed.';
     exit;
   }
-} catch (RuntimeException $e) {
+} catch (Throwable $e) {
   error_log($e->getMessage());
   http_response_code(502);
   echo 'Payment validation is temporarily unavailable.';

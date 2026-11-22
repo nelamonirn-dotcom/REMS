@@ -1,0 +1,72 @@
+/*** 
+
+====================================================================
+funfact-section-h3
+====================================================================
+
+***/
+.funfact-section-h3 {
+  position: relative;
+  padding: 0 0 227px;
+  background-color: var(--theme-color-black);
+  @include media-breakpoint-down(xl){
+    padding: 110px 0 227px;
+  }
+  @include media-breakpoint-down(lg){
+    padding: 70px 0 227px;
+  }
+  .inner-container {
+    max-width: 1170px;
+    margin: 0 auto;
+  }
+}
+
+.funfact-block-h3 {
+  &:last-child {
+    .inner-block {
+      border-right: 1px solid rgba(var(--theme-color-white-rgb), .1);
+    }
+  }
+  .inner-block {
+    padding: 120px 40px 120px 69px;
+    border-left: 1px solid rgba(var(--theme-color-white-rgb), .1);
+    @include media-breakpoint-down(xl){
+      border-left: none;
+    }
+    @include media-breakpoint-down(xl){
+      padding: 0 20px 50px;
+    }
+    @include media-breakpoint-down(sm){
+      padding: 0 30px 20px;
+    }
+    &.style-two {
+      padding-left: 80px;
+      padding-right: 40px;
+      @include media-breakpoint-down(xl){
+      padding: 0 20px 50px;
+    }
+    @include media-breakpoint-down(sm){
+      padding: 0 30px 20px;
+    }
+    }
+    &.style-three {
+      padding-left: 99px;
+      padding-right: 40px;
+      @include media-breakpoint-down(xl){
+      padding: 0 20px 50px;
+    }
+    @include media-breakpoint-down(sm){
+      padding: 0 30px 20px;
+    }
+    }
+    .count-box {
+      .title {
+        color:  var(--theme-color-white);
+        line-height: 1;
+      }
+      p {
+        color: var(--theme-color-lighter2);
+      }
+    }
+  }
+}

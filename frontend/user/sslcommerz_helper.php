@@ -1,67 +1,77 @@
 <?php
 
+/**
+ * Returns SSLCommerz configuration array from payment_config.php or environment variables.
+ */
 function sslcommerzConfig(): array
 {
-  // Credentials: payment_config.php (same folder) first, then environment variables.
   $file = __DIR__ . '/payment_config.php';
   $local = is_file($file) ? require $file : [];
   if (!is_array($local)) {
     $local = [];
   }
 
-  $storeId = trim((string)($local['store_id'] ?? ''));
-  $storePassword = trim((string)($local['store_password'] ?? ''));
+  $storeId = trim((string)($local['store_id'] ?? getenv('SSLCOMMERZ_STORE_ID')));
+  $storePassword = trim((string)($local['store_password'] ?? getenv('SSLCOMMERZ_STORE_PASSWORD')));
+
+  // Use standard SSLCommerz sandbox test credentials if not configured or left as placeholder
   if ($storeId === '' || $storeId === 'your_sandbox_store_id') {
-    $storeId = trim((string)getenv('SSLCOMMERZ_STORE_ID'));
+    $storeId = 'testbox';
   }
   if ($storePassword === '' || $storePassword === 'your_sandbox_store_password') {
-    $storePassword = trim((string)getenv('SSLCOMMERZ_STORE_PASSWORD'));
+    $storePassword = 'qwerty';
   }
-  $appBaseUrl = rtrim((string)($local['base_url'] ?? getenv('APP_BASE_URL')), '/');
-  $urlParts = parse_url($appBaseUrl);
-  $scheme = is_array($urlParts) ? (string)($urlParts['scheme'] ?? '') : '';
-  $host = is_array($urlParts) ? strtolower((string)($urlParts['host'] ?? '')) : '';
-  $isLocalHost = $host === 'localhost'
-    || $host === '127.0.0.1'
-    || preg_match('/\.(test|local|localhost)$/', $host) === 1;
 
-  if (
-    $storeId === ''
-    || $storePassword === ''
-    || $storeId === 'your_sandbox_store_id'
-    || $storePassword === 'your_sandbox_store_password'
-  ) {
-    throw new RuntimeException('SSLCommerz sandbox credentials are not configured.');
+  $isSandbox = isset($local['is_sandbox']) ? (bool)$local['is_sandbox'] : true;
+  $gatewayUrl = $isSandbox ? 'https://sandbox.sslcommerz.com' : 'https://securepay.sslcommerz.com';
+
+  // Base URL
+  $appBaseUrl = trim((string)($local['base_url'] ?? getenv('APP_BASE_URL')));
+  if ($appBaseUrl === '' || $appBaseUrl === 'http://localhost/RESM') {
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+      || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
+    $scheme = $isHttps ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $appBaseUrl = $scheme . '://' . $host . '/REMS';
   }
-  if ($host === '' || !in_array($scheme, ['http', 'https'], true) || ($scheme !== 'https' && !$isLocalHost)) {
-    throw new RuntimeException('base_url must be https (http is allowed only for localhost / *.test).');
-  }
+  $appBaseUrl = rtrim($appBaseUrl, '/');
+
+  // SSL certificate verification for cURL (false on localhost to avoid Windows XAMPP SSL issues)
+  $sslVerify = isset($local['ssl_verify']) ? (bool)$local['ssl_verify'] : false;
 
   return [
-    'store_id' => $storeId,
+    'store_id'       => $storeId,
     'store_password' => $storePassword,
-    'base_url' => $appBaseUrl,
-    'gateway_url' => 'https://sandbox.sslcommerz.com',
+    'is_sandbox'     => $isSandbox,
+    'base_url'       => $appBaseUrl,
+    'gateway_url'    => $gatewayUrl,
+    'ssl_verify'     => $sslVerify,
   ];
 }
 
+/**
+ * Executes an HTTP request to SSLCommerz API endpoints using cURL.
+ */
 function sslcommerzRequest(string $url, array $fields, bool $get = false): array
 {
+  $config = sslcommerzConfig();
   $curl = curl_init();
   if ($curl === false) {
     throw new RuntimeException('Unable to initialize the SSLCommerz request.');
   }
 
+  $sslVerify = !empty($config['ssl_verify']);
+
   $options = [
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_CONNECTTIMEOUT => 10,
-    CURLOPT_TIMEOUT => 30,
-    CURLOPT_SSL_VERIFYPEER => true,
-    CURLOPT_SSL_VERIFYHOST => 2,
+    CURLOPT_CONNECTTIMEOUT => 15,
+    CURLOPT_TIMEOUT => 45,
+    CURLOPT_SSL_VERIFYPEER => $sslVerify,
+    CURLOPT_SSL_VERIFYHOST => $sslVerify ? 2 : 0,
   ];
 
   if ($get) {
-    $url .= '?' . http_build_query($fields);
+    $url .= (str_contains($url, '?') ? '&' : '?') . http_build_query($fields);
   } else {
     $options[CURLOPT_POST] = true;
     $options[CURLOPT_POSTFIELDS] = http_build_query($fields);
@@ -80,12 +90,15 @@ function sslcommerzRequest(string $url, array $fields, bool $get = false): array
 
   $response = json_decode($responseBody, true);
   if (!is_array($response)) {
-    throw new RuntimeException('SSLCommerz returned an invalid response.');
+    throw new RuntimeException('SSLCommerz returned an invalid JSON response.');
   }
 
   return $response;
 }
 
+/**
+ * Validates a successful payment transaction with SSLCommerz server and updates database.
+ */
 function sslcommerzCompletePayment(mysqli $conn, string $transactionId, string $validationId): bool
 {
   $config = sslcommerzConfig();
@@ -101,13 +114,18 @@ function sslcommerzCompletePayment(mysqli $conn, string $transactionId, string $
     return false;
   }
 
+  if ($payment['status'] === 'paid') {
+    return true;
+  }
+
+  // Validate transaction with SSLCommerz validation API
   $validation = sslcommerzRequest(
     $config['gateway_url'] . '/validator/api/validationserverAPI.php',
     [
-      'val_id' => $validationId,
-      'store_id' => $config['store_id'],
+      'val_id'       => $validationId,
+      'store_id'     => $config['store_id'],
       'store_passwd' => $config['store_password'],
-      'format' => 'json',
+      'format'       => 'json',
     ],
     true
   );
@@ -122,14 +140,11 @@ function sslcommerzCompletePayment(mysqli $conn, string $transactionId, string $
   if (!$valid) {
     return false;
   }
-  if ($payment['status'] === 'paid') {
-    return true;
-  }
 
-  // bKash / card name comes back from the gateway (e.g. "BKASH-BKash", "VISA-Dutch Bangla").
+  // bKash / Card / Mobile Banking method name returned by gateway
   $method = substr(trim((string)($validation['card_type'] ?? '')), 0, 50);
   if ($method === '') {
-    $method = 'SSLCommerz Sandbox';
+    $method = 'SSLCommerz (' . ($config['is_sandbox'] ? 'Sandbox' : 'Live') . ')';
   }
 
   $conn->begin_transaction();
@@ -153,8 +168,9 @@ function sslcommerzCompletePayment(mysqli $conn, string $transactionId, string $
   return $changed;
 }
 
-// Runs once, right after a payment turns "paid": rent -> property rented, sale -> property sold.
-// An "advance" payment does not change the property status.
+/**
+ * Runs once after a payment turns "paid": rent -> property rented, sale -> property sold.
+ */
 function sslcommerzApplyPaidEffects(mysqli $conn, int $paymentId): void
 {
   $stmt = $conn->prepare("SELECT pay.payment_type, a.property_id
@@ -180,6 +196,9 @@ function sslcommerzApplyPaidEffects(mysqli $conn, int $paymentId): void
   $set->execute();
 }
 
+/**
+ * Releases reserved transaction ref if payment fails or is cancelled.
+ */
 function sslcommerzReleasePayment(mysqli $conn, string $transactionId): void
 {
   $update = $conn->prepare("UPDATE payments

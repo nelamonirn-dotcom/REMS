@@ -15,6 +15,41 @@ $adminPageTitle = 'Bookings';
 
 include_once __DIR__ . '/dbconfig.php'; // database connection ($conn)
 
+// Handle Admin Booking Actions (Approve / Cancel)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $action = $_POST['action'] ?? '';
+  $bookingId = (int)($_POST['booking_id'] ?? 0);
+
+  if ($action === 'approve' && $bookingId > 0) {
+    $conn->query("UPDATE bookings SET status = 'approved' WHERE booking_id = $bookingId");
+
+    // Check if visit already exists for this booking, if not auto-create
+    $vCheck = $conn->query("SELECT visit_id FROM visits WHERE booking_id = $bookingId LIMIT 1");
+    if ($vCheck && $vCheck->num_rows === 0) {
+      $bkRow = $conn->query("SELECT property_id, customer_id, booking_date FROM bookings WHERE booking_id = $bookingId")->fetch_assoc();
+      if ($bkRow) {
+        $pId = (int)$bkRow['property_id'];
+        $cId = (int)$bkRow['customer_id'];
+        $vTime = $bkRow['booking_date'];
+
+        // Find assigned agent
+        $agRow = $conn->query("SELECT agent_id FROM agent_properties WHERE property_id = $pId ORDER BY assigned_at LIMIT 1")->fetch_assoc();
+        $agId = $agRow ? (int)$agRow['agent_id'] : 'NULL';
+
+        $conn->query("INSERT INTO visits (booking_id, property_id, customer_id, agent_id, visit_time, status)
+                      VALUES ($bookingId, $pId, $cId, $agId, '$vTime', 'scheduled')");
+      }
+    }
+    header('Location: bookings.php?msg=approved');
+    exit;
+  } elseif ($action === 'cancel' && $bookingId > 0) {
+    $conn->query("UPDATE bookings SET status = 'cancelled' WHERE booking_id = $bookingId");
+    $conn->query("UPDATE visits SET status = 'cancelled' WHERE booking_id = $bookingId AND status = 'scheduled'");
+    header('Location: bookings.php?msg=cancelled');
+    exit;
+  }
+}
+
 // ---------- Filters (GET) ----------
 $statusFilter = $_GET['status'] ?? '';
 $search       = trim($_GET['q'] ?? '');
@@ -196,6 +231,7 @@ function statusLabel($s) {
                   <th scope="col">Booking date</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -226,10 +262,27 @@ function statusLabel($s) {
                       <td>
                         <span class="booking-status <?= statusClass($b['status']) ?>"><span></span><?= statusLabel($b['status']) ?></span>
                       </td>
+                      <td>
+                        <?php if ($b['status'] === 'pending'): ?>
+                          <form method="post" style="display:inline-flex; gap:6px;">
+                            <input type="hidden" name="booking_id" value="<?= (int)$b['booking_id'] ?>">
+                            <button type="submit" name="action" value="approve" class="btn btn-sm btn-success py-1 px-2" title="Approve booking & schedule visit">
+                              <i class="fa-solid fa-check"></i> Approve
+                            </button>
+                            <button type="submit" name="action" value="cancel" class="btn btn-sm btn-outline-danger py-1 px-2" title="Cancel booking" onclick="return confirm('Cancel this booking?');">
+                              <i class="fa-solid fa-xmark"></i>
+                            </button>
+                          </form>
+                        <?php elseif ($b['status'] === 'approved'): ?>
+                          <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="fa-solid fa-circle-check"></i> Approved</span>
+                        <?php else: ?>
+                          <span class="badge bg-secondary-subtle text-secondary px-2 py-1">Cancelled</span>
+                        <?php endif; ?>
+                      </td>
                     </tr>
                   <?php endwhile; ?>
                 <?php else: ?>
-                  <tr><td colspan="6" class="text-center py-4">Kono booking pawa jayni.</td></tr>
+                  <tr><td colspan="7" class="text-center py-4">Kono booking pawa jayni.</td></tr>
                 <?php endif; ?>
               </tbody>
             </table>

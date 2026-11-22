@@ -35,6 +35,7 @@ $isSignedIn = isset($_SESSION['email']) && $dashboardLink !== null;
         <li><a href="about.php" <?= $currentPage === 'about.php' ? 'aria-current="page"' : '' ?>>About</a></li>
         <li><a href="contact.php" <?= $currentPage === 'contact.php' ? 'aria-current="page"' : '' ?>>Contact</a></li>
         <?php if ($isSignedIn && $accountRole === 'customer'): ?>
+          <li><a href="my_bookings.php" <?= $currentPage === 'my_bookings.php' ? 'aria-current="page"' : '' ?>>My Bookings</a></li>
           <li><a href="payments.php" <?= $currentPage === 'payments.php' ? 'aria-current="page"' : '' ?>>Payments</a></li>
         <?php endif; ?>
         <?php if ($isSignedIn): ?>

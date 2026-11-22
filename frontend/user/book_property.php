@@ -94,16 +94,43 @@ if ($bookingDate === '' || $ts === false || $ts < time()) {
 }
 $dt = date('Y-m-d H:i:s', $ts);
 
-// ekoi property te already pending booking ache kina
-$q = $conn->prepare("SELECT booking_id FROM bookings
-                     WHERE property_id = ? AND customer_id = ? AND status = 'pending' LIMIT 1");
-$q->bind_param('ii', $propertyId, $customerId);
-$q->execute();
-if ($q->get_result()->num_rows > 0) { back($propertyId, 'booking=exists'); }
+// check if already has a scheduled visit for this property
+$chkVisit = $conn->prepare("SELECT visit_id FROM visits
+                            WHERE property_id = ? AND customer_id = ? AND status = 'scheduled' LIMIT 1");
+$chkVisit->bind_param('ii', $propertyId, $customerId);
+$chkVisit->execute();
+if ($chkVisit->get_result()->num_rows > 0) {
+  back($propertyId, 'booking=already_scheduled');
+}
 
-// insert
-$q = $conn->prepare("INSERT INTO bookings (property_id, customer_id, booking_date) VALUES (?, ?, ?)");
+// insert booking as approved
+$q = $conn->prepare("INSERT INTO bookings (property_id, customer_id, booking_date, status) VALUES (?, ?, ?, 'approved')");
 $q->bind_param('iis', $propertyId, $customerId, $dt);
 $q->execute();
+$bookingId = (int)$conn->insert_id;
 
-back($propertyId, 'booking=success');
+// find assigned agent if any
+$agentStmt = $conn->prepare("SELECT a.agent_id
+                             FROM agent_properties ap
+                             JOIN agents a ON a.agent_id = ap.agent_id AND a.status = 'active'
+                             WHERE ap.property_id = ?
+                             ORDER BY ap.assigned_at, ap.agent_id
+                             LIMIT 1");
+$agentStmt->bind_param('i', $propertyId);
+$agentStmt->execute();
+$assignedAgent = $agentStmt->get_result()->fetch_assoc();
+$agentId = $assignedAgent ? (int)$assignedAgent['agent_id'] : null;
+
+// insert into visits table
+if ($agentId !== null) {
+  $insVisit = $conn->prepare("INSERT INTO visits (booking_id, property_id, customer_id, agent_id, visit_time, status)
+                              VALUES (?, ?, ?, ?, ?, 'scheduled')");
+  $insVisit->bind_param('iiiis', $bookingId, $propertyId, $customerId, $agentId, $dt);
+} else {
+  $insVisit = $conn->prepare("INSERT INTO visits (booking_id, property_id, customer_id, agent_id, visit_time, status)
+                              VALUES (?, ?, ?, NULL, ?, 'scheduled')");
+  $insVisit->bind_param('iiis', $bookingId, $propertyId, $customerId, $dt);
+}
+$insVisit->execute();
+
+back($propertyId, 'booking=scheduled');

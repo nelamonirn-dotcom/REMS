@@ -50,29 +50,29 @@
         </a>
 
         <p class="nav-caption">Finance &amp; operations</p>
-        <a class="sidebar-link<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php'], true) ? ' is-active' : '' ?>" href="payments.php"<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php'], true) ? ' aria-current="page"' : '' ?> title="Payments">
+        <a class="sidebar-link<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php', 'payment_settings.php'], true) ? ' is-active' : '' ?>" href="payments.php"<?= in_array($currentAdminPage, ['payments.php', 'payment_invoice.php', 'payment_settings.php'], true) ? ' aria-current="page"' : '' ?> title="Payments">
           <i class="fa-solid fa-wallet" aria-hidden="true"></i><span>Payments</span>
         </a>
-        <a class="sidebar-link<?= $currentAdminPage === 'commissions.php' ? ' is-active' : '' ?>" href="commissions.php"<?= $currentAdminPage === 'commissions.php' ? ' aria-current="page"' : '' ?> title="Commissions">
+        <!-- <a class="sidebar-link<?= $currentAdminPage === 'commissions.php' ? ' is-active' : '' ?>" href="commissions.php"<?= $currentAdminPage === 'commissions.php' ? ' aria-current="page"' : '' ?> title="Commissions">
           <i class="fa-solid fa-percent" aria-hidden="true"></i><span>Commissions</span>
-        </a>
+        </a> -->
         <a class="sidebar-link<?= $currentAdminPage === 'expenses.php' ? ' is-active' : '' ?>" href="expenses.php"<?= $currentAdminPage === 'expenses.php' ? ' aria-current="page"' : '' ?> title="Expenses">
           <i class="fa-solid fa-receipt" aria-hidden="true"></i><span>Expenses</span>
         </a>
-        <a class="sidebar-link<?= $currentAdminPage === 'maintenance.php' ? ' is-active' : '' ?>" href="maintenance.php"<?= $currentAdminPage === 'maintenance.php' ? ' aria-current="page"' : '' ?> title="Maintenance">
+        <!-- <a class="sidebar-link<?= $currentAdminPage === 'maintenance.php' ? ' is-active' : '' ?>" href="maintenance.php"<?= $currentAdminPage === 'maintenance.php' ? ' aria-current="page"' : '' ?> title="Maintenance">
           <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i><span>Maintenance</span>
-        </a>
-        <a class="sidebar-link<?= $currentAdminPage === 'reports_analytics.php' ? ' is-active' : '' ?>" href="reports_analytics.php"<?= $currentAdminPage === 'reports_analytics.php' ? ' aria-current="page"' : '' ?> title="Reports &amp; analytics">
+        </a> -->
+        <!-- <a class="sidebar-link<?= $currentAdminPage === 'reports_analytics.php' ? ' is-active' : '' ?>" href="reports_analytics.php"<?= $currentAdminPage === 'reports_analytics.php' ? ' aria-current="page"' : '' ?> title="Reports &amp; analytics">
           <i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Reports &amp; analytics</span>
-        </a>
+        </a> -->
 
         <p class="nav-caption">Administration</p>
         <a class="sidebar-link<?= $currentAdminPage === 'notifications.php' ? ' is-active' : '' ?>" href="notifications.php"<?= $currentAdminPage === 'notifications.php' ? ' aria-current="page"' : '' ?> title="Notifications">
           <i class="fa-regular fa-bell" aria-hidden="true"></i><span>Notifications</span>
         </a>
-        <a class="sidebar-link<?= $currentAdminPage === 'users_roles.php' ? ' is-active' : '' ?>" href="users_roles.php"<?= $currentAdminPage === 'users_roles.php' ? ' aria-current="page"' : '' ?> title="Users &amp; roles">
+        <!-- <a class="sidebar-link<?= $currentAdminPage === 'users_roles.php' ? ' is-active' : '' ?>" href="users_roles.php"<?= $currentAdminPage === 'users_roles.php' ? ' aria-current="page"' : '' ?> title="Users &amp; roles">
           <i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Users &amp; roles</span>
-        </a>
+        </a> -->
         <a class="sidebar-link<?= $currentAdminPage === 'add_admin.php' ? ' is-active' : '' ?>" href="add_admin.php"<?= $currentAdminPage === 'add_admin.php' ? ' aria-current="page"' : '' ?> title="Add administrator">
           <i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>Add administrator</span>
         </a>

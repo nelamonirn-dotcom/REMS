@@ -1,0 +1,163 @@
+/***
+
+==================================================================
+gellary-section-h1
+==================================================================
+
+***/
+.gellary-section-h1 {
+  padding: 0 0 80px;
+  @include media-breakpoint-down(lg){
+    padding: 0 0 40px;
+  }
+    .outer-box {
+        max-width: 1888px;
+        margin: 0 auto;
+        padding: 0 15px;
+        .inner-box {
+          display: flex;
+          gap: 30px;
+          @include media-breakpoint-down(sm){
+            flex-direction: column;
+            margin-bottom: 30px;
+          }
+          .image {
+            margin-bottom: 30px;
+            overflow: hidden;
+            &:hover {
+              img {
+                transform: scale(1.1);
+              }
+            }
+            @include media-breakpoint-down(md){
+              min-height: 200px;
+            }
+            @include media-breakpoint-down(sm){
+              height: 200px;
+              margin-bottom: 0;
+            }
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              @include transition(all 300ms ease);
+              @include media-breakpoint-down(md){
+                min-height: 200px;
+              }
+              @include media-breakpoint-down(sm){
+                height: 200px;
+              }
+            }
+          }
+        }
+    } 
+}
+
+
+/***
+
+==================================================================
+gellary-section-h3
+==================================================================
+
+***/
+.gellary-section-h3 {
+  padding-top: 10px;
+  .outer-box {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 37px;
+    display: flex;
+    gap: 29px;
+    @include media-breakpoint-down(lg){
+      flex-direction: column;
+      gap: 0;
+    }
+    @include media-breakpoint-down(sm){
+      padding: 0 15px;
+    }
+    .gellary-block-h3 {
+      .inner-block {
+        @include media-breakpoint-down(lg){
+          display: flex;
+          gap: 30px;
+        }
+        @include media-breakpoint-down(sm){
+          flex-direction: column;
+          gap: 0;
+        }
+        .image {
+          margin-bottom: 21px;
+          position: relative;
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+          @include media-breakpoint-down(xxxl){
+            height: 319px;
+            width: 100%;
+          }
+          @include media-breakpoint-down(xl){
+            height: 271px;
+            width: 100%;
+          }
+          &:hover {
+            img {
+              transform: scale(1.1);
+            }
+          }
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            @include transition(all 300ms ease);
+            @include media-breakpoint-down(xxxl){
+            height: 319px;
+            width: 100%;
+          }
+          @include media-breakpoint-down(xl){
+            height: 271px;
+            width: 100%;
+          }
+          }
+          &.one {
+            @include media-breakpoint-down(xxxl){
+              height: 663px;
+              width: 100%;
+            }
+            @include media-breakpoint-down(xl){
+              height: 563px;
+              width: 100%;
+            }
+            @include media-breakpoint-down(lg){
+              height: 450px;
+              width: 100%;
+              margin-bottom: 30px;
+            }
+            @include media-breakpoint-down(sm){
+              height: 271px;
+              width: 100%;
+            }
+            img {
+              @include media-breakpoint-down(xxxl){
+              height: 663px;
+              width: 100%;
+            }
+            @include media-breakpoint-down(xl){
+              height: 563px;
+              width: 100%;
+            }
+            @include media-breakpoint-down(lg){
+              height: 450px;
+              width: 100%;
+            }
+            @include media-breakpoint-down(sm){
+              height: 271px;
+              width: 100%;
+            }
+            }
+          }
+        }
+      }
+    }
+  }
+}
